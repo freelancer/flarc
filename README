@@ -1,0 +1,5 @@
+= flarc =
+
+`flarc` is a library that contains
+[[https://secure.phabricator.com/book/phabricator/article/arcanist/ | Arcanist]]
+extensions used at Freelancer.com.
