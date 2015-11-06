@@ -150,16 +150,16 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     }
 
     if (is_dir($path)) {
+      if (FlarcFilesystem::isDescendant($path, $this->testDirectory)) {
+        return $this->getTestsInDirectory($path);
+      }
+
       if (FlarcFilesystem::isDescendant($path, $this->sourceDirectory)) {
         return $this->getTestsInDirectory(
           FlarcFilesystem::transposePath(
             $path,
             $this->sourceDirectory,
             $this->testDirectory));
-      }
-
-      if (FlarcFilesystem::isDescendant($path, $this->testDirectory)) {
-        return $this->getTestsInDirectory($path);
       }
     }
 
