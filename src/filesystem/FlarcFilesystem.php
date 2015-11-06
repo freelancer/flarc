@@ -6,6 +6,9 @@
  * All of the code contained within this class is probably generic enough to be
  * submitted upstream at some stage, but for whatever reason it has not yet
  * been done.
+ *
+ * @todo Submit all of these methods upstream and then replace the usage of
+ *       `FlarcFilesystem` with `Filesystem`.
  */
 final class FlarcFilesystem extends Phobject {
 
@@ -20,6 +23,8 @@ final class FlarcFilesystem extends Phobject {
    * @return bool    True if resolved child path is in fact a descendant of
    *                 resolved root path and both exist.
    * @task   path
+   *
+   * @todo Use `Filesystem::isDescendant` after https://secure.phabricator.com/D14418.
    */
   public static function isDescendant($path, $root) {
     $path = Filesystem::resolvePath($path);
@@ -86,7 +91,7 @@ final class FlarcFilesystem extends Phobject {
    * This is useful for finding the corresponding files in directories with a
    * mirrored structure.
    *
-   * It is expected that the path to be transposed is a descendent of the
+   * It is expected that the path to be transposed is a descendant of the
    * specified source directory. If not, then a `FilesystemException` will be
    * thrown.
    *
@@ -94,6 +99,8 @@ final class FlarcFilesystem extends Phobject {
    * @param  string  The source directory.
    * @param  string  The target directory.
    * @return string  The transposed directory.
+   *
+   * @todo Use `Filesystem::transposePath` after https://secure.phabricator.com/D14417.
    */
   public static function transposePath($path, $from, $to) {
     $relative_path = self::relativePath($from, $path);
