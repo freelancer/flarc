@@ -1,0 +1,73 @@
+<?php
+
+namespace Test;
+
+class PHPUnit_Framework_TestCase {
+  public function thisIsAMethod() {}
+
+  /*
+   * @covers Something
+   */
+  public function thisIsNotATest() {}
+
+  public function testNotATest() {}
+}
+
+final class SomeClassWhichIsNotATest extends PHPUnit_Framework_TestCase {
+  /**
+   * @test
+   */
+  public function testWhichIsNotATest() {
+    $this->assertTrue(true);
+  }
+}
+
+final class SomeClassWhichIsATest extends \PHPUnit_Framework_TestCase {
+
+  public function testMissingCovers() {
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @test
+   */
+  public function thisIsATestMissingCovers() {
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @covers something
+   */
+  public function testWhichHasCovers() {
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @test
+   * @covers something
+   */
+  public function thisIsATestWhichHasCovers() {
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @coversNothing
+   */
+  public function testWhichHasCoversNothing() {
+    $this->assertTrue(true);
+  }
+
+  /**
+   * @test
+   * @coversNothing
+   */
+  public function thisIsATestWhichHasCoversNothing() {
+    $this->assertTrue(true);
+  }
+}
+~~~~~~~~~~
+disabled:5:1
+disabled:5:7
+warning:5:7
+warning:27:3
+warning:31:3

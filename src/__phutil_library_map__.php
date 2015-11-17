@@ -14,6 +14,8 @@ phutil_register_library_map(array(
     'FlarcLibraryTestCase' => '__tests__/FlarcLibraryTestCase.php',
     'FreelancerPhpunitTestEngine' => 'unit/engine/FreelancerPhpunitTestEngine.php',
     'FreelancerPhpunitTestEngineTestCase' => 'unit/engine/__tests__/FreelancerPhpunitTestEngineTestCase.php',
+    'PHPUnitCoversXHPASTLinterRule' => 'lint/linter/phpunit-xhpast/rules/PHPUnitCoversXHPASTLinterRule.php',
+    'PHPUnitXHPASTLinterTestCase' => 'lint/linter/__tests__/PHPUnitXHPASTLinterTestCase.php',
   ),
   'function' => array(),
   'xmap' => array(
@@ -22,5 +24,7 @@ phutil_register_library_map(array(
     'FlarcLibraryTestCase' => 'PhutilLibraryTestCase',
     'FreelancerPhpunitTestEngine' => 'ArcanistUnitTestEngine',
     'FreelancerPhpunitTestEngineTestCase' => 'PhutilTestCase',
+    'PHPUnitCoversXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
+    'PHPUnitXHPASTLinterTestCase' => 'ArcanistLinterTestCase',
   ),
 ));
