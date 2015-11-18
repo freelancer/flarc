@@ -2,11 +2,12 @@
 
 final class PHPUnitXHPASTLinterTestCase extends ArcanistLinterTestCase {
 
+  protected function getLinter() {
+    return new ArcanistXHPASTLinter();
+  }
+
   public function testLinter() {
-    $linter = new ArcanistXHPASTLinter();
-    $this->executeTestsInDirectory(
-      dirname(__FILE__).'/xhpast/',
-      $linter);
+    $this->executeTestsInDirectory(dirname(__FILE__).'/xhpast/');
   }
 
 }
