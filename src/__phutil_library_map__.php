@@ -9,6 +9,8 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
+    'ArcanistGotoXHPASTLinterRule' => 'lint/linter/phpunit-xhpast/rules/ArcanistGotoXHPASTLinterRule.php',
+    'ArcanistGotoXHPASTLinterRuleTestCase' => 'lint/linter/__tests__/ArcanistGotoXHPASTLinterRuleTestCase.php',
     'FlarcFilesystem' => 'filesystem/FlarcFilesystem.php',
     'FlarcFilesystemTestCase' => 'filesystem/__tests__/FlarcFilesystemTestCase.php',
     'FlarcLibraryTestCase' => '__tests__/FlarcLibraryTestCase.php',
@@ -19,6 +21,8 @@ phutil_register_library_map(array(
   ),
   'function' => array(),
   'xmap' => array(
+    'ArcanistGotoXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
+    'ArcanistGotoXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'FlarcFilesystem' => 'Phobject',
     'FlarcFilesystemTestCase' => 'PhutilTestCase',
     'FlarcLibraryTestCase' => 'PhutilLibraryTestCase',

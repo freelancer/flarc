@@ -1,0 +1,9 @@
+<?php
+goto a;
+echo 'b';
+
+a:
+echo 'a';
+~~~~~~~~~~
+error:2:1
+error:5:1
