@@ -9,6 +9,8 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
+    'ArcanistDuplicateFunctionDeclarationXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistDuplicateFunctionDeclarationXHPASTLinterRule.php',
+    'ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase.php',
     'ArcanistGotoXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistGotoXHPASTLinterRule.php',
     'ArcanistGotoXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistGotoXHPASTLinterRuleTestCase.php',
     'FlarcFilesystem' => 'filesystem/FlarcFilesystem.php',
@@ -21,6 +23,8 @@ phutil_register_library_map(array(
   ),
   'function' => array(),
   'xmap' => array(
+    'ArcanistDuplicateFunctionDeclarationXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
+    'ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'ArcanistGotoXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
     'ArcanistGotoXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'FlarcFilesystem' => 'Phobject',

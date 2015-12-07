@@ -1,0 +1,12 @@
+<?php
+function some_function() {}
+if ($some_condition) {
+  function some_function() {}
+}
+
+if ($some_other_condition) {
+  function some_other_function() {}
+} else {
+  function some_other_function() {}
+}
+~~~~~~~~~~

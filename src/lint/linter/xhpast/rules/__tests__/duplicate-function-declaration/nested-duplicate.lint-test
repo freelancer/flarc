@@ -1,0 +1,7 @@
+<?php
+function some_function() {}
+function some_other_function() {
+  function some_function() {}
+}
+~~~~~~~~~~
+error:4:12

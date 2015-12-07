@@ -1,0 +1,13 @@
+<?php
+switch ($var) {
+  case 0:
+    function some_function() {}
+    break;
+  case 1:
+    function some_function() {}
+    break;
+  default:
+    function some_function() {}
+    break;
+}
+~~~~~~~~~~
