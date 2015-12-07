@@ -1,6 +1,5 @@
 <?php
-
 some_label:
 echo 'No goto here...';
 ~~~~~~~~~~
-error:3:1
+error:2:1

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @todo Submit this upstream after T27678.
+ */
 final class ArcanistGotoXHPASTLinterRule extends ArcanistXHPASTLinterRule {
 
   const ID = 1002;
@@ -18,22 +21,22 @@ final class ArcanistGotoXHPASTLinterRule extends ArcanistXHPASTLinterRule {
       switch ($node->getTypeName()) {
         case 'n_GOTO':
           $message = pht(
-            '`%s` statements should not be used.'.
-            ' [[http://imgs.xkcd.com/comics/goto.png | XKCD]]'.
-            ' explains why.', 'goto');
+            "`%s` statements should not be used as they hinder static ".
+            "analysis and, in almost all cases, you should use ".
+            "conditionals instead.\n\n%s",
+            'goto',
+            'xkcdgoto');
           break;
 
         case 'n_LABEL':
           $message = pht(
-            'Label associated with `%s` statements should not be used.'.
-            ' [[http://imgs.xkcd.com/comics/goto.png | XKCD]]'.
-            ' explains why.', 'goto');
+            'Labels (which are associated with `%s` statements) should '.
+            'not be used.',
+            'goto');
           break;
       }
 
-      $this->raiseLintAtNode(
-        $node,
-        $message);
+      $this->raiseLintAtNode($node, $message);
     }
   }
 

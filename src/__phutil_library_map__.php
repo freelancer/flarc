@@ -9,15 +9,15 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
-    'ArcanistGotoXHPASTLinterRule' => 'lint/linter/phpunit-xhpast/rules/ArcanistGotoXHPASTLinterRule.php',
-    'ArcanistGotoXHPASTLinterRuleTestCase' => 'lint/linter/__tests__/ArcanistGotoXHPASTLinterRuleTestCase.php',
+    'ArcanistGotoXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistGotoXHPASTLinterRule.php',
+    'ArcanistGotoXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistGotoXHPASTLinterRuleTestCase.php',
     'FlarcFilesystem' => 'filesystem/FlarcFilesystem.php',
     'FlarcFilesystemTestCase' => 'filesystem/__tests__/FlarcFilesystemTestCase.php',
     'FlarcLibraryTestCase' => '__tests__/FlarcLibraryTestCase.php',
     'FreelancerPhpunitTestEngine' => 'unit/engine/FreelancerPhpunitTestEngine.php',
     'FreelancerPhpunitTestEngineTestCase' => 'unit/engine/__tests__/FreelancerPhpunitTestEngineTestCase.php',
-    'PHPUnitCoversXHPASTLinterRule' => 'lint/linter/phpunit-xhpast/rules/PHPUnitCoversXHPASTLinterRule.php',
-    'PHPUnitXHPASTLinterTestCase' => 'lint/linter/__tests__/PHPUnitXHPASTLinterTestCase.php',
+    'PHPUnitCoversXHPASTLinterRule' => 'lint/linter/xhpast/rules/PHPUnitCoversXHPASTLinterRule.php',
+    'PHPUnitCoversXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/PHPUnitCoversXHPASTLinterRuleTestCase.php',
   ),
   'function' => array(),
   'xmap' => array(
@@ -29,6 +29,6 @@ phutil_register_library_map(array(
     'FreelancerPhpunitTestEngine' => 'ArcanistUnitTestEngine',
     'FreelancerPhpunitTestEngineTestCase' => 'PhutilTestCase',
     'PHPUnitCoversXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
-    'PHPUnitXHPASTLinterTestCase' => 'ArcanistLinterTestCase',
+    'PHPUnitCoversXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
   ),
 ));

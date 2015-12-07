@@ -66,8 +66,5 @@ final class SomeClassWhichIsATest extends \PHPUnit_Framework_TestCase {
   }
 }
 ~~~~~~~~~~
-disabled:5:1
-disabled:5:7
-warning:5:7
 warning:27:3
 warning:31:3
