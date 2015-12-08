@@ -1,0 +1,32 @@
+<?php
+
+namespace foo;
+use bar;
+
+namespace baz;
+function my_function() {
+  return 'hello';
+}
+
+namespace foo\bar;
+
+use meme;
+~~~~~~~~~~
+warning:3:1
+warning:6:1
+~~~~~~~~~~
+<?php
+
+namespace foo;
+
+use bar;
+
+namespace baz;
+
+function my_function() {
+  return 'hello';
+}
+
+namespace foo\bar;
+
+use meme;

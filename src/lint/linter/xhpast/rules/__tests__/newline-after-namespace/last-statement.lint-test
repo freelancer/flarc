@@ -1,0 +1,10 @@
+<?php
+namespace foo;
+// Comment
+~~~~~~~~~~
+warning:2:1
+~~~~~~~~~~
+<?php
+namespace foo;
+
+// Comment
