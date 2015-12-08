@@ -1,0 +1,7 @@
+<?php
+trait SomeTrait {
+  public function someMethod() {}
+  public function someMethod() {}
+}
+~~~~~~~~~~
+error:4:19

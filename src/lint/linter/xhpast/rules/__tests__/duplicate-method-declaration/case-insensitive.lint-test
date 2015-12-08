@@ -1,0 +1,7 @@
+<?php
+class SomeClass {
+  public function someMethod() {}
+  public function SOMEMETHOD() {}
+}
+~~~~~~~~~~
+error:4:19

@@ -1,0 +1,7 @@
+<?php
+class ClassName {
+  public function someMethod() {}
+  public static function someMethod() {}
+}
+~~~~~~~~~~
+error:4:26

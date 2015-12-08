@@ -1,0 +1,11 @@
+<?php
+class SomeMethod {
+  function someMethod() {}
+  public function someMethod() {}
+  protected function someMethod() {}
+  private function someMethod() {}
+}
+~~~~~~~~~~
+error:4:19
+error:5:22
+error:6:20
