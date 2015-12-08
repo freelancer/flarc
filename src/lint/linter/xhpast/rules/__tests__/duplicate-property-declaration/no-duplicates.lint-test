@@ -1,0 +1,6 @@
+<?php
+class SomeClass {
+  public $propertyOne;
+  public $propertyTwo;
+}
+~~~~~~~~~~

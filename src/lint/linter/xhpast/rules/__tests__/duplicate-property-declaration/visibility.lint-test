@@ -1,0 +1,9 @@
+<?php
+class SomeClass {
+  public $property;
+  protected $property;
+  private $property;
+}
+~~~~~~~~~~
+error:4:13
+error:5:11

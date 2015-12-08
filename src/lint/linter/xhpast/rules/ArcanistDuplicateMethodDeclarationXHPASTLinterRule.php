@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @todo Submit this upstream after T27678
+ * @todo Submit this upstream after T27678.
  */
 final class ArcanistDuplicateMethodDeclarationXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {

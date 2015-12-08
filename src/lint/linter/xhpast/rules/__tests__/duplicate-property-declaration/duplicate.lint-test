@@ -1,0 +1,7 @@
+<?php
+class SomeClass {
+  public $property;
+  public $property;
+}
+~~~~~~~~~~
+error:4:10
