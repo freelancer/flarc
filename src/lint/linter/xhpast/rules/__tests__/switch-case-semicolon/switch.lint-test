@@ -1,0 +1,16 @@
+<?php
+switch ($x) {
+  case 1: break;
+  case 2; break;
+  default; break;
+}
+~~~~~~~~~~
+warning:4:9
+warning:5:10
+~~~~~~~~~~
+<?php
+switch ($x) {
+  case 1: break;
+  case 2: break;
+  default: break;
+}
