@@ -9,6 +9,8 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
+    'ArcanistArrayPushXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistArrayPushXHPASTLinterRule.php',
+    'ArcanistArrayPushXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistArrayPushXHPASTLinterRuleTestCase.php',
     'ArcanistDuplicateFunctionDeclarationXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistDuplicateFunctionDeclarationXHPASTLinterRule.php',
     'ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase.php',
     'ArcanistDuplicateMethodDeclarationXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistDuplicateMethodDeclarationXHPASTLinterRule.php',
@@ -33,6 +35,8 @@ phutil_register_library_map(array(
   ),
   'function' => array(),
   'xmap' => array(
+    'ArcanistArrayPushXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
+    'ArcanistArrayPushXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'ArcanistDuplicateFunctionDeclarationXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
     'ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'ArcanistDuplicateMethodDeclarationXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',

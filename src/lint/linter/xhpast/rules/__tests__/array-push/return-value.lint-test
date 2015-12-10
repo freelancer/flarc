@@ -1,0 +1,9 @@
+<?php
+$array = array(1, 2, 3, 4);
+$count = array_push($array, 5);
+some_func(array_push($array, 6));
+
+function push(array $array, $element) {
+  return array_push($array, $element);
+}
+~~~~~~~~~~
