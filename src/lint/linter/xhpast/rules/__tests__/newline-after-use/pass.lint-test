@@ -1,0 +1,11 @@
+<?php
+
+namespace foo\bar;
+
+use meme;
+use other\thing;
+
+function my_other_function() {
+  return 'hello';
+}
+~~~~~~~~~~

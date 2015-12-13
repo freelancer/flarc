@@ -1,0 +1,24 @@
+<?php
+
+namespace foo;
+
+use A\Thing;
+
+use bar;
+function my_function() {
+  return 'hello';
+}
+~~~~~~~~~~
+warning:7:1
+~~~~~~~~~~
+<?php
+
+namespace foo;
+
+use A\Thing;
+
+use bar;
+
+function my_function() {
+  return 'hello';
+}

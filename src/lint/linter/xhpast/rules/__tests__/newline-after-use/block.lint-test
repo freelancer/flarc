@@ -1,0 +1,20 @@
+<?php
+
+use foo;
+use bar;
+use baz;
+/**
+ * There should be a newline before this comment.
+ */
+~~~~~~~~~~
+warning:5:1
+~~~~~~~~~~
+<?php
+
+use foo;
+use bar;
+use baz;
+
+/**
+ * There should be a newline before this comment.
+ */

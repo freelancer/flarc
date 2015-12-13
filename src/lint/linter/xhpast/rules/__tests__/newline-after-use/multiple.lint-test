@@ -1,0 +1,42 @@
+<?php
+
+namespace foo;
+
+use A\Thing;
+
+use bar;
+function my_function() {
+  return 'hello';
+}
+
+use foo;
+print('Random Statement');
+use baz;
+
+/**
+ * There should be a space before this comment.
+ */
+~~~~~~~~~~
+warning:7:1
+warning:12:1
+~~~~~~~~~~
+<?php
+
+namespace foo;
+
+use A\Thing;
+
+use bar;
+
+function my_function() {
+  return 'hello';
+}
+
+use foo;
+
+print('Random Statement');
+use baz;
+
+/**
+ * There should be a space before this comment.
+ */
