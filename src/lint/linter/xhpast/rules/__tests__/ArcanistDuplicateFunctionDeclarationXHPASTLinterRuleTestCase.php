@@ -4,8 +4,7 @@ final class ArcanistDuplicateFunctionDeclarationXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(
-      dirname(__FILE__).'/duplicate-function-declaration/');
+    $this->executeTestsInDirectory(__DIR__.'/duplicate-function-declaration/');
   }
 
 }

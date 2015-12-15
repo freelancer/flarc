@@ -4,7 +4,7 @@ final class PHPUnitCoversXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/phpunit-covers/');
+    $this->executeTestsInDirectory(__DIR__.'/phpunit-covers/');
   }
 
 }

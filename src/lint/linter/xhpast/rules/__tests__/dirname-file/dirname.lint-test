@@ -1,0 +1,13 @@
+<?php
+echo dirname(__FILE__);
+echo dirname(dirname(__FILE__));
+echo dirname(__file__);
+~~~~~~~~~~
+warning:2:6
+warning:3:14
+warning:4:6
+~~~~~~~~~~
+<?php
+echo __DIR__;
+echo dirname(__DIR__);
+echo __DIR__;

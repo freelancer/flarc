@@ -1,0 +1,4 @@
+<?php
+define('FOO', false);
+~~~~~~~~~~
+warning:2:1

@@ -1,0 +1,26 @@
+<?php
+$x = new Foo();
+$y = new Baz();
+Foo::bar();
+
+class Foo {}
+class Bar extends Foo {}
+class Baz implements Foo {}
+
+$x = new FooBarBaz();
+~~~~~~~~~~
+warning:2:10
+warning:4:1
+warning:7:19
+warning:8:22
+warning:10:10
+~~~~~~~~~~
+~~~~~~~~~~
+{
+  "config": {
+    "xhpast.deprecated.class": {
+      "Foo": "Class is deprecated",
+      "FooBarBaz": true
+    }
+  }
+}

@@ -5,7 +5,7 @@ final class ArcanistNewlineAfterNamespaceXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/newline-after-namespace/');
+      __DIR__.'/newline-after-namespace/');
   }
 
 }
