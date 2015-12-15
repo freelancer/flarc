@@ -14,22 +14,20 @@ final class ArcanistGlobalConstantXHPASTLinterRule
   }
 
   public function getLintSeverity() {
-    return ArcanistLintSeverity::SEVERITY_WARNING;
+    return ArcanistLintSeverity::SEVERITY_ADVICE;
   }
 
   public function process(XHPASTNode $root) {
-    $function_calls = $root->selectDescendantsOfType('n_FUNCTION_CALL');
+    $constants = $this
+      ->getFunctionCalls($root, array('define'))
+      ->add($root->selectDescendantsOfType('n_CONSTANT_DECLARATION_LIST'));
 
-    foreach ($function_calls as $call) {
-      $name = $call->getChildByIndex(0)->getConcreteString();
-
-      if (strtolower($name) == 'define') {
-        $this->raiseLintAtNode(
-          $call,
-          pht(
-            'Limit the use of defined constants. See %s for more information.',
-            'T13418'));
-      }
+    foreach ($constants as $constant) {
+      $this->raiseLintAtNode(
+        $constant,
+        pht(
+          'Limit the use of defined constants. See %s for more information.',
+          'T13418'));
     }
   }
 

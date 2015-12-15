@@ -1,4 +1,4 @@
 <?php
-define('FOO', false);
+const FOO = false;
 ~~~~~~~~~~
 advice:2:1
