@@ -10,7 +10,7 @@ final class ArcanistDirnameFileXHPASTLinterRule
   const ID = 1009;
 
   public function getLintName() {
-    return pht('%s Usage', 'dirname(__FILE__)');
+    return pht('`%s` Usage', 'dirname(__FILE__)');
   }
 
   public function getLintSeverity() {
@@ -18,27 +18,26 @@ final class ArcanistDirnameFileXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $function_calls = $root->selectDescendantsOfType('n_FUNCTION_CALL');
+    $function_calls = $this->getFunctionCalls($root, array('dirname'));
 
     foreach ($function_calls as $function_call) {
-      $name = $function_call->getChildByIndex(0)->getConcreteString();
-      $name = strtolower($name);
       $args = $function_call->getChildOfType(1, 'n_CALL_PARAMETER_LIST');
 
-      if ($name == 'dirname' && count($args->getChildren()) == 1) {
-        $arg = $args->getChildByIndex(0);
+      if (count($args->getChildren()) != 1) {
+        continue;
+      }
 
-        if ($arg->getTypeName() == 'n_MAGIC_SCALAR' &&
-            strtoupper($arg->getSemanticString()) == '__FILE__') {
+      $arg = $args->getChildByIndex(0);
 
-          $this->raiseLintAtNode(
-            $function_call,
-            pht(
-              'Use `%s` instead of `%s`.',
-              '__DIR__',
-              'dirname(__FILE__)'),
-            '__DIR__');
-        }
+      if ($arg->getTypeName() == 'n_MAGIC_SCALAR' &&
+          strtoupper($arg->getSemanticString()) == '__FILE__') {
+        $this->raiseLintAtNode(
+          $function_call,
+          pht(
+            'Use `%s` instead of `%s`.',
+            '__DIR__',
+            'dirname(__FILE__)'),
+          '__DIR__');
       }
     }
   }
