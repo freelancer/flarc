@@ -1,0 +1,12 @@
+<?php
+
+foo(); bar(); baz();
+~~~~~~~~~~
+warning:3:8
+warning:3:15
+~~~~~~~~~~
+<?php
+
+foo();
+bar();
+baz();
