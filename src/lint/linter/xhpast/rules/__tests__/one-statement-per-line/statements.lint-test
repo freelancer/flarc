@@ -7,6 +7,6 @@ warning:3:15
 ~~~~~~~~~~
 <?php
 
-foo();
-bar();
+foo(); 
+bar(); 
 baz();
