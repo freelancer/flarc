@@ -31,7 +31,8 @@ final class ArcanistArrayPushXHPASTLinterRule
       // is probably wrong (e.g. `array_push(null, 'derp')`). In any case,
       // don't raise any linter messages here.
       $array = $parameters->getChildByIndex(0);
-      if ($array->getTypeName() != 'n_VARIABLE') {
+      if ($array->getTypeName() != 'n_VARIABLE' &&
+          $array->getTypeName() != 'n_OBJECT_PROPERTY_ACCESS') {
         continue;
       }
 

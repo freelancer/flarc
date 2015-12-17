@@ -9,6 +9,6 @@ warning:4:26
 <?php
 
 function () { return; };
-function () {
-$x = null;
+function () { 
+$x = null; 
 return $x; };
