@@ -1,0 +1,14 @@
+<?php
+
+function () { return; };
+function () { $x = null; return $x; };
+~~~~~~~~~~
+warning:4:15
+warning:4:26
+~~~~~~~~~~
+<?php
+
+function () { return; };
+function () {
+$x = null;
+return $x; };

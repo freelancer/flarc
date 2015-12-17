@@ -17,32 +17,82 @@ final class ArcanistOneStatementPerLineXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $statements = $root->selectDescendantsOfType('n_STATEMENT');
-    $mapping = array();
+    $statement_lists = $root->selectDescendantsOfType('n_STATEMENT_LIST');
 
-    foreach ($statements as $statement) {
-      $line_number = $statement->getLineNumber();
+    foreach ($statement_lists as $id => $statement_list) {
+      $mapping    = array();
+      $statements = $root->selectDescendantsOfType('n_STATEMENT');
 
-      if (!isset($mapping[$line_number])) {
-        $mapping[$line_number] = array();
+      foreach ($statements as $statement) {
+        $parent_statement_list = $this->getFirstParentOfType(
+          $statement,
+          'n_STATEMENT_LIST');
+
+        // If this statement is a child of a different statement list then
+        // don't do anything because the "one-statement-per-line" rule is
+        // constrained to statements within the same statement list. This is
+        // necessary because statement lists can be nested.
+        if ($parent_statement_list != $statement_list) {
+          continue;
+        }
+
+        $line_number = $statement->getLineNumber();
+
+        if (!isset($mapping[$line_number])) {
+          $mapping[$line_number] = array();
+        }
+
+        $mapping[$line_number][] = $statement;
       }
 
-      $mapping[$line_number][] = $statement;
-    }
+      foreach ($mapping as $line_number => $statements) {
+        if (count($statements) > 1) {
+          $indentation = head($statements)->getIndentation();
 
-    foreach ($mapping as $line_number => $statements) {
-      if (count($statements) > 1) {
-        $first_statement = array_shift($statements);
+          // If the statements appear on the same line as the statement list
+          // then it is necessary to force the first statement onto a new line.
+          // For example, we don't need to handle the first statement in the
+          // case of  `foo(); bar(); baz();` but we do need to handle the first
+          // statement in the case of `function () { foo(); bar(); baz(); };`.
+          if ($line_number == $statement_list->getLineNumber()) {
+            array_unshift($statements, $statement_list);
+          }
 
-        foreach ($statements as $statement) {
-          $this->raiseLintAtNode(
-            $statement,
-            pht('Only one statement per line.'),
-            "\n".$first_statement->getIndentation().
-            $statement->getConcreteString());
+          array_shift($statements);
+
+          foreach ($statements as $statement) {
+            $this->raiseLintAtNode(
+              $statement,
+              pht('Each statement should appear on a separate line.'),
+              "\n".$indentation.$statement->getConcreteString());
+          }
         }
       }
     }
+  }
+
+  /**
+   * Find the first parent node which is of the specified type.
+   *
+   * Given a node, return the first parent node which is of the specified type.
+   *
+   * @param  XHPASTNode  The input node.
+   * @param  string      The node type to search for.
+   * @return XHPASTNode  The first parent node of the specified type. `null` if
+   *                     no such node exists.
+   */
+  private function getFirstParentOfType(XHPASTNode $node, $parent_type) {
+    while ($node) {
+      $parent = $node->getParentNode();
+
+      if ($parent->getTypeName() == $parent_type) {
+        return $parent;
+      }
+
+      $node = $parent;
+    }
+
+    return null;
   }
 
 }
