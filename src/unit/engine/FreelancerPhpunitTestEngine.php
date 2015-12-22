@@ -203,6 +203,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
   private function getTestsInDirectory($path) {
     $tests = array();
 
+    $path = rtrim($path, '/');
+
     $files = id(new FileFinder($path))
       ->withType('f')
       ->withSuffix('php')
@@ -296,6 +298,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
           $bin,
           'composer install'));
     }
+
+    return $binary_path;
   }
 
   /**
