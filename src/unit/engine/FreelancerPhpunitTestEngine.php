@@ -286,11 +286,16 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       ->getConfigurationManager()
       ->getConfigFromAnySource($key, $default);
 
-    if (Filesystem::binaryExists($bin)) {
-      return $bin;
-    }
+    $binary_path = Filesystem::resolvePath($bin, $this->getProjectRoot());
 
-    return Filesystem::resolvePath($bin, $this->getProjectRoot());
+    if (!Filesystem::binaryExists($binary_path)) {
+      throw new ArcanistUsageException(
+        pht(
+          '%s does not seem to be installed at `%s`. Have you run `%s`?',
+          'PHPUnit',
+          $bin,
+          'composer install'));
+    }
   }
 
   /**
