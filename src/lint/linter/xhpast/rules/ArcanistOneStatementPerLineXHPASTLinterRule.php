@@ -23,6 +23,18 @@ final class ArcanistOneStatementPerLineXHPASTLinterRule
       $mapping    = array();
       $statements = $root->selectDescendantsOfType('n_STATEMENT');
 
+      // If the statement list contains //any// inline HTML, just give up...
+      // XHPAST doesn't do a great job of parsing inline HTML and its usage is
+      // exceedingly rare anyway. See some discussion in D28106.
+      //
+      // TODO: It would be nice to handle this properly eventually, but doing
+      // so is fairly low priority as using inline HTML within a PHP script is
+      // rather uncommon (PHP is not a great templating language). To handle
+      // this correctly will most likely require changes to XHPAST.
+      if (count($statement_list->selectDescendantsOfType('n_INLINE_HTML'))) {
+        continue;
+      }
+
       foreach ($statements as $statement) {
         $parent_statement_list = $this->getFirstParentOfType(
           $statement,
