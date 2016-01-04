@@ -1,0 +1,5 @@
+<?php
+class x {}
+class X {}
+~~~~~~~~~~
+error:3:7

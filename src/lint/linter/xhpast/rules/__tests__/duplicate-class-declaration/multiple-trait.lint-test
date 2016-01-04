@@ -1,0 +1,5 @@
+<?php
+trait X {}
+trait X {}
+~~~~~~~~~~
+error:3:7

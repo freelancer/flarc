@@ -1,0 +1,7 @@
+<?php
+class X {}
+interface X {}
+trait X {}
+~~~~~~~~~~
+error:3:11
+error:4:7
