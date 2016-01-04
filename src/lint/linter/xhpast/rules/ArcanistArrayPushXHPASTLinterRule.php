@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @todo Submit this upstream after T27678.
+ */
 final class ArcanistArrayPushXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {
 

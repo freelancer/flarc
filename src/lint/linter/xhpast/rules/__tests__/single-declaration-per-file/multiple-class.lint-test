@@ -1,0 +1,5 @@
+<?php
+class X {}
+class Y {}
+~~~~~~~~~~
+warning:3:1
