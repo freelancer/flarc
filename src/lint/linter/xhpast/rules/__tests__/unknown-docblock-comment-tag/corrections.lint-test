@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @codecoverageignore
+ * @concreteextensible
+ * @tood
+ * @xyz
+ */
+class SomeClass {}
+~~~~~~~~~~
+advice:4:4
+advice:5:4
+advice:6:4
+advice:7:4
+~~~~~~~~~~
+<?php
+
+/**
+ * @codeCoverageIgnore
+ * @concrete-extensible
+ * @todo
+ * @xyz
+ */
+class SomeClass {}

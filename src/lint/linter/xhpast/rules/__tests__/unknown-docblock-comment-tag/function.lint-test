@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * @todo This is a comment.
+ * @xyz
+ */
+function some_function() {}
+~~~~~~~~~~
+advice:5:4

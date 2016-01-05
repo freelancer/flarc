@@ -1,0 +1,11 @@
+<?php
+
+class SomeClass {
+  /**
+   * @todo This is a comment.
+   * @xyz
+   */
+  public function someMethod() {}
+}
+~~~~~~~~~~
+advice:6:6

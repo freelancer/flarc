@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * @tag
+ * @tag
+ */
+class SomeClass {}
+~~~~~~~~~~
+advice:3:1
