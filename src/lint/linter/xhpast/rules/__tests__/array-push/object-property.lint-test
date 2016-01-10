@@ -1,0 +1,9 @@
+<?php
+$foo->bar = array(1, 2);
+array_push($foo->bar, 'baz');
+~~~~~~~~~~
+advice:3:1
+~~~~~~~~~~
+<?php
+$foo->bar = array(1, 2);
+$foo->bar[] = 'baz';
