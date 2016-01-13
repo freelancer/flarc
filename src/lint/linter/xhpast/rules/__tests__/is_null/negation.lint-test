@@ -1,0 +1,10 @@
+<?php
+!is_null($x);
+!!is_null($x);
+~~~~~~~~~~
+advice:2:1
+advice:3:2
+~~~~~~~~~~
+<?php
+$x !== null;
+!($x !== null);
