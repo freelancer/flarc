@@ -1,0 +1,14 @@
+<?php
+
+for ($i = 0;$i < 10;$i++) {
+  print $i;
+}
+~~~~~~~~~~
+warning:3:12
+warning:3:20
+~~~~~~~~~~
+<?php
+
+for ($i = 0; $i < 10; $i++) {
+  print $i;
+}
