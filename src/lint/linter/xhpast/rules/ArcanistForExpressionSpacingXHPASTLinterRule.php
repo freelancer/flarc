@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * @todo Submit this upstream after T27678.
+ */
 final class ArcanistForExpressionSpacingXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {
 
   const ID = 1019;
 
   public function getLintName() {
-    return pht('For Expression Spacing.');
+    return pht('`%s` Expression Spacing', 'for');
   }
 
   public function getLintSeverity() {
@@ -19,10 +22,11 @@ final class ArcanistForExpressionSpacingXHPASTLinterRule
       $semicolons = $expression->selectTokensOfType(';');
 
       foreach ($semicolons as $semicolon) {
-        if ($semicolon->getNextToken()->getTypeName() == 'T_WHITESPACE' ||
-            $semicolon->getNextToken()->getTypeName() == ';' ||
-            $semicolon->getNextToken()->getTypeName() == ')') {
-          continue;
+        switch ($semicolon->getNextToken()->getTypeName()) {
+          case 'T_WHITESPACE':
+          case ';':
+          case ')':
+            continue 2;
         }
 
         $this->raiseLintAtToken(
