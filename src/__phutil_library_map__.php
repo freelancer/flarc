@@ -11,6 +11,8 @@ phutil_register_library_map(array(
   'class' => array(
     'ArcanistArrayPushXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistArrayPushXHPASTLinterRule.php',
     'ArcanistArrayPushXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistArrayPushXHPASTLinterRuleTestCase.php',
+    'ArcanistCommaSpacingXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistCommaSpacingXHPASTLinterRule.php',
+    'ArcanistCommaSpacingXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistCommaSpacingXHPASTLinterRuleTestCase.php',
     'ArcanistDeprecatedClassXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistDeprecatedClassXHPASTLinterRule.php',
     'ArcanistDeprecatedClassXHPASTLinterRuleTestCase' => 'lint/linter/xhpast/rules/__tests__/ArcanistDeprecatedClassXHPASTLinterRuleTestCase.php',
     'ArcanistDirnameFileXHPASTLinterRule' => 'lint/linter/xhpast/rules/ArcanistDirnameFileXHPASTLinterRule.php',
@@ -57,6 +59,8 @@ phutil_register_library_map(array(
   'xmap' => array(
     'ArcanistArrayPushXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
     'ArcanistArrayPushXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
+    'ArcanistCommaSpacingXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
+    'ArcanistCommaSpacingXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'ArcanistDeprecatedClassXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',
     'ArcanistDeprecatedClassXHPASTLinterRuleTestCase' => 'ArcanistXHPASTLinterRuleTestCase',
     'ArcanistDirnameFileXHPASTLinterRule' => 'ArcanistXHPASTLinterRule',

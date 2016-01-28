@@ -1,0 +1,23 @@
+<?php
+
+some_func(
+  $arg1, // Some comment
+  $arg2, // Another Comment
+  $arg3);
+
+some_func(
+  $arg1
+  , $arg2, $arg3);
+~~~~~~~~~~
+warning:9:8
+~~~~~~~~~~
+<?php
+
+some_func(
+  $arg1, // Some comment
+  $arg2, // Another Comment
+  $arg3);
+
+some_func(
+  $arg1,
+  $arg2, $arg3);

@@ -1,0 +1,7 @@
+<?php
+some_func($arg1,$arg2, $arg3);
+~~~~~~~~~~
+warning:2:16
+~~~~~~~~~~
+<?php
+some_func($arg1, $arg2, $arg3);
