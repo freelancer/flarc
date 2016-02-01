@@ -5,7 +5,9 @@ final class PHPUnitCoversXHPASTLinterRule extends PHPUnitXHPASTLinterRule {
   const ID = 1001;
 
   public function getLintName() {
-    return pht('Explicit Coverage Specification');
+    return pht(
+      'Explicit `%s` Specification',
+      '@covers');
   }
 
   public function getLintSeverity() {
@@ -17,14 +19,15 @@ final class PHPUnitCoversXHPASTLinterRule extends PHPUnitXHPASTLinterRule {
 
     foreach ($this->getTestMethods($root) as $method) {
       $docblock = $method->getDocblockToken();
+      $message = pht(
+        'This test method does not specify a `%s` or `%s` annotation.'.
+        'You should use the `%s` annotation to indicate covered code.',
+        '@covers',
+        '@coversNothing',
+        '@covers');
 
       if (!$docblock) {
-        $this->raiseLintAtNode(
-          $method,
-          pht(
-            'This test method does not specify a `%s` or `%s` annotation.',
-            '@covers',
-            '@coversNothing'));
+        $this->raiseLintAtNode($method, $message);
         continue;
       }
 
@@ -34,12 +37,7 @@ final class PHPUnitCoversXHPASTLinterRule extends PHPUnitXHPASTLinterRule {
         continue;
       }
 
-      $this->raiseLintAtToken(
-        $docblock,
-        pht(
-          'This docblock does not contain a `%s` or `%s` annotation.',
-          '@covers',
-          '@coversNothing'));
+      $this->raiseLintAtToken($docblock, $message);
     }
   }
 

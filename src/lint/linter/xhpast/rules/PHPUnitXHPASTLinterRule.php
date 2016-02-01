@@ -13,14 +13,35 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
    * `\PHPUnit_Framework_TestCase`.
    *
    * @param  XHPASTNode        Root node.
+   * @param  bool              If `true` then `abstract` classes will be
+   *                           excluded from the result.
    * @return list<XHPASTNode>  All PHPUnit test classes.
    */
-  final protected function getTestClasses(XHPASTNode $root) {
+  final protected function getTestClasses(
+    XHPASTNode $root,
+    $exclude_abstract_classes = false) {
+
     $classes = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
     $test_classes = array();
 
     foreach ($classes as $class) {
       $extends = $class->getChildByIndex(2);
+
+      if ($exclude_abstract_classes) {
+        // TODO: `XHPASTNode` should maybe provide an `isAbstractClass` method.
+        $class_attributes = $class
+          ->getChildOfType(0, 'n_CLASS_ATTRIBUTES')
+          ->getChildrenOfType('n_STRING');
+
+        foreach ($class_attributes as $class_attribute) {
+          // Class attributes are case-insensitive.
+          $class_attribute = strtolower($class_attribute->getConcreteString());
+
+          if ($class_attribute == 'abstract') {
+            continue 2;
+          }
+        }
+      }
 
       if ($extends->getTypeName() == 'n_EMPTY') {
         // The class doesn't extend any other class and, as such,

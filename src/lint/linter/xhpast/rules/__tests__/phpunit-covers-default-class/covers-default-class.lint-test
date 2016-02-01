@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @coversDefaultClass SomeClass
+ */
+final class SomeTest extends PHPUnit_Framework_TestCase {
+  public function testSomething() {
+    $this->assertTrue(true);
+  }
+}
+
+/**
+ * @stuff
+ */
+final class SomeOtherTest extends PHPUnit_Framework_TestCase {
+  public function testSomething() {
+    $this->assertTrue(true);
+  }
+}
+
+final class YetAnotherTest extends PHPUnit_Framework_TestCase {
+  public function testSomething() {
+    $this->assertTrue(true);
+  }
+}
+~~~~~~~~~~
+warning:12:1
+warning:21:1

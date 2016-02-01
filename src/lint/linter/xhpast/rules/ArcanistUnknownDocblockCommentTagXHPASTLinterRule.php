@@ -28,6 +28,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
         'codeCoverageIgnore',
         'concrete-extensible',
         'coversDefaultClass',
+        'coversNoDefaultClass',
         'coversNothing',
         'deprecated',
         'generated',
