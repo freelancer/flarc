@@ -1,0 +1,9 @@
+<?php
+
+use PHPUnit_Framework_TestCase as TestCase;
+
+final class SomeTest extends TestCase {
+  public function testSomething() {}
+}
+~~~~~~~~~~
+warning:6:3

@@ -1,0 +1,11 @@
+<?php
+
+namespace X\Y;
+
+use PHPUnit_Framework_TestCase as TestCase;
+
+final class SomeTest extends TestCase {
+  public function testSomething() {}
+}
+~~~~~~~~~~
+warning:8:3

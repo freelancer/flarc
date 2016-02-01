@@ -1,0 +1,14 @@
+<?php
+namespace SomeNamespace;
+use X;
+use Y as Z;
+use \W;
+class SomeClass {}
+~~~~~~~~~~
+{
+  "23": {
+    "W": "\\W",
+    "X": "\\X",
+    "Z": "\\Y"
+  }
+}

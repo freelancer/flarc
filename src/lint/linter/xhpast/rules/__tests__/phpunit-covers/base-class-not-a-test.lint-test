@@ -1,0 +1,13 @@
+<?php
+
+namespace X\Y;
+
+abstract class PHPUnit_Framework_TestCase {}
+
+/**
+ * This is **not** a PHPUnit test class.
+ */
+final class SomeTest extends PHPUnit_Framework_TestCase {
+  public function testSomething() {}
+}
+~~~~~~~~~~

@@ -1,0 +1,12 @@
+<?php
+
+final class SomeTest extends PHPUnit_Framework_TestCase {
+  public function testSomething() {}
+}
+
+final class SomeOtherTest extends \PHPUnit_Framework_TestCase {
+  public function testSomething() {}
+}
+~~~~~~~~~~
+warning:4:3
+warning:8:3

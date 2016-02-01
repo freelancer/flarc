@@ -1,0 +1,13 @@
+<?php
+use A;
+use B as C;
+use \D;
+class SomeClass {}
+~~~~~~~~~~
+{
+  "19": {
+    "A": "\\A",
+    "C": "\\B",
+    "D": "\\D"
+  }
+}
