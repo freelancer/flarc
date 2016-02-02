@@ -13,7 +13,11 @@ final class PHPUnitXHPASTLinterRuleTestCase extends PhutilTestCase {
       list($tree, $expect) = $this->readTestData($dir.'/'.$file);
 
       $root    = $tree->getRootNode();
-      $classes = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
+      $classes = $root->selectDescendantsOfTypes(array(
+        'n_CLASS_DECLARATION',
+        'n_INTERFACE_DECLARATION',
+        'n_FUNCTION_DECLARATION',
+      ));
 
       foreach ($classes as $class) {
         $id = (string)$class->getID();

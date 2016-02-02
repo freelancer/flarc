@@ -1,12 +1,26 @@
 <?php
 namespace SomeNamespace;
+
 use X;
 use Y as Z;
 use \W;
+
 class SomeClass {}
+interface SomeInterface {}
+function some_func() {}
 ~~~~~~~~~~
 {
-  "23": {
+  "25": {
+    "W": "\\W",
+    "X": "\\X",
+    "Z": "\\Y"
+  },
+  "31": {
+    "W": "\\W",
+    "X": "\\X",
+    "Z": "\\Y"
+  },
+  "37": {
     "W": "\\W",
     "X": "\\X",
     "Z": "\\Y"

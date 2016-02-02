@@ -1,6 +1,10 @@
 <?php
 class SomeClass {}
+interface SomeInterface {}
+function some_func() {}
 ~~~~~~~~~~
 {
-  "4": {}
+  "6": {},
+  "12": {},
+  "18": {}
 }

@@ -1,0 +1,24 @@
+<?php
+use A;
+class SomeClass {}
+
+use B as C;
+class SomeOtherClass {}
+
+use \D;
+class YetAnotherClass {}
+~~~~~~~~~~
+{
+  "13": {
+    "A": "\\A"
+  },
+  "23": {
+    "A": "\\A",
+    "C": "\\B"
+  },
+  "33": {
+    "A": "\\A",
+    "C": "\\B",
+    "D": "\\D"
+  }
+}

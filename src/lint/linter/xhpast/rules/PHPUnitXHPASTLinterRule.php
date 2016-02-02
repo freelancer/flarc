@@ -186,16 +186,6 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
     $mapping   = new CaseInsensitiveArray();
     $statement = $node->getParentNode();
 
-    // TODO: There's no reason that we can't generate a `use` mapping for other
-    // node types. For example, it's perfectly reasonable to generate a `use`
-    // mapping for a node of type `n_FUNCTION_DECLARATION`.
-    if ($node->getTypeName() != 'n_CLASS_DECLARATION') {
-      throw new InvalidArgumentException(
-        pht(
-          "Expected node of type '%'!",
-          'n_CLASS_DECLARATION'));
-    }
-
     while ($statement) {
       $use_lists = $statement->selectDescendantsOfType('n_USE_LIST');
 
