@@ -91,6 +91,18 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
         $test_classes[] = $class;
         continue;
       }
+
+      // Allow classes annotated with `@testClass` to be identified as PHPUnit
+      // test classes.
+      if ($docblock = $class->getDocblockToken()) {
+        $parser = new PhutilDocblockParser();
+        list($text, $specials) = $parser->parse($docblock->getValue());
+
+        if (idx($specials, 'testClass')) {
+          $test_classes[] = $class;
+          continue;
+        }
+      }
     }
 
     return $test_classes;

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @testClass
+ */
+final class MyTestCase extends TestCase {}
+~~~~~~~~~~
+warning:3:1

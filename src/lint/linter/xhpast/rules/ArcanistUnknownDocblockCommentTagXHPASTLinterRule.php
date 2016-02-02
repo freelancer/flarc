@@ -37,6 +37,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
         'runTestsInSeparateProcesses',
         'see',
         'task',
+        'testClass',
         'todo',
       ),
       'class');
