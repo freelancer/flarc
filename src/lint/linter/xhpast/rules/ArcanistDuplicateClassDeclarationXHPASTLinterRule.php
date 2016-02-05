@@ -37,6 +37,15 @@ final class ArcanistDuplicateClassDeclarationXHPASTLinterRule
         continue;
       }
 
+      // TODO: This will be moved to a more generally accessible place like
+      // `ArcanistXHPASTLinterRule` or XHPAST itself.
+      $use_mapping = PHPUnitXHPASTLinterRule::getUseMapping($symbol);
+      foreach ($use_mapping as $key => $value) {
+        // TODO: This should also be set to the use statement symbol, but this
+        // isn't currently exposed by `PHPUnitXHPASTLinterRule::getUseMapping`.
+        $declarations[$key] = null;
+      }
+
       $symbol_name_node = $symbol->getChildOfType(1, 'n_CLASS_NAME');
       $symbol_name = $symbol_name_node->getConcreteString();
 

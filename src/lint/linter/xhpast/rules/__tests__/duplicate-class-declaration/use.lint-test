@@ -1,0 +1,10 @@
+<?php
+use X;
+class X {}
+
+use Y as Z;
+class Y {}
+class Z {}
+~~~~~~~~~~
+error:3:7
+error:7:7
