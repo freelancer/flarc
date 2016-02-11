@@ -1,0 +1,26 @@
+{
+    "event": "suiteStart",
+    "suite": "SomeClassTest",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "SomeClassTest",
+    "test": "SomeClassTest::testSomeMethod"
+}{
+    "event": "test",
+    "suite": "SomeClassTest",
+    "test": "SomeClassTest::testSomeMethod",
+    "status": "fail",
+    "time": 0.01228404045105,
+    "trace": [
+        {
+            "file": "test\/SomeClassTest.php",
+            "line": 13,
+            "function": "assertTrue",
+            "class": "PHPUnit_Framework_Assert",
+            "type": "::"
+        }
+    ],
+    "message": "Failed asserting that false is true.",
+    "output": ""
+}

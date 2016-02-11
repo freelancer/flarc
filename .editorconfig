@@ -14,3 +14,10 @@ indent_style =
 end_of_line =
 max_line_length =
 trim_trailing_whitespace = false
+
+[src/unit/parser/__tests__/phpunit-json/*.phpunit-json]
+indent_size = 4
+max_line_length =
+
+[src/unit/parser/__tests__/phpunit-xml/*.xml]
+max_line_length =
