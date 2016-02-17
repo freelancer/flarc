@@ -1,0 +1,7 @@
+<?php
+
+define('FOO', 'BAR');
+define('FOO', 'BAR', false);
+define('FOO', 'BAR', true);
+~~~~~~~~~~
+warning:5:1
