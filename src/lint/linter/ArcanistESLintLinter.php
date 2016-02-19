@@ -114,7 +114,8 @@ final class ArcanistESLintLinter extends ArcanistExternalLinter {
           $message->setName('ESLint '.idx($line, 'ruleId'));
 
           // TODO: Source contains the whole line, is this better than nothing?
-          $message->setOriginalText(substr($message->getChar()));
+          $message->setOriginalText(
+            substr(idx($line, 'source'), $message->getChar()));
         }
 
         $messages[] = $message;
