@@ -1,0 +1,6 @@
+var statement = false;
+if (statment {
+
+}
+~~~~~~~~~~
+error:2:14
