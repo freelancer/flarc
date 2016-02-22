@@ -4,7 +4,8 @@ final class ArcanistOneStatementPerLineXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/one-statement-per-line/');
+    $this->executeTestsInDirectory(
+      dirname(__FILE__).'/one-statement-per-line/');
   }
 
 }

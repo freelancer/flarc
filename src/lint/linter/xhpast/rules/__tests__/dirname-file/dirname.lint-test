@@ -11,3 +11,9 @@ warning:4:6
 echo __DIR__;
 echo dirname(__DIR__);
 echo __DIR__;
+~~~~~~~~~~
+{
+  "config": {
+    "xhpast.php-version": "5.4.0"
+  }
+}

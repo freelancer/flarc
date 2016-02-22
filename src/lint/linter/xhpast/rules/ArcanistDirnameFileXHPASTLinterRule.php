@@ -18,6 +18,10 @@ final class ArcanistDirnameFileXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
+    if (!$this->version || version_compare($this->version, '5.4.0', '<')) {
+      return;
+    }
+
     $function_calls = $this->getFunctionCalls($root, array('dirname'));
 
     foreach ($function_calls as $function_call) {

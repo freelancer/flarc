@@ -4,7 +4,7 @@ final class ArcanistSwitchCaseSemicolonXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/switch-case-semicolon/');
+    $this->executeTestsInDirectory(dirname(__FILE__).'/switch-case-semicolon/');
   }
 
 }

@@ -4,7 +4,8 @@ final class ArcanistGlobalConstantXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/global-constant/');
+    $this->executeTestsInDirectory(
+      dirname(__FILE__).'/global-constant/');
   }
 
 }

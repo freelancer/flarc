@@ -4,7 +4,7 @@ final class ArcanistGotoXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/goto/');
+    $this->executeTestsInDirectory(dirname(__FILE__).'/goto/');
   }
 
 }
