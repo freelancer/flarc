@@ -1,6 +1,8 @@
 <?php
 echo __FILE__;
 ~~~~~~~~~~
+~~~~~~~~~~
+~~~~~~~~~~
 {
   "config": {
     "xhpast.php-version": "5.4.0"
