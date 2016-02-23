@@ -1,0 +1,25 @@
+<?php
+
+namespace X;
+
+function php_sapi_name() {
+  return 'foobar';
+}
+
+// TODO: This is wrong, but it seems exceedingly rare for this to cause any
+// false positives.
+echo php_sapi_name();
+~~~~~~~~~~
+advice:11:6
+~~~~~~~~~~
+<?php
+
+namespace X;
+
+function php_sapi_name() {
+  return 'foobar';
+}
+
+// TODO: This is wrong, but it seems exceedingly rare for this to cause any
+// false positives.
+echo PHP_SAPI;

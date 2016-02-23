@@ -1,0 +1,9 @@
+<?php
+
+echo php_sapi_name();
+~~~~~~~~~~
+advice:3:6
+~~~~~~~~~~
+<?php
+
+echo PHP_SAPI;
