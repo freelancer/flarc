@@ -1,5 +1,8 @@
 var obj = {
   key: 3,
-  key: 12
+  key: 12,
 };
 ~~~~~~~~~~
+error:1:5
+error:3:3
+error:3:10

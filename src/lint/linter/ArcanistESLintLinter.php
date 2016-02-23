@@ -5,6 +5,9 @@
  */
 final class ArcanistESLintLinter extends ArcanistExternalLinter {
 
+  private $config;
+  private $env;
+
   public function getInfoName() {
     return 'ESLint';
   }
@@ -65,7 +68,45 @@ final class ArcanistESLintLinter extends ArcanistExternalLinter {
     $options[] = '--cache=false';
     $options[] = '--format=json';
 
+    if ($this->config) {
+      $options[] = '--config='.$this->config;
+    }
+
+    if ($this->env) {
+      $options[] = '--env='.$this->env;
+    }
+
     return $options;
+  }
+
+  public function getLinterConfigurationOptions() {
+    $options = array(
+      'eslint.config' => array(
+        'type' => 'optional string',
+        'help' => pht('%s configuration file.', 'ESLint'),
+      ),
+      'eslint.env' => array(
+        'type' => 'optional string',
+        'help' => pht('Enables specific environments.'),
+      ),
+    );
+
+    return $options + parent::getLinterConfigurationOptions();
+  }
+
+  public function setLinterConfigurationValue($key, $value) {
+    switch ($key) {
+      case 'eslint.config':
+        $this->config = $value;
+        return;
+
+      case 'eslint.env':
+        $this->env = $value;
+        return;
+
+      default:
+        return parent::setLinterConfigurationValue($key, $value);
+    }
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
@@ -115,7 +156,7 @@ final class ArcanistESLintLinter extends ArcanistExternalLinter {
 
           // TODO: Source contains the whole line, is this better than nothing?
           $message->setOriginalText(
-            substr(idx($line, 'source'), $message->getChar()));
+            substr(idx($line, 'source'), $message->getChar() - 1));
         }
 
         $messages[] = $message;
