@@ -18,7 +18,7 @@ final class ArcanistDirnameFileXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    if (!$this->version || version_compare($this->version, '5.4.0', '<')) {
+    if (!$this->version || version_compare($this->version, '5.3.0', '<')) {
       return;
     }
 
