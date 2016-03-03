@@ -271,25 +271,20 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
         $file->getAttribute('name'),
         $this->projectRoot);
 
-      $coverage = '';
+      $any_line_covered = false;
+      $coverage = str_repeat('N', $this->getFileLineCount($file_path));
       $lines = $file->getElementsByTagName('line');
-      $start_line = 1;
 
       foreach ($lines as $line) {
-        $line_number = (int)$line->getAttribute('num');
-
-        for (; $start_line < $line_number; $start_line++) {
-          $coverage .= 'N';
-        }
-
         switch ($line->getAttribute('type')) {
           case 'stmt':
             $count = (int)$line->getAttribute('count');
 
-            if ($count == 0) {
-              $coverage .= 'U';
-            } else if ($count > 0) {
-              $coverage .= 'C';
+            if ($count > 0) {
+              $any_line_covered = true;
+              $is_covered = 'C';
+            } else if ($count == 0) {
+              $is_covered = 'U';
             } else {
               throw new UnexpectedValueException(
                 pht(
@@ -297,22 +292,22 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
                   'count',
                   $count));
             }
+
+            $line_number = (int)$line->getAttribute('num');
+            $coverage[$line_number - 1] = $is_covered;
             break;
 
           default:
-            $coverage .= 'N';
             break;
         }
-
-        $start_line++;
       }
 
-      $line_count = $this->getFileLineCount($file_path);
-      for (; $start_line <= $line_count; $start_line++) {
-        $coverage .= 'N';
+      // Sometimes the Clover coverage gives false positives on uncovered lines
+      // when the file wasn't actually part of the test. This filters out files
+      // with no coverage which helps give more accurate overall results.
+      if ($any_line_covered) {
+        $coverage_data[$file_path] = $coverage;
       }
-
-      $coverage_data[$file_path] = $coverage;
     }
 
     return $coverage_data;
