@@ -40,6 +40,16 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
   }
 
   public function run() {
+    if ($this->getEnableCoverage() !== false && !extension_loaded('xdebug')) {
+      throw new ArcanistUsageException(
+        pht(
+          'You specified `%s` but %s is not available, so coverage can not '.
+          'be enabled for `%s`.',
+          '--coverage',
+          'XDebug',
+          __CLASS__));
+    }
+
     $this->setSourceDirectory(
       $this->getConfigPath('unit.phpunit.source-directory'));
     $this->setTestDirectory(
