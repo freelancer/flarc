@@ -40,14 +40,33 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
   }
 
   public function run() {
-    if ($this->getEnableCoverage() !== false && !extension_loaded('xdebug')) {
-      throw new ArcanistUsageException(
-        pht(
-          'You specified `%s` but %s is not available, so coverage can not '.
-          'be enabled for `%s`.',
-          '--coverage',
-          'XDebug',
-          __CLASS__));
+    // @{method:getEnableCoverage} returns the following possible values:
+    //
+    //   - `false` if the user passed `--no-coverage`, explicitly disabling
+    //     coverage.
+    //   - `null` if the user did not pass any coverage flags. Coverage should
+    //     generally be enabled if available.
+    //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
+    $enable_coverage = $this->getEnableCoverage();
+
+    if ($enable_coverage !== false) {
+      if (!extension_loaded('xdebug')) {
+        // Throw an exception if the user explicitly enabled coverage, but
+        // coverage is unavailable.
+        if ($enable_coverage === true) {
+          throw new ArcanistUsageException(
+            pht(
+              'You specified `%s` but %s is not available, so coverage can not '.
+              'be enabled for `%s`.',
+              '--coverage',
+              'XDebug',
+              __CLASS__));
+        }
+
+        $enable_coverage = false;
+      } else {
+        $enable_coverage = true;
+      }
     }
 
     $this->setSourceDirectory(
@@ -87,7 +106,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         $args[] = '-d display_errors=stderr';
         $args[] = '--log-json='.$json_output;
 
-        if ($this->getEnableCoverage() !== false) {
+        if ($enable_coverage !== false) {
           $clover_output = new TempFile();
           $args[] = '--coverage-clover='.$clover_output;
         }
