@@ -21,7 +21,7 @@ final class ArcanistOneStatementPerLineXHPASTLinterRule
 
     foreach ($statement_lists as $id => $statement_list) {
       $mapping    = array();
-      $statements = $root->selectDescendantsOfType('n_STATEMENT');
+      $statements = $statement_list->selectDescendantsOfType('n_STATEMENT');
 
       // If the statement list contains //any// inline HTML, just give up...
       // XHPAST doesn't do a great job of parsing inline HTML and its usage is
