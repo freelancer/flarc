@@ -1,2 +1,5 @@
+# Diviner
+/.divinercache/
+
 # libphutil
 /src/.phutil_module_cache

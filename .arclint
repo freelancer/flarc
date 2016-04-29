@@ -1,0 +1,44 @@
+{
+  "linters": {
+    "chmod": {
+      "type": "chmod"
+    },
+    "filename": {
+      "type": "filename"
+    },
+    "generated": {
+      "type": "generated"
+    },
+    "json": {
+      "type": "json",
+      "include": [
+        "(^\\.arcconfig$)",
+        "(^\\.arclint$)",
+        "(^\\.arcunit$)",
+        "(\\.book$)",
+        "(\\.json$)"
+      ]
+    },
+    "merge-conflict": {
+      "type": "merge-conflict"
+    },
+    "nolint": {
+      "type": "nolint"
+    },
+    "phutil-library": {
+      "type": "phutil-library",
+      "include": "(\\.php$)"
+    },
+    "spelling": {
+      "type": "spelling"
+    },
+    "text": {
+      "type": "text"
+    },
+    "xhpast": {
+      "type": "xhpast",
+      "include": "(\\.php$)",
+      "standard": "phutil.xhpast"
+    }
+  }
+}

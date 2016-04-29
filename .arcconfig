@@ -1,0 +1,6 @@
+{
+  "phabricator.uri": "https://phabricator.freelancer.com",
+  "load": [
+    "src/"
+  ]
+}
