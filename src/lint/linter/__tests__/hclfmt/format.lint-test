@@ -1,0 +1,9 @@
+output "something" {
+value = "something"
+}
+~~~~~~~~~~
+warning:1:1
+~~~~~~~~~~
+output "something" {
+  value = "something"
+}

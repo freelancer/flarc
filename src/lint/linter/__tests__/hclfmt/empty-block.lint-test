@@ -1,0 +1,10 @@
+output "foo" {}
+
+output "bar" {
+}
+~~~~~~~~~~
+warning:1:1
+~~~~~~~~~~
+output "foo" {}
+
+output "bar" {}
