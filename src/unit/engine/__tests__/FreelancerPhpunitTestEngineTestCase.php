@@ -67,4 +67,49 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
     }
   }
 
+
+  public function testGetStaleDependencies() {
+    $test_cases = array(
+      array(
+        array(
+          'packages' => array(
+            array(
+              'name' => 'A',
+              'version' => '1.1.0',
+            ),
+            array(
+              'name' => 'B',
+              'version' => '1.0.0',
+            ),
+            array(
+              'name' => 'C',
+              'version' => '1.0.1',
+            ),
+          ),
+        ),
+        array(
+          array(
+            'name' => 'A',
+            'version' => '1.0.1',
+          ),
+          array(
+            'name' => 'B',
+            'version' => '1.0.0',
+          ),
+        ),
+        array('A', 'C'),
+      ),
+    );
+
+    foreach ($test_cases as $test_case) {
+      list($composer_lock, $installed, $expected) = $test_case;
+      $composer_lock = phutil_json_encode($composer_lock);
+      $installed = phutil_json_encode($installed);
+      $this->assertEqual(
+        $expected,
+        FreelancerPhpunitTestEngine::getStaleDependencies(
+          $composer_lock,
+          $installed));
+    }
+  }
 }

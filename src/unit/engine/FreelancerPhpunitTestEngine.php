@@ -69,6 +69,22 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       }
     }
 
+    // Check whether composer dependencies are up-to-date.
+    $stale_dependencies = $this->getStaleDependencies(
+      Filesystem::readFile(
+        $this->getProjectRoot().'/composer.lock'),
+      Filesystem::readFile(
+        $this->getProjectRoot().'/vendor/composer/installed.json'));
+
+    if (!empty($stale_dependencies)) {
+      throw new Exception (
+        pht(
+          "The following dependencies are out of date:\n%s\n".
+          "Please run `%s` to update them\n",
+          implode("\n", $stale_dependencies),
+          'composer install'));
+    }
+
     $this->setSourceDirectory(
       $this->getConfigPath('unit.phpunit.source-directory'));
     $this->setTestDirectory(
@@ -367,4 +383,38 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     return $this->getWorkingCopy()->getProjectRoot();
   }
 
+  /**
+   * Get stale Composer dependencies.
+   *
+   * Compare dependency versions in `composer.lock` and
+   * `installed.json`, and return dependencies needed
+   * to be updated or installed.
+   *
+   * @param  string         Content of composer.lock
+   * @param  string         Content of installed.json
+   * @return list<string>   Stale dependencies
+   */
+  public static function getStaleDependencies($composer_lock, $installed) {
+    $repo_dependencies = phutil_json_decode($composer_lock);
+    $repo_dependencies = $repo_dependencies['packages'];
+    $local_dependencies = phutil_json_decode($installed);
+    $local_dependency_versions = array();
+    foreach ($local_dependencies as $dependency) {
+      $name = $dependency['name'];
+      $local_dependency_versions[$name] = $dependency['version'];
+    }
+
+    $stale_dependencies = array();
+    foreach ($repo_dependencies as $dependency) {
+      $name = $dependency['name'];
+
+      if (!isset($local_dependency_versions[$name])
+        || $dependency['version'] !== $local_dependency_versions[$name]) {
+
+        $stale_dependencies[] = $name;
+      }
+    }
+
+    return $stale_dependencies;
+  }
 }
