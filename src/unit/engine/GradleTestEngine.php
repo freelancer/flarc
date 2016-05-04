@@ -49,9 +49,9 @@ final class GradleTestEngine extends ArcanistUnitTestEngine {
     Filesystem::assertIsFile($root.'/gradlew');
     // TODO: replace this with an upstream version eventually
     if (!is_executable($root.'/gradlew')) {
-      throw new Exception(
-        $path,
-        pht("`%s` is not executible.", 'gradlew'));
+      throw new FilesystemException(
+        $root.'/gradlew',
+        pht('`%s` is not executable.', 'gradlew'));
     }
 
     id(new ExecFuture('./gradlew --rerun-tasks %Ls', $gradle_tasks))

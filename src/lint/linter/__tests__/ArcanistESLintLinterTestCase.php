@@ -26,7 +26,7 @@ final class ArcanistESLintLinterTestCase
   }
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/eslint/');
+    $this->executeTestsInDirectory(dirname(__FILE__).'/eslint/');
   }
 
 }

@@ -4,7 +4,7 @@ final class ArcanistCommaSpacingXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/comma-spacing/');
+    $this->executeTestsInDirectory(dirname(__FILE__).'/comma-spacing/');
   }
 
 }

@@ -4,7 +4,7 @@ final class ArcanistEmptyDocblockCommentXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(__DIR__.'/empty-docblock-comment/');
+    $this->executeTestsInDirectory(dirname(__FILE__).'/empty-docblock-comment/');
   }
 
 }

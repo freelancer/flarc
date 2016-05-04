@@ -3,7 +3,7 @@
 final class PHPUnitXHPASTLinterRuleTestCase extends PhutilTestCase {
 
   public function testUseMapping() {
-    $dir   = __DIR__.'/use-mapping/';
+    $dir   = dirname(__FILE__).'/use-mapping/';
     $files = id(new FileFinder($dir))
       ->withType('f')
       ->withSuffix('php.test')
