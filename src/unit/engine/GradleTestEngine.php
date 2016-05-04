@@ -24,7 +24,7 @@ final class GradleTestEngine extends ArcanistUnitTestEngine {
    * This engine does not support yet support testing only affected files,
    * though we could consider it in the future.
    */
-  public function supportsRunAllTests() {
+  protected function supportsRunAllTests() {
     return true;
   }
 
