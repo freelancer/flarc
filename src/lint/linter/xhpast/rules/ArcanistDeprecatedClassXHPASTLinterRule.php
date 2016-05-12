@@ -38,32 +38,19 @@ final class ArcanistDeprecatedClassXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $map   = $this->deprecatedClasses;
-    $nodes = $root->selectDescendantsOfTypes(array(
-      'n_NEW',
-      'n_CLASS_STATIC_ACCESS',
-      'n_EXTENDS_LIST',
-      'n_IMPLEMENTS_LIST',
-    ));
+    $map = $this->deprecatedClasses;
+    foreach ($root->selectDescendantsOfType('n_CLASS_NAME') as $node) {
+      $name = $node->getConcreteString();
+      if (!isset($map[$name])
+        || $node->getParentNode()->getTypeName() === 'n_CLASS_DECLARATION') {
 
-    foreach ($nodes as $node) {
-      $class_names = $nodes->selectDescendantsOfType('n_CLASS_NAME');
-
-      foreach ($class_names as $class_name) {
-        $name = $class_name->getConcreteString();
-
-        if (idx($map, $name, false) === false) {
-          continue;
-        }
-
-        $message = pht('The `%s` class is deprecated.', $name);
-        if (is_string($map[$name])) {
-          $message .= ' '.$map[$name];
-        }
-
-        $this->raiseLintAtNode($class_name, $message);
+        continue;
       }
+      $message = pht('The `%s` class is deprecated.', $name);
+      if (is_string($map[$name])) {
+        $message .= ' '.$map[$name];
+      }
+      $this->raiseLintAtNode($node, $message);
     }
   }
-
 }
