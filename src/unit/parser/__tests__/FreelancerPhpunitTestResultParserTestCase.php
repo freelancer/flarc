@@ -83,7 +83,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   protected function getTestCases() {
     return array(
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-json/1.phpunit-json'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/1.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -116,7 +116,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-json/2.phpunit-json'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/2.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -158,7 +158,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-json/3.phpunit-json'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/3.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -197,7 +197,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-json/4.phpunit-json'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/4.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -410,7 +410,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-json/5.phpunit-json'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/5.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -483,11 +483,11 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   public function testParseCloverCoverage() {
     $test_cases = array(
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-xml/1.xml'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/1.xml'),
         array(),
       ),
       array(
-        Filesystem::readFile(__DIR__.'/phpunit-xml/2.xml'),
+        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/2.xml'),
         array(
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
         ),
