@@ -14,6 +14,7 @@
 final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
 
   private $fileLineCounts = array();
+  private $stdout;
 
 
 /* -(  Configuration  )------------------------------------------------------ */
@@ -62,6 +63,19 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     return $this;
   }
 
+  /**
+   * Set data that was output to the standard output stream.
+   *
+   * @param  string
+   * @return this
+   *
+   * @task config
+   */
+  public function setStdout($stdout) {
+    $this->stdout = $stdout;
+    return $this;
+  }
+
 
 /* -(  Test Result Parsing  )------------------------------------------------ */
 
@@ -79,6 +93,18 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
    * @return list<ArcanistUnitTestResult>  Unit test results.
    */
   public function parseTestResults($path, $output) {
+    // Sometimes PHPUnit will output error messages to stdout rather than
+    // stderr. See https://github.com/sebastianbergmann/phpunit/issues/2110.
+    $stdout = preg_replace('/^PHPUnit \d+.\d+.\d+.*\n\n/', '', $this->stdout);
+
+    if (strlen($stdout)) {
+      $result = id(new ArcanistUnitTestResult())
+        ->setName($path)
+        ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
+        ->setUserData($stdout);
+      return array($result);
+    }
+
     if (!$output) {
       $result = id(new ArcanistUnitTestResult())
         ->setName($path)
@@ -255,6 +281,10 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
    * @task utility
    */
   public function parseCloverCoverage($xml) {
+    if (!strlen($xml)) {
+      return null;
+    }
+
     $dom = new DOMDocument();
     $ok = @$dom->loadXML($xml);
 

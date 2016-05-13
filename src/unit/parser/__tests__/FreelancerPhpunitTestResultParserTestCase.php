@@ -83,7 +83,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   protected function getTestCases() {
     return array(
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/1.phpunit-json'),
+        Filesystem::readFile(__DIR__.'/phpunit-json/1.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -116,7 +116,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/2.phpunit-json'),
+        Filesystem::readFile(__DIR__.'/phpunit-json/2.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -158,7 +158,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/3.phpunit-json'),
+        Filesystem::readFile(__DIR__.'/phpunit-json/3.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -197,7 +197,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/4.phpunit-json'),
+        Filesystem::readFile(__DIR__.'/phpunit-json/4.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -410,7 +410,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ),
       ),
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-json/5.phpunit-json'),
+        Filesystem::readFile(__DIR__.'/phpunit-json/5.phpunit-json'),
         array(
           array(
             'event' => 'suiteStart',
@@ -483,11 +483,11 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   public function testParseCloverCoverage() {
     $test_cases = array(
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/1.xml'),
+        Filesystem::readFile(__DIR__.'/phpunit-xml/1.xml'),
         array(),
       ),
       array(
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/2.xml'),
+        Filesystem::readFile(__DIR__.'/phpunit-xml/2.xml'),
         array(
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
         ),
@@ -509,16 +509,9 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   }
 
   public function testParseCloverCoverageWithInvalidData() {
-    $exception = null;
-    $parser = new FreelancerPhpunitTestResultParser();
-
-    try {
-      $parser->parseCloverCoverage('');
-    } catch (Exception $ex) {
-      $exception = $ex;
-    }
-
-    $this->assertTrue($exception instanceof RuntimeException);
+    $this->assertEqual(
+      null,
+      id(new FreelancerPhpunitTestResultParser())->parseCloverCoverage(''));
   }
 
   public function testParseTestResults() {
@@ -579,4 +572,24 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
     $this->assertTrue($exception instanceof UnexpectedValueException);
   }
 
+  public function testParseErrorOnStdout() {
+    $path = 'src/BrokenTest.php';
+    $message = sprintf(
+      'Trying to @cover or @use not existing method "%s".',
+      'SomeClass::someMethod');
+
+    $expected = array(
+      id(new ArcanistUnitTestResult())
+        ->setName($path)
+        ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
+        ->setUserData($message),
+    );
+
+    $parser = id(new FreelancerPhpunitTestResultParser())
+      ->setStdout(
+        "PHPUnit 4.8.23 by Sebastian Bergmann and contributors.\n\n{$message}");
+    $results = $parser->parseTestResults($path, phutil_json_encode(array()));
+
+    $this->assertTrue($expected == $results);
+  }
 }

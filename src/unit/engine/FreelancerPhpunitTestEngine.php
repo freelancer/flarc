@@ -56,8 +56,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         if ($enable_coverage === true) {
           throw new ArcanistUsageException(
             pht(
-              'You specified `%s` but %s is not available, so coverage can '.
-              'not be enabled for `%s`.',
+              'You specified `%s` but %s is not available, so coverage can not '.
+              'be enabled for `%s`.',
               '--coverage',
               'XDebug',
               __CLASS__));
@@ -122,6 +122,13 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         $args[] = '-d display_errors=stderr';
         $args[] = '--log-json='.$json_output;
 
+        // By default, PHPUnit will output both progress and errors to stdout.
+        // This makes it difficult to determine if an error occurred by
+        // inspecting standard output. By passing the `--stderr` flag, PHPUnit
+        // will output progress information to the standard error stream
+        // instead.
+        $args[] = '--stderr';
+
         if ($enable_coverage !== false) {
           $clover_output = new TempFile();
           $args[] = '--coverage-clover='.$clover_output;
@@ -150,6 +157,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         $test,
         $output[$test]['json'],
         $output[$test]['clover'],
+        $stdout,
         $stderr);
     }
 
@@ -302,10 +310,13 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    * @param  string                        Path to test file.
    * @param  string                        Path to PHPUnit JSON report.
    * @param  string                        Path to PHPUnit Clover report.
-   * @param  string                        Data written to `stderr`.
+   * @param  string                        Data written to the standard output
+   *                                       stream.
+   * @param  string                        Data written to the standard error
+   *                                       output dstream.
    * @return list<ArcanistUnitTestResult>
    */
-  private function parseTestResults($path, $json, $clover, $stderr) {
+  private function parseTestResults($path, $json, $clover, $stdout, $stderr) {
     $results = Filesystem::readFile($json);
 
     return id(new FreelancerPhpunitTestResultParser())
@@ -313,6 +324,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       ->setProjectRoot($this->getProjectRoot())
       ->setCoverageFile($clover)
       ->setAffectedTests($this->affectedTests)
+      ->setStdout($stdout)
       ->setStderr($stderr)
       ->parseTestResults($path, $results);
   }
