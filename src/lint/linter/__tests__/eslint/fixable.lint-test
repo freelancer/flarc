@@ -1,0 +1,7 @@
+/* eslint semi: ["error", "always"] */
+'use strict'
+~~~~~~~~~~
+error:2:13
+~~~~~~~~~~
+/* eslint semi: ["error", "always"] */
+'use strict';

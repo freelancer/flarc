@@ -1,0 +1,9 @@
+<?php
+
+interface X {
+  /**
+   * @return int
+   */
+  function s();
+}
+~~~~~~~~~~

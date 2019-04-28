@@ -1,0 +1,4 @@
+var s = 'alert(1)';
+eval(s);
+~~~~~~~~~~
+error:1:0

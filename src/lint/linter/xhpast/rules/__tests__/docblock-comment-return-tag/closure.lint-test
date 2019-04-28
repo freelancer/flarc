@@ -1,0 +1,21 @@
+<?php
+
+final class SomeClass {
+  /**
+   * @param string
+   */
+  public function __construct($str) {
+    $closure = function () {
+      return new stdClass();
+    };
+  }
+  /**
+   * @return void
+   */
+  public function someMethod() {
+    $closure = function () {
+      return new stdClass();
+    };
+  }
+}
+~~~~~~~~~~

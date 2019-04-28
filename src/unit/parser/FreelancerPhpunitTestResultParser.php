@@ -3,7 +3,7 @@
 /**
  * Test result parser for PHPUnit.
  *
- * This class parses PHPUnit test results produced with the `--log-json` flag
+ * This class parses PHPUnit test results produced with the `--log-junit` flag
  * and Clover XML coverage data produced with the `--coverage-clover` flag.
  * This class is based on @{class:ArcanistPhpunitTestResultParser}.
  *
@@ -14,7 +14,6 @@
 final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
 
   private $fileLineCounts = array();
-  private $stdout;
 
 
 /* -(  Configuration  )------------------------------------------------------ */
@@ -63,49 +62,24 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     return $this;
   }
 
-  /**
-   * Set data that was output to the standard output stream.
-   *
-   * @param  string
-   * @return this
-   *
-   * @task config
-   */
-  public function setStdout($stdout) {
-    $this->stdout = $stdout;
-    return $this;
-  }
-
 
 /* -(  Test Result Parsing  )------------------------------------------------ */
 
 
   /**
-   * Parse test results from the PHPUnit JSON report.
+   * Parse test results from the PHPUnit JUnit report.
    *
-   * This method converts output from PHPUnit (produced with the `--log-json`
+   * This method converts output from PHPUnit (produced with the `--log-junit`
    * and `--coverage-clover` flags) to instances of
    * @{class:ArcanistUnitTestResult}.
    *
    * @param  string                        Path of the test file.
-   * @param  string                        String containing the PHPUnit JSON
+   * @param  string                        String containing the PHPUnit JUnit
    *                                       report.
    * @return list<ArcanistUnitTestResult>  Unit test results.
    */
-  public function parseTestResults($path, $output) {
-    // Sometimes PHPUnit will output error messages to stdout rather than
-    // stderr. See https://github.com/sebastianbergmann/phpunit/issues/2110.
-    $stdout = preg_replace('/^PHPUnit \d+.\d+.\d+.*\n\n/', '', $this->stdout);
-
-    if (strlen($stdout)) {
-      $result = id(new ArcanistUnitTestResult())
-        ->setName($path)
-        ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
-        ->setUserData($stdout);
-      return array($result);
-    }
-
-    if (!$output) {
+  public function parseTestResults($path, $output): array {
+    if (!strlen($output) || strlen($this->stderr)) {
       $result = id(new ArcanistUnitTestResult())
         ->setName($path)
         ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
@@ -113,8 +87,9 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
       return array($result);
     }
 
-    // Parse the JSON test report.
-    $events = self::parseJsonEvents($output);
+    // Parse the JUnit test report.
+    $parser = new ArcanistXUnitTestResultParser();
+    $events = $parser->parseTestResults($output);
 
     // Coverage is calculated for all test cases in the executed path.
     $coverage = array();
@@ -138,96 +113,10 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     $last_test_name = null;
 
     foreach ($events as $event) {
-      $result = new ArcanistUnitTestResult();
-
-      switch ($event['event']) {
-        case 'suiteStart':
-          // TODO: We should maybe do a sanity check here to ensure that
-          // `$event['tests'] < last($tests_remaining)`. We should also
-          // probably check that `$event['tests']` is actually an integer and
-          // that the value is positive.
-          $test_suites[] = $event['suite'];
-          $tests_remaining[] = $event['tests'];
-          continue 2;
-
-        case 'test':
-          list($namespace, $name) = self::getTestName(
-            last($test_suites),
-            $event['test']);
-          $result->setNamespace($namespace);
-          $result->setName($name);
-
-          // Keep track of the number of tests remaining in each test suite.
-          for ($i = 0; $i < count($tests_remaining); $i++) {
-            $tests_remaining[$i]--;
-          }
-          while (last($tests_remaining) === 0) {
-            array_pop($test_suites);
-            array_pop($tests_remaining);
-          }
-
-          break;
-
-        case 'testStart':
-          list($last_test_namespace, $last_test_name) = self::getTestName(
-            $event['suite'],
-            $event['test']);
-          continue 2;
-
-        default:
-          throw new UnexpectedValueException(
-            pht(
-              'Unexpected event in PHPUnit JSON report: "%s"',
-              $event['event']));
-      }
-
-      $message = idx($event, 'message');
-
-      switch ($event['status']) {
-        case 'error':
-          if (strpos($message, 'Skipped Test: ') !== false) {
-            $result->setResult(ArcanistUnitTestResult::RESULT_SKIP);
-          } else if (strpos($message, 'Incomplete Test: ') !== false) {
-            $result->setResult(ArcanistUnitTestResult::RESULT_SKIP);
-          } else {
-            $result->setResult(ArcanistUnitTestResult::RESULT_BROKEN);
-          }
-          $result->setUserData($message);
-          break;
-
-        case 'fail':
-          $result->setResult(ArcanistUnitTestResult::RESULT_FAIL);
-          $result->setUserData($message);
-          break;
-
-        case 'pass':
-          $result->setResult(ArcanistUnitTestResult::RESULT_PASS);
-          break;
-
-        default:
-          throw new UnexpectedValueException(
-            pht(
-              "Unexpected status in PHPUnit JSON report: '%s'",
-              $event['status']));
-      }
-
-      $result->setCoverage($coverage);
-      $result->setDuration($event['time']);
-      $results[] = $result;
+      $event->setCoverage($coverage);
     }
 
-    // If the `$tests_remaining` array is non-empty, something has gone wrong.
-    // This can happen if a fatal error occurs during test execution, in which
-    // case the JSON output from PHPUnit will be incomplete.
-    if ($tests_remaining) {
-      $results[] = id(new ArcanistUnitTestResult())
-        ->setNamespace($last_test_namespace)
-        ->setName($last_test_name)
-        ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
-        ->setUserData($this->stderr);
-    }
-
-    return $results;
+    return $events;
   }
 
 
@@ -252,7 +141,7 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     // The test name will be the class method, plus additional information
     // describing the data set (e.g. "with data set #0"). The actual data
     // contained within the data set is removed from the test name.
-    $name = preg_replace('/^.*::/', '', $name);
+    $name = preg_replace('/^[^:]+::/', '', $name);
     $name = preg_replace('/ \(.*\)/s', '', $name);
 
     return array($namespace, $name);
@@ -281,10 +170,6 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
    * @task utility
    */
   public function parseCloverCoverage($xml) {
-    if (!strlen($xml)) {
-      return null;
-    }
-
     $dom = new DOMDocument();
     $ok = @$dom->loadXML($xml);
 
@@ -341,31 +226,6 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     }
 
     return $coverage_data;
-  }
-
-  /**
-   * Parse the PHPUnit JSON output.
-   *
-   * Passing `--log-json` to PHPUnit causes it to output invalid JSON, see
-   * [[https://github.com/sebastianbergmann/phpunit/issues/143 | PHPUnit
-   * doesn't log valid JSON]]. This method converts "PHPUnit JSON" to regular
-   * JSON and returns the parsed JSON object.
-   *
-   * @param  string  String containing JSON report.
-   * @return array   Decoded JSON data.
-   */
-  public function parseJsonEvents($json) {
-    if (!$json) {
-      throw new RuntimeException(
-        pht(
-          'JSON report file is empty, which probably means that PHPUnit '.
-          'failed to run tests. Try running `%s` with `%s` option and then '.
-          'run the generated PHPUnit command yourself.',
-          'arc unit',
-          '--trace'));
-    }
-
-    return phutil_json_decode('['.preg_replace('/}{\s*"/', '},{"', $json).']');
   }
 
 }

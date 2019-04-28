@@ -1,0 +1,9 @@
+<?php
+$GLOBALS['x'];
+
+function foobar() {
+  return $GLOBALS['x'];
+}
+~~~~~~~~~~
+warning:2:1
+warning:5:10

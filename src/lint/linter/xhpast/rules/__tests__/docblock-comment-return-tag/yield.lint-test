@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @param int
+ */
+function a($n) {
+  for ($ii = 0; $ii < $n; $ii++) {
+    yield $ii;
+  }
+}
+
+/**
+ * @param  int
+ * @return Generator
+ */
+function a($n) {
+  for ($ii = 0; $ii < $n; $ii++) {
+    yield $ii;
+  }
+}
+
+/**
+ * @return Generator
+ */
+function a() {
+  return true;
+}
+~~~~~~~~~~
+warning:3:1
+warning:22:1

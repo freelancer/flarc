@@ -1,0 +1,90 @@
+<?php
+
+function f($x) {}
+function g($x ) {}
+function h ($x) {}
+
+function & i($x) {}
+function &j( $x ) {}
+function &k(&$x ) {}
+function &l    (int ...$x ) {}
+
+final class X {
+
+  public function a($x) {}
+  public function b($x ) {}
+
+  public static function & c($x) {}
+  public  static function &d($x ) {}
+
+  abstract private function e($x);
+  abstract   private  function f(   $x );
+
+  private function & a (User ...$users ) {}
+
+  abstract  public function foo(int   $a = 10, bool $b=true);
+
+  public static     function & f (int $a =5, int &$b  , array $arr =[1, 2, 3], ...$param ) :int {return 0;}
+}
+
+function foo  ( ) {}
+
+function f1 (int $a   = 100 ) : int {
+  $func = function ($n)use($a):int {
+    return $n + $a;
+  };
+  return 0;
+}
+~~~~~~~~~~
+advice:4:1
+advice:5:1
+advice:8:1
+advice:9:1
+advice:10:1
+advice:15:3
+advice:18:3
+advice:21:3
+advice:23:3
+advice:25:3
+advice:27:3
+advice:30:1
+advice:32:1
+advice:33:11
+~~~~~~~~~~
+<?php
+
+function f($x) {}
+function g($x) {}
+function h($x) {}
+
+function & i($x) {}
+function & j($x) {}
+function & k(&$x) {}
+function & l(int ...$x) {}
+
+final class X {
+
+  public function a($x) {}
+  public function b($x) {}
+
+  public static function & c($x) {}
+  public static function & d($x) {}
+
+  abstract private function e($x);
+  abstract private function f($x);
+
+  private function & a(User ...$users) {}
+
+  abstract public function foo(int $a = 10, bool $b = true);
+
+  public static function & f(int $a = 5, int &$b, array $arr = [1, 2, 3], ...$param): int {return 0;}
+}
+
+function foo() {}
+
+function f1(int $a = 100): int {
+  $func = function ($n) use ($a): int {
+    return $n + $a;
+  };
+  return 0;
+}

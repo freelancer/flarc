@@ -1,0 +1,5 @@
+FROM ubuntu
+RUN apt-get install -y python=2.7
+~~~~~~~~~~
+advice:1:0
+advice:2:0

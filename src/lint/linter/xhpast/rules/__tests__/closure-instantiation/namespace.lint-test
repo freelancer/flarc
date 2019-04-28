@@ -1,0 +1,8 @@
+<?php
+
+namespace SomeNamespace;
+
+new Closure();
+new \Closure();
+~~~~~~~~~~
+error:6:1

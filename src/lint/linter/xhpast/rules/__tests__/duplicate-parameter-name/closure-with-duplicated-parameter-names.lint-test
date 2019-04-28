@@ -1,0 +1,4 @@
+<?php
+foo($arr, function($a, $a){});
+~~~~~~~~~~
+error:2:24

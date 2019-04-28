@@ -1,0 +1,30 @@
+--- Original
++++ New
+@@ -1,75 +1,89 @@
+-      'foo
+-        'bar
++        foo
++        bar
+@@ -10,75 +1,89 @@
+-      'foo
+         'bar
+         foo
++        bar
+~~~~~~~~~
+1
+~~~~~~~~~
+      'foo
+        'bar
+~~~~~~~~~
+        foo
+        bar
+~~~~~~~~~
+10
+~~~~~~~~~
+      'foo
+        'bar
+        foo
+~~~~~~~~~
+        'bar
+        foo
+        bar

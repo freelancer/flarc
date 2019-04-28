@@ -1,0 +1,7 @@
+<?php
+
+function foo1($a, $b, $unused, $unused) {}
+function foo2($a, $b, $unused, &$unused) {}
+~~~~~~~~~~
+error:3:32
+error:4:33

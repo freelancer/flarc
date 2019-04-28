@@ -1,0 +1,29 @@
+<?php
+
+function foo1(int $a): int {return 0;}
+function foo2( int $a)     : int {return 0;}
+function foo3(int $a):int {return 0;}
+function foo4(int   $a):     int {return 0;}
+function foo5(int &$a, ...$params): void {return;}
+function   foo6  ( int  &$a , ...$params   ):void {return;}
+function foo7 (  ) :bool {
+	return true;
+}
+~~~~~~~~~~
+advice:4:1
+advice:5:1
+advice:6:1
+advice:8:1
+advice:9:1
+~~~~~~~~~~
+<?php
+
+function foo1(int $a): int {return 0;}
+function foo2(int $a): int {return 0;}
+function foo3(int $a): int {return 0;}
+function foo4(int $a): int {return 0;}
+function foo5(int &$a, ...$params): void {return;}
+function foo6(int &$a, ...$params): void {return;}
+function foo7(): bool {
+	return true;
+}

@@ -3,7 +3,7 @@
 /**
  * @coversDefaultClass SomeClass
  */
-final class SomeTest extends PHPUnit_Framework_TestCase {
+final class SomeTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {
     $this->assertTrue(true);
   }
@@ -12,13 +12,13 @@ final class SomeTest extends PHPUnit_Framework_TestCase {
 /**
  * @stuff
  */
-final class SomeOtherTest extends PHPUnit_Framework_TestCase {
+final class SomeOtherTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {
     $this->assertTrue(true);
   }
 }
 
-final class YetAnotherTest extends PHPUnit_Framework_TestCase {
+final class YetAnotherTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {
     $this->assertTrue(true);
   }

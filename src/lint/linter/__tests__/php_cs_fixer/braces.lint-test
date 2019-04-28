@@ -1,0 +1,16 @@
+<?php
+
+class foo extends boo {
+    const bar = 'bar';
+    const far = 'far';
+}
+~~~~~~
+advice:1:1
+~~~~~~
+<?php
+
+class foo extends boo
+{
+    const bar = 'bar';
+    const far = 'far';
+}

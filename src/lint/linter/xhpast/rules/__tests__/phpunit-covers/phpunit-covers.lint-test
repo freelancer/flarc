@@ -1,6 +1,6 @@
 <?php
 
-final class SomeTest extends PHPUnit_Framework_TestCase {
+final class SomeTest extends PHPUnit\Framework\TestCase {
 
   public function testMissingCovers() {
     $this->assertTrue(true);

@@ -1,0 +1,17 @@
+<?php
+
+function func() {
+  $func = function ($var): bool {
+    return false;
+  };
+  return false;
+}
+
+function func() {
+  $func = function ($var) {
+    return false;
+  };
+}
+~~~~~~~~~~
+advice:7:10
+advice:12:12

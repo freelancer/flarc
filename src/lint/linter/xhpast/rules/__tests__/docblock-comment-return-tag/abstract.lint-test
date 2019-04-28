@@ -1,0 +1,9 @@
+<?php
+
+class X {
+  /**
+   * @return int
+   */
+  abstract function s();
+}
+~~~~~~~~~~

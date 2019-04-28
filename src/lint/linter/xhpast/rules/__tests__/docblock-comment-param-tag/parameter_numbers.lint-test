@@ -1,0 +1,30 @@
+<?php
+/**
+ * @param  int
+ * @param  int
+ * @return void
+ */
+function f ($a, $b, $c) {}
+
+class X {
+ /**
+  * @param  int
+  * @return void
+  */
+ public function f1 () {}
+
+ /**
+  * @return void
+  */
+ public function f2 ($a) {}
+
+ /**
+  * @param  int
+  * @return void
+  */
+ public function f3 ($a) {}
+}
+~~~~~~~~~~
+warning:2:1
+warning:10:2
+warning:16:2

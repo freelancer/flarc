@@ -1,0 +1,15 @@
+<?php
+/**
+ * @param  list<int>
+ * @param  map<int,int>
+ * @return 
+ */
+function f1 (array $a, array $b) {}
+
+/**
+ * @param  map<int,list<int>>
+ * @return
+ */
+function f3 (Object $a) {}
+~~~~~~~~~~
+warning:9:1

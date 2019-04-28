@@ -1,0 +1,8 @@
+<?php
+$x = "$GLOBALS[x]";
+$y = "${GLOBALS['y']}";
+$z = "$somevar";
+$z = "${_POST['x']}";
+~~~~~~~~~~
+warning:2:6
+warning:3:6

@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @param int
+ * @param ...
+ * @return void
+ */
+function f($a) {
+}
+
+/**
+ * @param int
+ * @param ...
+ * @return void
+ */
+function f($a) {
+    $b = func_get_args();
+}
+~~~~~~~~~
+warning:3:1

@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * TODO: This is wrong but it seems that 
+ * `PhutilArgumentSpellingCorrector::newCommandCorrector` is no longer 
+ * case-sensitive. See https://secure.phabricator.com/D16332#191176.
+ */
+
+/**
  * @codecoverageignore
  * @concreteextensible
  * @tood
@@ -8,15 +14,21 @@
  */
 class SomeClass {}
 ~~~~~~~~~~
-advice:4:4
-advice:5:4
-advice:6:4
-advice:7:4
+advice:10:4
+advice:11:4
+advice:12:4
+advice:13:4
 ~~~~~~~~~~
 <?php
 
 /**
- * @codeCoverageIgnore
+ * TODO: This is wrong but it seems that 
+ * `PhutilArgumentSpellingCorrector::newCommandCorrector` is no longer 
+ * case-sensitive. See https://secure.phabricator.com/D16332#191176.
+ */
+
+/**
+ * @codecoverageignore
  * @concrete-extensible
  * @todo
  * @xyz

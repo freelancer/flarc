@@ -2,11 +2,11 @@
 
 namespace X\Y;
 
-final class SomeTest extends PHPUnit_Framework_TestCase {
+final class SomeTest extends PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 
-final class SomeTest extends \PHPUnit_Framework_TestCase {
+final class SomeTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~

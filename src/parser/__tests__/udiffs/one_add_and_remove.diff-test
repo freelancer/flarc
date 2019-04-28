@@ -1,0 +1,17 @@
+--- Original
++++ New
+@@ -10000,75 +1,89 @@
+-      'foo
+         'bar
+         foo
++        bar
+~~~~~~~~~
+10000
+~~~~~~~~~
+      'foo
+        'bar
+        foo
+~~~~~~~~~
+        'bar
+        foo
+        bar

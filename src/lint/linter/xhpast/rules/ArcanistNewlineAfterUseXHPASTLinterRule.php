@@ -41,7 +41,9 @@ final class ArcanistNewlineAfterUseXHPASTLinterRule
 
       list($before, $after) = $statement->getSurroundingNonsemanticTokens();
       $trailing_token = head($after);
-      if (preg_match('/^\s*\n\s*\n/', $trailing_token->getValue())) {
+      if ($trailing_token &&
+        preg_match('/^\s*\n\s*\n/', $trailing_token->getValue())) {
+
         continue;
       }
 

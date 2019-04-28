@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @param string
+ */
+function a($x) {
+  return $x;
+}
+
+/**
+ * @param string
+ */
+function b($x) {}
+
+/**
+ * @param string
+ */
+function c($x) {
+  return;
+}
+
+class X {
+  /**
+   * @param string
+   */
+  public function a($x) {
+    return $x;
+  }
+
+  /**
+   * @param string
+   */
+  public function b($x) {}
+
+  /**
+   * @param string
+   */
+  public function c($x) {
+    return;
+  }
+}
+~~~~~~~~~~
+warning:3:1
+warning:15:1
+warning:23:3
+warning:35:3

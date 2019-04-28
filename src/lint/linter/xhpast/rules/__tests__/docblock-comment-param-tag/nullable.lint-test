@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @param array|null
+ */
+function f(?array $a) {}
+
+/**
+ * @param array
+ */
+function f(?array $a) {}
+~~~~~~~~~~
+warning:8:1

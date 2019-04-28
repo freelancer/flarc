@@ -1,0 +1,33 @@
+<?php
+$array = array();
+$array = array( );
+$array = array ();
+$array = array(1, 2, 3);
+$array = array(
+  'foo',
+  'bar',
+  'baz',
+);
+~~~~~~~~~~
+advice:2:10
+advice:3:10
+advice:4:10
+advice:5:10
+advice:6:10
+~~~~~~~~~~
+<?php
+$array = [];
+$array = [ ];
+$array = [];
+$array = [1, 2, 3];
+$array = [
+  'foo',
+  'bar',
+  'baz',
+];
+~~~~~~~~~~
+{
+  "config": {
+    "xhpast.php-version": "5.4.0"
+  }
+}

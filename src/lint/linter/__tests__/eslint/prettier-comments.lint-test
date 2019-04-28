@@ -1,0 +1,26 @@
+/* eslint "prettier/prettier": "error" */
+var x = {/* dangling */};
+var x = {
+  // dangling
+};
+var x = [/* dangling */];
+function x() {
+  /* dangling */
+}
+~~~~~~~~~~
+error:2:10
+error:6:10
+~~~~~~~~~~
+/* eslint "prettier/prettier": "error" */
+var x = {
+  /* dangling */
+};
+var x = {
+  // dangling
+};
+var x = [
+  /* dangling */
+];
+function x() {
+  /* dangling */
+}

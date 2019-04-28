@@ -1,0 +1,6 @@
+<?php
+
+$a = new Exception();
+$b = new Foo();
+~~~~~~~
+error:4:0

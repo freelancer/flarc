@@ -1,0 +1,14 @@
+<?php
+
+function f($a) {}
+function g(&$a) {}
+~~~~~~~~~~
+advice:3:12
+advice:4:13
+~~~~~~~~~~
+~~~~~~~~~~
+{
+  "config": {
+    "xhpast.php-version": "7.0.18"
+  }
+}

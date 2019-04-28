@@ -1,0 +1,30 @@
+<?php
+
+f(function ($x) {});
+f(function (  $x ) {});
+f(function ($x )   use    ($z) {});
+f(function ($x)use($z) {});
+f(function (User ...$users)use($z) {});
+f(function   &(bool $b=true, &$c,   ...$param) use   ( $z,$y   )  : bool {
+	return true;
+});
+f(function  ( )use ( $x) {});
+~~~~~~~~~~
+advice:4:3
+advice:5:3
+advice:6:3
+advice:7:3
+advice:8:3
+advice:11:3
+~~~~~~~~~~
+<?php
+
+f(function ($x) {});
+f(function ($x) {});
+f(function ($x) use ($z) {});
+f(function ($x) use ($z) {});
+f(function (User ...$users) use ($z) {});
+f(function & (bool $b = true, &$c, ...$param) use ($z, $y): bool {
+	return true;
+});
+f(function () use ($x) {});

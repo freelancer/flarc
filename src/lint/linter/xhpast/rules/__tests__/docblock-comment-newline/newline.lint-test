@@ -1,0 +1,85 @@
+<?php
+
+/**
+ *
+ * comment
+ *
+ */
+function f () {}
+
+/**
+ *
+ *
+ * comment
+ *
+ *
+ */
+function f2 () {}
+
+/**
+ * comment
+ */
+function f3 () {}
+
+class C {
+    /**
+     *
+     * comment
+     */
+    private $a;
+
+    /**
+     *
+     * comment
+     *
+     */
+    public function method() {}
+}
+
+/** comment */
+function f4() {}
+
+/** comment
+ */
+function f5() {}
+~~~~~~~~~~
+advice:3:1
+advice:10:1
+advice:25:5
+advice:31:5
+~~~~~~~~~~
+<?php
+
+/**
+ * comment
+ */
+function f () {}
+
+/**
+ * comment
+ */
+function f2 () {}
+
+/**
+ * comment
+ */
+function f3 () {}
+
+class C {
+    /**
+     * comment
+     */
+    private $a;
+
+    /**
+     * comment
+     */
+    public function method() {}
+}
+
+/** comment */
+function f4() {}
+
+/** comment
+ */
+function f5() {}

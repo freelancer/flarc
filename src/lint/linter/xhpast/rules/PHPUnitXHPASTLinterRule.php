@@ -10,7 +10,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
    * specified root node. According to the
    * [[https://phpunit.de/manual/current/en/writing-tests-for-phpunit.html |
    * PHPUnit documentation]], a test class is any class which extends from
-   * `\PHPUnit_Framework_TestCase`.
+   * `\PHPUnit\Framework\TestCase`.
    *
    * @param  XHPASTNode        Root node.
    * @param  bool              If `true` then `abstract` classes will be
@@ -19,7 +19,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
    */
   final protected function getTestClasses(
     XHPASTNode $root,
-    $exclude_abstract_classes = false) {
+    $exclude_abstract_classes = false): array {
 
     $classes = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
     $test_classes = array();
@@ -28,6 +28,10 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
       $extends = $class->getChildByIndex(2);
 
       if ($exclude_abstract_classes) {
+        // Skip anonymous classes
+        if ($class->getChildByIndex(0)->getTypeName() == 'n_EMPTY') {
+          continue;
+        }
         // TODO: `XHPASTNode` should maybe provide an `isAbstractClass` method.
         $class_attributes = $class
           ->getChildOfType(0, 'n_CLASS_ATTRIBUTES')
@@ -57,7 +61,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
       $extends_class = strtolower($extends_class);
 
       if ($extends_class[0] == '\\') {
-        if ($extends_class == '\\phpunit_framework_testcase') {
+        if ($extends_class == '\\phpunit\\framework\\testcase') {
           $test_classes[] = $class;
         }
 
@@ -68,7 +72,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
       }
 
       if ($class->getNamespace() === null &&
-          $extends_class == 'phpunit_framework_testcase') {
+          $extends_class == 'phpunit\\framework\\testcase') {
         $test_classes[] = $class;
         continue;
       }
@@ -84,10 +88,10 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
         $extends_class = $use_mapping[$extends_class];
       }
 
-      // Class names in PHP are case-insensitive.c
+      // Class names in PHP are case-insensitive.
       $extends_class = strtolower($extends_class);
 
-      if ($extends_class == '\\phpunit_framework_testcase') {
+      if ($extends_class == '\\phpunit\\framework\\testcase') {
         $test_classes[] = $class;
         continue;
       }

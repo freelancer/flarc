@@ -1,0 +1,5 @@
+a {
+  color: #zzzzzz;
+}
+~~~~~~~~~~
+error:2:10

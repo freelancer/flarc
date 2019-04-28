@@ -1,0 +1,38 @@
+<?php
+
+function f1($a) {}
+
+function f2(int $a, $b) {}
+
+/**
+ * @param int
+ */
+function f3($a) {}
+
+/**
+ * @param int
+ * @param array|int
+ */
+function f3(int $a, $b) {}
+
+/**
+ * @param mixed $a
+ */
+function f5($a) {}
+
+/**
+ * @param int|null
+ */
+function f6($a) {}
+~~~~~~~~~~
+advice:3:13
+advice:5:21
+advice:10:13
+advice:26:13
+~~~~~~~~~~
+~~~~~~~~~~
+{
+  "config": {
+    "xhpast.php-version": "7.1.11"
+  }
+}

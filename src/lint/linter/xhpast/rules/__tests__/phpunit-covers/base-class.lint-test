@@ -2,9 +2,9 @@
 
 namespace X\Y;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class TestCase extends PHPUnit_Framework_TestCase {}
+abstract class TestCase extends PHPUnit\Framework\TestCase {}
 
 final class SomeTest extends TestCase {
   // TODO: We should raise a linter warning here, but we do not currently

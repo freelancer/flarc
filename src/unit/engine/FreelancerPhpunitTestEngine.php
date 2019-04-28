@@ -39,7 +39,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     return true;
   }
 
-  public function run() {
+  public function run(): array {
     // @{method:getEnableCoverage} returns the following possible values:
     //
     //   - `false` if the user passed `--no-coverage`, explicitly disabling
@@ -69,19 +69,20 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       }
     }
 
-    // Check whether composer dependencies are up-to-date.
+    // Check whether Composer dependencies are up-to-date.
+    $project_root = $this->getProjectRoot();
     $stale_dependencies = $this->getStaleDependencies(
-      Filesystem::readFile(
-        $this->getProjectRoot().'/composer.lock'),
-      Filesystem::readFile(
-        $this->getProjectRoot().'/vendor/composer/installed.json'));
+      Filesystem::readFile($project_root.'/composer.lock'),
+      Filesystem::readFile($project_root.'/vendor/composer/installed.json'));
 
     if (!empty($stale_dependencies)) {
-      throw new Exception (
+      echo phutil_console_format(
+        "<bg:yellow>** %s **</bg> %s\n",
+        pht('WARNING'),
         pht(
-          "The following dependencies are out of date:\n%s\n".
-          "Please run `%s` to update them\n",
-          implode("\n", $stale_dependencies),
+          'The following Composer dependencies are out-of-date: %s. This '.
+          'could cause unit test failures. Run `%s` to resolve this issue.',
+          implode(', ', $stale_dependencies),
           'composer install'));
     }
 
@@ -114,20 +115,13 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         $args = array();
 
         $clover_output = null;
-        $json_output   = new TempFile();
+        $junit_output   = new TempFile();
 
         if ($config) {
           $args[] = '--configuration='.$config;
         }
         $args[] = '-d display_errors=stderr';
-        $args[] = '--log-json='.$json_output;
-
-        // By default, PHPUnit will output both progress and errors to stdout.
-        // This makes it difficult to determine if an error occurred by
-        // inspecting standard output. By passing the `--stderr` flag, PHPUnit
-        // will output progress information to the standard error stream
-        // instead.
-        $args[] = '--stderr';
+        $args[] = '--log-junit='.$junit_output;
 
         if ($enable_coverage !== false) {
           $clover_output = new TempFile();
@@ -140,10 +134,10 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
           $args,
           $test_path);
 
-        $output[$test_path] = array(
+        $output[$test_path] = [
           'clover' => $clover_output,
-          'json' => $json_output,
-        );
+          'junit' => $junit_output,
+        ];
       }
     }
 
@@ -153,12 +147,19 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     foreach ($futures->limit(4) as $test => $future) {
       list($err, $stdout, $stderr) = $future->resolve();
 
-      $results[] = $this->parseTestResults(
+      $result = $this->parseTestResults(
         $test,
-        $output[$test]['json'],
+        $output[$test]['junit'],
         $output[$test]['clover'],
-        $stdout,
         $stderr);
+
+      if ($this->renderer) {
+        foreach ($result as $unit_result) {
+          echo $this->renderer->renderUnitResult($unit_result);
+        }
+      }
+
+      $results[] = $result;
     }
 
     return array_mergev($results);
@@ -255,8 +256,11 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    */
   private function getTestsInDirectory($path) {
     $tests = array();
-
     $path = rtrim($path, '/');
+
+    if (!Filesystem::pathExists($path)) {
+      return array();
+    }
 
     $files = id(new FileFinder($path))
       ->withType('f')
@@ -305,26 +309,21 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
   }
 
   /**
-   * Parse test results from PHPUnit JSON report.
+   * Parse test results from PHPUnit JUnit report.
    *
    * @param  string                        Path to test file.
-   * @param  string                        Path to PHPUnit JSON report.
+   * @param  string                        Path to PHPUnit JUnit report.
    * @param  string                        Path to PHPUnit Clover report.
-   * @param  string                        Data written to the standard output
-   *                                       stream.
-   * @param  string                        Data written to the standard error
-   *                                       output dstream.
+   * @param  string                        Data written to `stderr`.
    * @return list<ArcanistUnitTestResult>
    */
-  private function parseTestResults($path, $json, $clover, $stdout, $stderr) {
-    $results = Filesystem::readFile($json);
-
+  private function parseTestResults($path, $junit_ouput, $clover, $stderr): array {
+    $results = Filesystem::readFile($junit_ouput);
     return id(new FreelancerPhpunitTestResultParser())
-      ->setEnableCoverage($this->getEnableCoverage())
+      ->setEnableCoverage($clover !== null)
       ->setProjectRoot($this->getProjectRoot())
       ->setCoverageFile($clover)
       ->setAffectedTests($this->affectedTests)
-      ->setStdout($stdout)
       ->setStderr($stderr)
       ->parseTestResults($path, $results);
   }

@@ -1,0 +1,18 @@
+{
+    "event": "suiteStart",
+    "suite": "TestCase",
+    "tests": 1
+}{
+    "event": "testStart",
+    "suite": "TestCase",
+    "test": "TestCase::testWarnings"
+}{
+    "event": "test",
+    "suite": "TestCase",
+    "test": "TestCase::testWarnings",
+    "status": "warning",
+    "time": 0.0039680004119873,
+    "trace": [],
+    "message": "PHPUnit_Framework_TestCase::getMock() is deprecated, use PHPUnit_Framework_TestCase::createMock() or PHPUnit_Framework_TestCase::getMockBuilder() instead\n",
+    "output": ""
+}

@@ -3,24 +3,24 @@
 final class ArcanistESLintLinterTestCase
   extends ArcanistExternalLinterTestCase {
 
-  private $eslintconfig;
+  private $config;
 
   protected function getLinter() {
     // We need to specify this configuration as newer versions of ESLint do not
     // enable any linter rules by default.
-    $this->eslintconfig = new TempFile();
+    $this->config = new TempFile();
 
     Filesystem::writeFile(
-      $this->eslintconfig,
+      $this->config,
       phutil_json_encode(
-        array(
-          'extends' => 'eslint:recommended',
-        )));
+        [
+          'plugins' => ['prettier'],
+        ]));
 
     $linter = parent::getLinter();
     $linter->setLinterConfigurationValue(
       'eslint.config',
-      (string)$this->eslintconfig);
+      (string)$this->config);
 
     return $linter;
   }

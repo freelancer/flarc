@@ -1,0 +1,8 @@
+<?php
+//This will raise an error, but technically should not.
+//It is probably bad practice to write this sort of code anyway.
+function foo() {
+  $GLOBALS = array();
+}
+~~~~~~~~~~
+warning:5:3

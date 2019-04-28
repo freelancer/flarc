@@ -1,0 +1,25 @@
+<?php
+
+function func1() {
+  try {
+    return new SomeClass();
+  } catch (Exception $e) {
+    return false;
+  }
+}
+
+function func2() {
+  try {
+    return new SomeClass();
+  } catch (Exception $e) {
+    return null;
+  }
+}
+
+class C {
+  public function func(): bool {
+    return false;
+  }
+}
+~~~~~~~~~~
+advice:7:12

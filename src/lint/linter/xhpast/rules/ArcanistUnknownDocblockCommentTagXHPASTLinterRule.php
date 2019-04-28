@@ -93,6 +93,9 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
         'throws',
         'todo',
         'uses',
+
+        // TODO: This tag can only be used to annotate static methods.
+        'beforeClass',
       ),
       'method');
 
@@ -141,10 +144,8 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
       $unknown_tags = array_keys(array_diff_key($tags, $whitelisted_tags));
 
       foreach ($unknown_tags as $unknown_tag) {
-        $corrections = ArcanistConfiguration::correctCommandSpelling(
-          $unknown_tag,
-          array_keys($whitelisted_tags),
-          2);
+        $corrections = PhutilArgumentSpellingCorrector::newCommandCorrector()
+          ->correctSpelling($unknown_tag, array_keys($whitelisted_tags));
         $corrected_tag = nonempty(head($corrections), null);
 
         $this->raiseLintAtDocblockTag(

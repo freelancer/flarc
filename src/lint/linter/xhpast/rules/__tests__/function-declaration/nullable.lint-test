@@ -1,0 +1,8 @@
+<?php
+
+function f(?int $x): ?int {}
+~~~~~~~~~~
+~~~~~~~~~~
+<?php
+
+function f(?int $x): ?int {}

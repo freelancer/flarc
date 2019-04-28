@@ -1,0 +1,23 @@
+<?php
+
+class Vegetable {
+  /** this is edible */
+  private $edible;
+  
+  private $color;
+
+  /** @var Foo|null */
+  private $foo = null;
+
+  /** @return something */
+  private $bar;
+
+  /**
+   * @var string
+   */
+  private $multiline;
+}
+~~~~~~~~~~~~~~~~~~~~~~
+warning:5:3
+warning:7:3
+warning:13:3

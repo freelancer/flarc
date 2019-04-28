@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @return void
+ */
+function a($x) {
+  return $x;
+}
+
+/**
+ * @return int
+ */
+function b() {}
+
+/**
+ * @return int
+ */
+function c() {
+  return;
+}
+
+class X {
+  /**
+   * @return int
+   */
+  function s() {}
+}
+~~~~~~~~~~
+warning:7:3
+warning:13:1
+warning:26:3

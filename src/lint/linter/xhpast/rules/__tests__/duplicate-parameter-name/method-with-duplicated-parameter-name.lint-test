@@ -1,0 +1,6 @@
+<?php
+class bar {
+  function foo($a, $a) {}
+}
+~~~~~~~~~~
+error:3:20

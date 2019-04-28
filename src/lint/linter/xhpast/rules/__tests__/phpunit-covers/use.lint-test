@@ -2,9 +2,9 @@
 
 namespace X\Y;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class SomeTest extends PHPUnit_Framework_TestCase {
+final class SomeTest extends PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~
