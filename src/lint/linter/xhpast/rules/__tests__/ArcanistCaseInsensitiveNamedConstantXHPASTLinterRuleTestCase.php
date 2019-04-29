@@ -5,7 +5,7 @@ final class ArcanistCaseInsensitiveNamedConstantXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/case-insensitive-named-constant/');
+      __DIR__.'/case-insensitive-named-constant/');
   }
 
 }

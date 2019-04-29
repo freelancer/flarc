@@ -19,7 +19,7 @@ final class ArcanistGlobalConstantXHPASTLinterRule
 
   public function process(XHPASTNode $root) {
     $constants = $this
-      ->getFunctionCalls($root, array('define'))
+      ->getFunctionCalls($root, ['define'])
       ->add($root->selectDescendantsOfType('n_CONSTANT_DECLARATION_LIST'));
 
     foreach ($constants as $constant) {

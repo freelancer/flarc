@@ -17,7 +17,7 @@ final class ArcanistCaseInsensitiveNamedConstantXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $defines = $this->getFunctionCalls($root, array('define'));
+    $defines = $this->getFunctionCalls($root, ['define']);
 
     foreach ($defines as $define) {
       $parameters = $define->getChildOfType(1, 'n_CALL_PARAMETER_LIST');

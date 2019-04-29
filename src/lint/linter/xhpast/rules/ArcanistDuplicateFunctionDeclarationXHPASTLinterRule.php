@@ -25,12 +25,12 @@ final class ArcanistDuplicateFunctionDeclarationXHPASTLinterRule
 
       // We don't want to raise a lint error if the declaration is within a
       // conditional block.
-      static $conditional_types = array(
+      static $conditional_types = [
         'n_ELSE',
         'n_ELSE_IF',
         'n_IF',
         'n_SWITCH',
-      );
+      ];
 
       if ($this->hasAncestorOfTypes($function, $conditional_types)) {
         continue;
@@ -55,7 +55,7 @@ final class ArcanistDuplicateFunctionDeclarationXHPASTLinterRule
         continue;
       }
 
-      $declarations[$function_name] = array($function);
+      $declarations[$function_name] = [$function];
     }
   }
 

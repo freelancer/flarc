@@ -5,7 +5,7 @@ final class ArcanistSingleDeclarationPerFileXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/single-declaration-per-file/');
+      __DIR__.'/single-declaration-per-file/');
   }
 
 }

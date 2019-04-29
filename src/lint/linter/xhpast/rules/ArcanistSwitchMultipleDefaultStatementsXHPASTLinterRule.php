@@ -20,7 +20,7 @@ final class ArcanistSwitchMultipleDefaultStatementsXHPASTLinterRule
 
     foreach ($switches as $switch) {
       $statements = $switch->getChildOfType(1, 'n_STATEMENT_LIST');
-      $defaults   = array();
+      $defaults   = [];
 
       foreach ($statements->getChildren() as $statement) {
         if ($statement->getTypeName() != 'n_DEFAULT') {

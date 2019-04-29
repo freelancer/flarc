@@ -18,10 +18,10 @@ final class ArcanistMissingTypeDeclarationXHPASTLinterRule
       return;
     }
 
-    $nodes = $root->selectDescendantsOfTypes(array(
+    $nodes = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
 
     foreach ($nodes as $node) {
       $param_tags = $this->getDocblockTag($node, 'param');

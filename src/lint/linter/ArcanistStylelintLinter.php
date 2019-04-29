@@ -62,7 +62,7 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    $options = array();
+    $options = [];
 
     $options[] = '--formatter=json';
     $options[] = '--no-color';
@@ -75,12 +75,12 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
   }
 
   public function getLinterConfigurationOptions() {
-    $options = array(
-      'stylelint.config' => array(
+    $options = [
+      'stylelint.config' => [
         'type' => 'optional string',
         'help' => pht('%s configuration file.', 'stylelint'),
-      ),
-    );
+      ],
+    ];
 
     return $options + parent::getLinterConfigurationOptions();
   }
@@ -97,7 +97,7 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
-    $messages = array();
+    $messages = [];
 
     try {
       $files = phutil_json_decode($stdout);

@@ -4,7 +4,7 @@ final class ArcanistLongArraySyntaxXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/long-array-syntax/');
+    $this->executeTestsInDirectory(__DIR__.'/long-array-syntax/');
   }
 
 }

@@ -4,7 +4,7 @@ final class ArcanistDeprecatedClassXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/deprecated-class/');
+    $this->executeTestsInDirectory(__DIR__.'/deprecated-class/');
   }
 
 }

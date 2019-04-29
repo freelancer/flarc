@@ -8,7 +8,7 @@ final class ArcanistDeprecatedClassXHPASTLinterRule
 
   const ID = 1008;
 
-  private $deprecatedClasses = array();
+  private $deprecatedClasses = [];
 
   public function getLintName() {
     return pht('Use of Deprecated Class');
@@ -19,12 +19,12 @@ final class ArcanistDeprecatedClassXHPASTLinterRule
   }
 
   public function getLinterConfigurationOptions() {
-    return parent::getLinterConfigurationOptions() + array(
-      'xhpast.deprecated.class' => array(
+    return parent::getLinterConfigurationOptions() + [
+      'xhpast.deprecated.class' => [
         'type' => 'optional map<string, string | bool>',
         'help' => pht('Classes which should should be considered deprecated.'),
-      ),
-    );
+      ],
+    ];
   }
 
   public function setLinterConfigurationValue($key, $value) {

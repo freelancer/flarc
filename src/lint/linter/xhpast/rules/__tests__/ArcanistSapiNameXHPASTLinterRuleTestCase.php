@@ -4,7 +4,7 @@ final class ArcanistSapiNameXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/sapi-name/');
+    $this->executeTestsInDirectory(__DIR__.'/sapi-name/');
   }
 
 }

@@ -5,7 +5,7 @@ final class ArcanistClosureInstantiationXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/closure-instantiation/');
+      __DIR__.'/closure-instantiation/');
   }
 
 }

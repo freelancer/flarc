@@ -13,25 +13,25 @@ final class ArcanistDuplicateClassDeclarationXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $symbols = $root->selectDescendantsOfTypes(array(
+    $symbols = $root->selectDescendantsOfTypes([
       'n_CLASS_DECLARATION',
       'n_INTERFACE_DECLARATION',
 
       // This doesn't actually exist yet, but it's listed here for
       // forwards-compatibility. See T28174.
       // 'n_TRAIT_DECLARATION',
-    ));
+    ]);
     $declarations = new CaseInsensitiveArray();
 
     foreach ($symbols as $symbol) {
       // We don't want to raise a lint error if the declaration is within a
       // conditional block.
-      static $conditional_types = array(
+      static $conditional_types = [
         'n_ELSE',
         'n_ELSE_IF',
         'n_IF',
         'n_SWITCH',
-      );
+      ];
 
       if ($this->hasAncestorOfTypes($symbol, $conditional_types)) {
         continue;
@@ -64,7 +64,7 @@ final class ArcanistDuplicateClassDeclarationXHPASTLinterRule
         continue;
       }
 
-      $declarations[$symbol_name] = array($symbol);
+      $declarations[$symbol_name] = [$symbol];
     }
   }
 

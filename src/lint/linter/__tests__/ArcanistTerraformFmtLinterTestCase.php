@@ -4,7 +4,7 @@ final class ArcanistTerraformFmtLinterTestCase
   extends ArcanistExternalLinterTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/terraform-fmt/');
+    $this->executeTestsInDirectory(__DIR__.'/terraform-fmt/');
   }
 
 }

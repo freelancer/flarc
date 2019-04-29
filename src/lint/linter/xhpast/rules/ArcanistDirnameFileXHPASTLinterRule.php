@@ -22,7 +22,7 @@ final class ArcanistDirnameFileXHPASTLinterRule
       return;
     }
 
-    $function_calls = $this->getFunctionCalls($root, array('dirname'));
+    $function_calls = $this->getFunctionCalls($root, ['dirname']);
 
     foreach ($function_calls as $function_call) {
       $args = $function_call->getChildOfType(1, 'n_CALL_PARAMETER_LIST');

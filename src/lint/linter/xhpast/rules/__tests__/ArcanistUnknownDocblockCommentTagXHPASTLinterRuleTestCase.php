@@ -5,7 +5,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/unknown-docblock-comment-tag/');
+      __DIR__.'/unknown-docblock-comment-tag/');
   }
 
 }

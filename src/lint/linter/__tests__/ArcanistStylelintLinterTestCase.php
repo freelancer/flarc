@@ -12,9 +12,9 @@ final class ArcanistStylelintLinterTestCase
       $this->config,
       phutil_json_encode(
         [
-          'rules' => array(
+          'rules' => [
             'color-no-invalid-hex' => true,
-          ),
+          ],
         ]));
 
     $linter = parent::getLinter();
@@ -26,6 +26,6 @@ final class ArcanistStylelintLinterTestCase
   }
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/stylelint/');
+    $this->executeTestsInDirectory(__DIR__.'/stylelint/');
   }
 }

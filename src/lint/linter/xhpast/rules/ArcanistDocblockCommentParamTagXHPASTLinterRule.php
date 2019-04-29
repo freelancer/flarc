@@ -16,10 +16,10 @@ final class ArcanistDocblockCommentParamTagXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $functions = $root->selectDescendantsOfTypes(array(
+    $functions = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
 
     foreach ($functions as $function) {
       $docblock = $function->getDocblockToken();
@@ -45,7 +45,7 @@ final class ArcanistDocblockCommentParamTagXHPASTLinterRule
       if (!empty($docblock_types) && end($docblock_types) === '...') {
         $calls = $this->getFunctionCalls(
           $function,
-          array('func_get_arg', 'func_get_args'));
+          ['func_get_arg', 'func_get_args']);
 
         if ($calls->count() == 0) {
           $this->raiseLintAtToken(
@@ -117,12 +117,12 @@ final class ArcanistDocblockCommentParamTagXHPASTLinterRule
     list($_, $_, $tags) = $this->parseDocblock($docblock);
 
     if (!isset($tags['param'])) {
-      return array();
+      return [];
     }
 
-    $types = array();
+    $types = [];
     if (!is_array($tags['param'])) {
-      $tags['param'] = array($tags['param']);
+      $tags['param'] = [$tags['param']];
     }
     foreach ($tags['param'] as $line) {
       $types[] = head(explode(' ', $line));
@@ -151,7 +151,7 @@ final class ArcanistDocblockCommentParamTagXHPASTLinterRule
     $parameters = $parameter_list->getChildrenOfType(
       'n_DECLARATION_PARAMETER');
 
-    $types = array();
+    $types = [];
     foreach ($parameters as $parameter) {
       $type_node = $parameter->getChildByIndex(0);
 

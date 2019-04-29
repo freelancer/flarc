@@ -16,7 +16,7 @@ final class ArcanistSapiNameXHPASTLinterRule extends ArcanistXHPASTLinterRule {
   }
 
   public function process(XHPASTNode $root) {
-    $function_calls = $this->getFunctionCalls($root, array('php_sapi_name'));
+    $function_calls = $this->getFunctionCalls($root, ['php_sapi_name']);
 
     foreach ($function_calls as $function_call) {
       $parameters = $function_call->getChildOfType(1, 'n_CALL_PARAMETER_LIST');

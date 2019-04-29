@@ -65,7 +65,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    $options = array();
+    $options = [];
     $options[] = '--format=json';
 
     if ($this->config !== null) {

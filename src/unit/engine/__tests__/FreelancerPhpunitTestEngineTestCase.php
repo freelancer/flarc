@@ -20,7 +20,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
   public function testGetAffectedTests() {
     $engine = $this->createTestEngine();
 
-    $test_cases = array(
+    $test_cases = [
       array(
         array(),
         array(),
@@ -53,7 +53,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
           ),
         ),
       ),
-    );
+    ];
 
     foreach ($test_cases as $test_case) {
       list($paths, $expected) = $test_case;
@@ -69,7 +69,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
 
 
   public function testGetStaleDependencies() {
-    $test_cases = array(
+    $test_cases = [
       array(
         array(
           'packages' => array(
@@ -99,7 +99,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
         ),
         array('A', 'C'),
       ),
-    );
+    ];
 
     foreach ($test_cases as $test_case) {
       list($composer_lock, $installed, $expected) = $test_case;

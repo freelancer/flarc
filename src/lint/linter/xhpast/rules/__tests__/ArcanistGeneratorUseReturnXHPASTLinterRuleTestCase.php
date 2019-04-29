@@ -5,6 +5,6 @@ final class ArcanistGeneratorUseReturnXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/generator-use-return/');
+      __DIR__.'/generator-use-return/');
   }
 }

@@ -22,7 +22,7 @@ final class ArcanistDuplicatePropertyDeclarationXHPASTLinterRule
 
       $properties = $class->selectDescendantsOfType(
         'n_CLASS_MEMBER_DECLARATION');
-      $declarations = array();
+      $declarations = [];
 
       foreach ($properties as $property) {
         $property_name_node = $property->getChildOfType(0, 'n_VARIABLE');
@@ -40,7 +40,7 @@ final class ArcanistDuplicatePropertyDeclarationXHPASTLinterRule
           continue;
         }
 
-        $declarations[$property_name] = array($property);
+        $declarations[$property_name] = [$property];
       }
     }
   }

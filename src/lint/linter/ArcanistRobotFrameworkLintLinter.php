@@ -29,7 +29,7 @@ final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    $options = array();
+    $options = [];
 
     $options[] = '--configure';
     $options[] = 'LineTooLong:'.$this->maxLineLength;
@@ -70,18 +70,18 @@ final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
   }
 
   public function getLinterConfigurationOptions() {
-    $options = array(
-      'rflint.max-line-length' => array(
+    $options = [
+      'rflint.max-line-length' => [
         'type' => 'optional int',
         'help' => pht(
           'Adjust the maximum line length before a warning is raised. '.
           'By default, a warning is raised on lines exceeding 100 characters.'),
-        ),
-        'rflint.rule-file' => array(
+        ],
+        'rflint.rule-file' => [
           'type' => 'optional string',
           'help' => pht('Load additional lint rules from the specified file.'),
-        ),
-      );
+        ],
+      ];
       return $options + parent::getLinterConfigurationOptions();
   }
 
@@ -100,7 +100,7 @@ final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
     $lines = phutil_split_lines($stdout, false);
-    $messages = array();
+    $messages = [];
 
     foreach ($lines as $line) {
       $matches = null;

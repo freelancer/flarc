@@ -18,7 +18,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   }
 
   public function testGetTestName() {
-    $test_cases = array(
+    $test_cases = [
       array(
         '',
         '',
@@ -75,7 +75,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
           'testD with data set #3',
         ),
       ),
-    );
+    ];
 
     foreach ($test_cases as $test_case) {
       list($test_suite, $test_name, $expected) = $test_case;
@@ -89,7 +89,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   }
 
   public function testParseCloverCoverage() {
-    $test_cases = array(
+    $test_cases = [
       array(
         Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/1.xml'),
         array(),
@@ -100,7 +100,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
         ),
       ),
-    );
+    ];
 
     foreach ($test_cases as $test_case) {
       list($input, $expected) = $test_case;
@@ -130,12 +130,12 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   }
 
   public function testParseBrokenTestResults() {
-    $expected = array(
+    $expected = [
       id(new ArcanistUnitTestResult())
         ->setName('src/BrokenTest.php')
         ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
         ->setUserData('Something is broken'),
-    );
+    ];
     $results = id(new FreelancerPhpunitTestResultParser())
       ->setStderr('Something is broken')
       ->parseTestResults('src/BrokenTest.php', '');

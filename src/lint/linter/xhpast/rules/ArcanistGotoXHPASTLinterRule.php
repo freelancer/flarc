@@ -12,10 +12,10 @@ final class ArcanistGotoXHPASTLinterRule extends ArcanistXHPASTLinterRule {
   }
 
   public function process(XHPASTNode $root) {
-    $nodes = $root->selectDescendantsOfTypes(array(
+    $nodes = $root->selectDescendantsOfTypes([
       'n_GOTO',
       'n_LABEL',
-    ));
+    ]);
 
     foreach ($nodes as $node) {
       switch ($node->getTypeName()) {

@@ -4,7 +4,7 @@ final class ArcanistDirnameFileXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/dirname-file/');
+    $this->executeTestsInDirectory(__DIR__.'/dirname-file/');
   }
 
 }

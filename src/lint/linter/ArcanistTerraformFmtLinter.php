@@ -32,17 +32,17 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
   }
 
   public function getLintSeverityMap() {
-    return array(
+    return [
       self::LINT_SYNTAX_ERROR => ArcanistLintSeverity::SEVERITY_ERROR,
       self::LINT_FORMATTING   => ArcanistLintSeverity::SEVERITY_WARNING,
-    );
+    ];
   }
 
   public function getLintNameMap() {
-    return array(
+    return [
       self::LINT_SYNTAX_ERROR => pht('Syntax Error'),
       self::LINT_FORMATTING   => pht('Formatting Issue'),
-    );
+    ];
   }
 
   public function getDefaultBinary() {
@@ -57,11 +57,11 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    return array(
+    return [
       'fmt',
       '-list=false',
       '-write=false',
-    );
+    ];
   }
 
   public function getVersion() {
@@ -144,7 +144,7 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
         ->setName($this->getLintMessageName($code))
         ->setDescription($matches['message']);
 
-      return array($message);
+      return [$message];
     }
 
     $original_file  = $this->getData($path);
@@ -173,10 +173,10 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
         ->setOriginalText($original_file)
         ->setReplacementText($formatted_file);
 
-      return array($message);
+      return [$message];
     }
 
-    return array();
+    return [];
   }
 
 }

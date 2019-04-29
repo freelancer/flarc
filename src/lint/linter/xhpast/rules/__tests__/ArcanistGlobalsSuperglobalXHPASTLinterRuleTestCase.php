@@ -4,7 +4,7 @@ final class ArcanistGlobalsSuperglobalXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/globals-superglobal/');
+    $this->executeTestsInDirectory(__DIR__.'/globals-superglobal/');
   }
 
 }

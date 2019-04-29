@@ -44,7 +44,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
   public function getVersion() {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
-    $matches = array();
+    $matches = [];
     $regex = '/^puppet-lint (?P<version>\d+\.\d+\.\d+)$/';
 
     if (preg_match($regex, $stdout, $matches)) {
@@ -55,15 +55,15 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    return array(
+    return [
       '--error-level=all',
       '--json',
-    );
+    ];
   }
 
   protected function parseLinterOutput($path, $status, $stdout, $stderr) {
     $output = idx(phutil_json_decode($stdout), 0);
-    $messages = array();
+    $messages = [];
 
     foreach ($output as $message) {
       $messages[] = id(new ArcanistLintMessage())

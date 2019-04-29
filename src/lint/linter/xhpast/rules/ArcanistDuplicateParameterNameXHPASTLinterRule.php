@@ -18,7 +18,7 @@ final class ArcanistDuplicateParameterNameXHPASTLinterRule
       $parameters = $parameter_list->getChildrenOfType(
         'n_DECLARATION_PARAMETER');
 
-      $parameter_name_set = array();
+      $parameter_name_set = [];
       foreach ($parameters as $parameter) {
         $parameter_node = $parameter->getChildByIndex(1);
         if ($parameter_node->getTypeName() === 'n_VARIABLE_REFERENCE'

@@ -5,7 +5,7 @@ final class ArcanistMissingReturnTypeXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/missing-return-type/');
+      __DIR__.'/missing-return-type/');
   }
 
 }

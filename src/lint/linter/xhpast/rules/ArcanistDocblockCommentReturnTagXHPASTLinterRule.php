@@ -16,10 +16,10 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $functions = $root->selectDescendantsOfTypes(array(
+    $functions = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
     $this->interfaces = $root->selectDescendantsOfType('n_INTERFACE_DECLARATION');
 
     foreach ($functions as $function) {
@@ -27,13 +27,13 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
         continue;
       }
 
-      $linters = array(
-        array($this, 'lintMultipleReturnTags'),
-        array($this, 'lintReturnVoid'),
-        array($this, 'lintNoReturnTag'),
-        array($this, 'lintReturnGenerator'),
-        array($this, 'lintNoReturnStatement'),
-      );
+      $linters = [
+        [$this, 'lintMultipleReturnTags'],
+        [$this, 'lintReturnVoid'],
+        [$this, 'lintNoReturnTag'],
+        [$this, 'lintReturnGenerator'],
+        [$this, 'lintNoReturnStatement'],
+      ];
 
       foreach ($linters as $linter) {
         if ($linter($function)) {
@@ -223,11 +223,11 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
    * @return pair<list<XHPASTNode>,list<XHPASTNode>> Lists of `return` and `yield` nodes.
    */
   public function getReturnAndYieldNodes(XHPASTNode $function) {
-    $returns = array();
-    $yields = array();
+    $returns = [];
+    $yields = [];
 
     $closures = $this->getAnonymousClosures($function);
-    foreach ($function->selectDescendantsOfTypes(array('n_RETURN', 'n_YIELD')) as $node) {
+    foreach ($function->selectDescendantsOfTypes(['n_RETURN', 'n_YIELD']) as $node) {
       foreach ($closures as $closure) {
         if ($node->isDescendantOf($closure)) {
           continue 2;
@@ -240,6 +240,6 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
         $yields[] = $node;
       }
     }
-    return array($returns, $yields);
+    return [$returns, $yields];
   }
 }

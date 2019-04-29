@@ -5,7 +5,7 @@ final class ArcanistMultipleNamespaceDeclarationsXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/multiple-namespace-declarations/');
+      __DIR__.'/multiple-namespace-declarations/');
   }
 
 }

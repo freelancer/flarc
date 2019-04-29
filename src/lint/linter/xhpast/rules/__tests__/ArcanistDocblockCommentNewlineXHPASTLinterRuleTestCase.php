@@ -5,6 +5,6 @@ final class ArcanistDocblockCommentNewlineXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/docblock-comment-newline/');
+      __DIR__.'/docblock-comment-newline/');
   }
 }

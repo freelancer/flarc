@@ -21,10 +21,10 @@ final class ArcanistGeneratorUseReturnXHPASTLinterRule
       return;
     }
 
-    $functions = $root->selectDescendantsOfTypes(array(
+    $functions = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
 
     foreach ($functions as $function) {
 
@@ -32,11 +32,11 @@ final class ArcanistGeneratorUseReturnXHPASTLinterRule
 
       $returns = array_filter(
         iterator_to_array($function->selectDescendantsOfType('n_RETURN')),
-        array($this, 'closureStatementFilter'));
+        [$this, 'closureStatementFilter']);
 
       $yields = array_filter(
         iterator_to_array($function->selectDescendantsOfType('n_YIELD')),
-        array($this, 'closureStatementFilter'));
+        [$this, 'closureStatementFilter']);
 
       if ($returns && $yields) {
         foreach ($returns as $return) {

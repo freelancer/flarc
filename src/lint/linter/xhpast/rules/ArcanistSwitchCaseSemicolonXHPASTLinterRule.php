@@ -17,7 +17,7 @@ final class ArcanistSwitchCaseSemicolonXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $cases = $root->selectDescendantsOfTypes(array('n_CASE', 'n_DEFAULT'));
+    $cases = $root->selectDescendantsOfTypes(['n_CASE', 'n_DEFAULT']);
 
     foreach ($cases as $case) {
       switch ($case->getTypeName()) {

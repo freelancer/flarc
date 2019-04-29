@@ -20,7 +20,7 @@ final class ArcanistOneStatementPerLineXHPASTLinterRule
     $statement_lists = $root->selectDescendantsOfType('n_STATEMENT_LIST');
 
     foreach ($statement_lists as $id => $statement_list) {
-      $mapping    = array();
+      $mapping    = [];
       $statements = $statement_list->selectDescendantsOfType('n_STATEMENT');
 
       // If the statement list contains //any// inline HTML, just give up...
@@ -51,7 +51,7 @@ final class ArcanistOneStatementPerLineXHPASTLinterRule
         $line_number = $statement->getLineNumber();
 
         if (!isset($mapping[$line_number])) {
-          $mapping[$line_number] = array();
+          $mapping[$line_number] = [];
         }
 
         $mapping[$line_number][] = $statement;

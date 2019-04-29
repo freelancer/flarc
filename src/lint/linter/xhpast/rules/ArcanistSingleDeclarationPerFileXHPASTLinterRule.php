@@ -17,14 +17,14 @@ final class ArcanistSingleDeclarationPerFileXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $declarations = $root->selectDescendantsOfTypes(array(
+    $declarations = $root->selectDescendantsOfTypes([
       'n_CLASS_DECLARATION',
       'n_INTERFACE_DECLARATION',
 
       // This doesn't actually exist yet, but it's listed here for
       // forwards-compatibility. See T28174.
       // 'n_TRAIT_DECLARATION',
-    ));
+    ]);
 
     if (count($declarations) <= 1) {
       return;

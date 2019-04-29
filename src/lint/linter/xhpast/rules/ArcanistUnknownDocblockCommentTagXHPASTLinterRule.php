@@ -18,11 +18,11 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
     $this->lintDocblockCommentTags(
       $this->getDocblockTokensForTypes(
         $root,
-        array(
+        [
           'n_CLASS_DECLARATION',
           'n_INTERFACE_DECLARATION',
-        )),
-      array(
+        ]),
+      [
         'backupGlobals',
         'backupStaticAttributes',
         'codeCoverageIgnore',
@@ -39,7 +39,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
         'task',
         'testClass',
         'todo',
-      ),
+      ],
       'class');
 
     // Functions
@@ -47,7 +47,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
       $this->getDocblockTokensForType(
         $root,
         'n_FUNCTION_DECLARATION'),
-      array(
+      [
         'codeCoverageIgnore',
         'deprecated',
         'generated',
@@ -58,7 +58,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
         'task',
         'throws',
         'todo',
-      ),
+      ],
       'function');
 
     // Methods
@@ -66,7 +66,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
       $this->getDocblockTokensForType(
         $root,
         'n_METHOD_DECLARATION'),
-      array(
+      [
         'backupGlobals',
         'backupStaticAttributes',
         'codeCoverageIgnore',
@@ -96,7 +96,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
 
         // TODO: This tag can only be used to annotate static methods.
         'beforeClass',
-      ),
+      ],
       'method');
 
     // Properties
@@ -104,12 +104,12 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
       $this->getDocblockTokensForType(
         $root,
         'n_CLASS_MEMBER_DECLARATION_LIST'),
-      array(
+      [
         'link',
         'see',
         'todo',
         'var',
-      ),
+      ],
       'property');
   }
 
@@ -183,7 +183,7 @@ final class ArcanistUnknownDocblockCommentTagXHPASTLinterRule
    * @return list<XHPASTToken>  Tokens of type `T_DOC_COMMENT`.
    */
   protected function getDocblockTokensForType(XHPASTNode $root, $type) {
-    return $this->getDocblockTokensForTypes($root, array($type));
+    return $this->getDocblockTokensForTypes($root, [$type]);
   }
 
   /**

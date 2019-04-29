@@ -17,7 +17,7 @@ final class ArcanistArrayPushXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $array_pushes = $this->getFunctionCalls($root, array('array_push'));
+    $array_pushes = $this->getFunctionCalls($root, ['array_push']);
 
     foreach ($array_pushes as $array_push) {
       $parameters = $array_push->getChildOfType(1, 'n_CALL_PARAMETER_LIST');

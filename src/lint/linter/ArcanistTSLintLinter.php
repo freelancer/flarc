@@ -50,7 +50,7 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function getMandatoryFlags() {
-    $options = array();
+    $options = [];
 
     $options[] = '--format';
     $options[] = 'json';
@@ -69,16 +69,16 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
   }
 
   public function getLinterConfigurationOptions(): array {
-    $options = array(
-      'tslint.config' => array(
+    $options = [
+      'tslint.config' => [
         'type' => 'optional string',
         'help' => pht('%s configuration file.', 'TSLint'),
-      ),
-      'tslint.project' => array(
+      ],
+      'tslint.project' => [
         'type' => 'optional string',
         'help' => pht('%s project file.', 'TSLint'),
-      ),
-    );
+      ],
+    ];
 
     return $options + parent::getLinterConfigurationOptions();
   }
@@ -100,7 +100,7 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
-    $errors = array();
+    $errors = [];
 
     if (strlen($stderr)) {
       throw new RuntimeException(
@@ -115,7 +115,7 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
         $ex);
     }
 
-    $messages = array();
+    $messages = [];
 
     foreach ($errors as $error) {
       $position = idx($error, 'startPosition');

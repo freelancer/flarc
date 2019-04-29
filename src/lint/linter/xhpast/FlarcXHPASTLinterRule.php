@@ -58,7 +58,7 @@ abstract class FlarcXHPASTLinterRule extends ArcanistXHPASTLinterRule {
       $summary = null;
     }
 
-    return array($summary, $description, $tags, $raw_text);
+    return [$summary, $description, $tags, $raw_text];
   }
 
   /**

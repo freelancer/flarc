@@ -13,10 +13,10 @@ final class ArcanistDuplicateMethodDeclarationXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $classes = $root->selectDescendantsOfTypes(array(
+    $classes = $root->selectDescendantsOfTypes([
       'n_CLASS_DECLARATION',
       'n_INTERFACE_DECLARATION',
-    ));
+    ]);
 
     foreach ($classes as $class) {
       $class_name = $class
@@ -46,7 +46,7 @@ final class ArcanistDuplicateMethodDeclarationXHPASTLinterRule
           continue;
         }
 
-        $declarations[$name_string] = array($method);
+        $declarations[$name_string] = [$method];
       }
     }
   }

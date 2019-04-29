@@ -13,7 +13,7 @@
  */
 final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
 
-  private $fileLineCounts = array();
+  private $fileLineCounts = [];
 
 
 /* -(  Configuration  )------------------------------------------------------ */
@@ -84,7 +84,7 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
         ->setName($path)
         ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
         ->setUserData($this->stderr);
-      return array($result);
+      return [$result];
     }
 
     // Parse the JUnit test report.
@@ -92,20 +92,20 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     $events = $parser->parseTestResults($output);
 
     // Coverage is calculated for all test cases in the executed path.
-    $coverage = array();
+    $coverage = [];
     if ($this->enableCoverage) {
       $coverage_data = Filesystem::readFile($this->coverageFile);
       $coverage = $this->parseCloverCoverage($coverage_data);
     }
 
-    $test_suites = array();
-    $results = array();
+    $test_suites = [];
+    $results = [];
 
     // Keep track of how many tests have been executed within each test suite.
     // This is necessary because there is no "suiteEnd" event. Once the count
     // drops to zero, the test suite has finished and can be popped from
     // `$test_suites`.
-    $tests_remaining = array();
+    $tests_remaining = [];
 
     // Keep track of the previous test namespace and test name. This allows us
     // to properly attribute a broken test harness to the most-recent test.
@@ -144,7 +144,7 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
     $name = preg_replace('/^[^:]+::/', '', $name);
     $name = preg_replace('/ \(.*\)/s', '', $name);
 
-    return array($namespace, $name);
+    return [$namespace, $name];
   }
 
   /**
@@ -177,7 +177,7 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
       throw new RuntimeException(pht('Unable to parse Clover XML.'));
     }
 
-    $coverage_data = array();
+    $coverage_data = [];
     $files = $dom->getElementsByTagName('file');
 
     foreach ($files as $file) {

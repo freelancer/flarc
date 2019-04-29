@@ -4,6 +4,6 @@ final class ArcanistDuplicateParameterNameXHPASTLinterRuleTestCase
   extends ArcanistXHPASTLinterRuleTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/duplicate-parameter-name/');
+    $this->executeTestsInDirectory(__DIR__.'/duplicate-parameter-name/');
   }
 }

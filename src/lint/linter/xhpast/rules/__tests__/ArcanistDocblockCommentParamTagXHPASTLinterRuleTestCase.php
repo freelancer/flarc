@@ -5,7 +5,7 @@ final class ArcanistDocblockCommentParamTagXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/docblock-comment-param-tag/');
+      __DIR__.'/docblock-comment-param-tag/');
   }
 
 }

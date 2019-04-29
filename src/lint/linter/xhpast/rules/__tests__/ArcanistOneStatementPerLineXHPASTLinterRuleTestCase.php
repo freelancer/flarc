@@ -5,7 +5,7 @@ final class ArcanistOneStatementPerLineXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/one-statement-per-line/');
+      __DIR__.'/one-statement-per-line/');
   }
 
 }

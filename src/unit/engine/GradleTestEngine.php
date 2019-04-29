@@ -37,7 +37,7 @@ final class GradleTestEngine extends ArcanistUnitTestEngine {
       'build/test-results');
     $gradle_tasks = $configuration_manager->getConfigFromAnySource(
       'unit.gradle.tasks',
-      array('test'));
+      ['test']);
 
     $results_directory = Filesystem::resolvePath($results_directory, $root);
 
@@ -63,7 +63,7 @@ final class GradleTestEngine extends ArcanistUnitTestEngine {
 
   private function parseTestResults($results_directory) {
     $parser = new ArcanistXUnitTestResultParser();
-    $results = array();
+    $results = [];
 
     $test_reports = id(new FileFinder($results_directory))
       ->withSuffix('xml')

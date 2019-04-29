@@ -22,7 +22,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
     $exclude_abstract_classes = false): array {
 
     $classes = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
-    $test_classes = array();
+    $test_classes = [];
 
     foreach ($classes as $class) {
       $extends = $class->getChildByIndex(2);
@@ -127,7 +127,7 @@ abstract class PHPUnitXHPASTLinterRule extends ArcanistXHPASTLinterRule {
    */
   final protected function getTestMethods(XHPASTNode $root) {
     $test_classes = $this->getTestClasses($root);
-    $test_methods = array();
+    $test_methods = [];
 
     foreach ($test_classes as $test_class) {
       $methods = $test_class->selectDescendantsOfType('n_METHOD_DECLARATION');

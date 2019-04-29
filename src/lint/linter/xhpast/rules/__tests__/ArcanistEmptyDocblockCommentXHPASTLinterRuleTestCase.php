@@ -5,7 +5,7 @@ final class ArcanistEmptyDocblockCommentXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/empty-docblock-comment/');
+      __DIR__.'/empty-docblock-comment/');
   }
 
 }

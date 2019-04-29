@@ -26,7 +26,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
   }
 
   public function getLinterConfigurationOptions() {
-    return parent::getLinterConfigurationOptions() + array(
+    return parent::getLinterConfigurationOptions() + [
       'xhpast.naminghook' => array(
         'type' => 'optional string',
         'help' => pht(
@@ -34,7 +34,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
           'granular naming convention rules for symbols.',
           'ArcanistXHPASTLintNamingHook'),
       ),
-    );
+    ];
   }
 
   public function setLinterConfigurationValue($key, $value) {
@@ -52,14 +52,14 @@ final class FlarcNamingConventionsXHPASTLinterRule
     // We're going to build up a list of <type, name, token, error> tuples
     // and then try to instantiate a hook class which has the opportunity to
     // override us.
-    $names = array();
+    $names = [];
 
     $classes = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
     foreach ($classes as $class) {
       $name_token = $class->getChildByIndex(1);
       $name_string = $name_token->getConcreteString();
 
-      $names[] = array(
+      $names[] = [
         'class',
         $name_string,
         $name_token,
@@ -68,14 +68,14 @@ final class FlarcNamingConventionsXHPASTLinterRule
           : pht(
             'Follow naming conventions: classes should be named using `%s`.',
             'UpperCamelCase'),
-      );
+      ];
     }
 
     $ifaces = $root->selectDescendantsOfType('n_INTERFACE_DECLARATION');
     foreach ($ifaces as $iface) {
       $name_token = $iface->getChildByIndex(1);
       $name_string = $name_token->getConcreteString();
-      $names[] = array(
+      $names[] = [
         'interface',
         $name_string,
         $name_token,
@@ -84,7 +84,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
           : pht(
             'Follow naming conventions: interfaces should be named using `%s`.',
             'UpperCamelCase'),
-      );
+      ];
     }
 
 
@@ -96,7 +96,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
         continue;
       }
       $name_string = $name_token->getConcreteString();
-      $names[] = array(
+      $names[] = [
         'function',
         $name_string,
         $name_token,
@@ -106,7 +106,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
           : pht(
             'Follow naming conventions: functions should be named using `%s`.',
             'lowercase_with_underscores'),
-      );
+      ];
     }
 
 
@@ -114,7 +114,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
     foreach ($methods as $method) {
       $name_token = $method->getChildByIndex(2);
       $name_string = $name_token->getConcreteString();
-      $names[] = array(
+      $names[] = [
         'method',
         $name_string,
         $name_token,
@@ -124,10 +124,10 @@ final class FlarcNamingConventionsXHPASTLinterRule
           : pht(
             'Follow naming conventions: methods should be named using `%s`.',
             'lowerCamelCase'),
-      );
+      ];
     }
 
-    $param_tokens = array();
+    $param_tokens = [];
 
     $params = $root->selectDescendantsOfType('n_DECLARATION_PARAMETER_LIST');
     foreach ($params as $param_list) {
@@ -141,7 +141,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
         $param_tokens[$name_token->getID()] = true;
         $name_string = $name_token->getConcreteString();
 
-        $names[] = array(
+        $names[] = [
           'parameter',
           $name_string,
           $name_token,
@@ -152,7 +152,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
               'Follow naming conventions: parameters '.
               'should be named using `%s`',
               'lowercase_with_underscores'),
-        );
+        ];
       }
     }
 
@@ -163,7 +163,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
       foreach ($constant_list->getChildren() as $constant) {
         $name_token = $constant->getChildByIndex(0);
         $name_string = $name_token->getConcreteString();
-        $names[] = array(
+        $names[] = [
           'constant',
           $name_string,
           $name_token,
@@ -173,11 +173,11 @@ final class FlarcNamingConventionsXHPASTLinterRule
               'Follow naming conventions: class constants '.
               'should be named using `%s`',
               'UPPERCASE_WITH_UNDERSCORES'),
-        );
+        ];
       }
     }
 
-    $member_tokens = array();
+    $member_tokens = [];
 
     $props = $root->selectDescendantsOfType('n_CLASS_MEMBER_DECLARATION_LIST');
     foreach ($props as $prop_list) {
@@ -190,7 +190,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
         $member_tokens[$name_token->getID()] = true;
 
         $name_string = $name_token->getConcreteString();
-        $names[] = array(
+        $names[] = [
           'member',
           $name_string,
           $name_token,
@@ -201,7 +201,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
               'Follow naming conventions: class properties '.
               'should be named using `%s`.',
               'lowerCamelCase'),
-        );
+        ];
       }
     }
 
@@ -210,27 +210,27 @@ final class FlarcNamingConventionsXHPASTLinterRule
       true);
 
 
-    $defs = $root->selectDescendantsOfTypes(array(
+    $defs = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
 
     foreach ($defs as $def) {
       $globals = $def->selectDescendantsOfType('n_GLOBAL_DECLARATION_LIST');
       $globals = $globals->selectDescendantsOfType('n_VARIABLE');
 
-      $globals_map = array();
+      $globals_map = [];
       foreach ($globals as $global) {
         $global_string = $global->getConcreteString();
         $globals_map[$global_string] = true;
-        $names[] = array(
+        $names[] = [
           'user',
           $global_string,
           $global,
 
           // No advice for globals, but hooks have an option to provide some.
           null,
-        );
+        ];
       }
 
       // Exclude access of static properties, since lint will be raised at
@@ -238,7 +238,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
       // variable rules. This is slightly overbroad (includes the entire
       // RHS of a "Class::..." token) to cover cases like "Class:$x[0]". These
       // variables are simply made exempt from naming conventions.
-      $exclude_tokens = array();
+      $exclude_tokens = [];
       $statics = $def->selectDescendantsOfType('n_CLASS_STATIC_ACCESS');
       foreach ($statics as $static) {
         $rhs = $static->getChildByIndex(1);
@@ -258,7 +258,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
       // because we only want to complain about the variable name if the
       // variable is being declared, rather than on every reference to the
       // variable.
-      $visited_local_vars = array();
+      $visited_local_vars = [];
 
       foreach ($vars as $token_id => $var) {
         if (isset($member_tokens[$token_id])) {
@@ -288,7 +288,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
         }
         $visited_local_vars[$var_string] = true;
 
-        $names[] = array(
+        $names[] = [
           'variable',
           $var_string,
           $var,
@@ -299,7 +299,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
                 'Follow naming conventions: variables '.
                 'should be named using `%s`.',
                 'lowercase_with_underscores'),
-        );
+        ];
       }
     }
 
@@ -307,7 +307,7 @@ final class FlarcNamingConventionsXHPASTLinterRule
     // default results for all the symbol names.
     $hook_class = $this->naminghook;
     if ($hook_class) {
-      $hook_obj = newv($hook_class, array());
+      $hook_obj = newv($hook_class, []);
       foreach ($names as $k => $name_attrs) {
         list($type, $name, $token, $default) = $name_attrs;
         $result = $hook_obj->lintSymbolName($type, $name, $default);
@@ -327,11 +327,11 @@ final class FlarcNamingConventionsXHPASTLinterRule
 
     // Lint constant declarations.
     $defines = $this
-      ->getFunctionCalls($root, array('define'))
-      ->add($root->selectDescendantsOfTypes(array(
+      ->getFunctionCalls($root, ['define'])
+      ->add($root->selectDescendantsOfTypes([
         'n_CLASS_CONSTANT_DECLARATION',
         'n_CONSTANT_DECLARATION',
-      )));
+      ]));
 
     foreach ($defines as $define) {
       switch ($define->getTypeName()) {

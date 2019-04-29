@@ -14,7 +14,7 @@ final class ArcanistIsNullXHPASTLinterRule
   }
 
   public function process(XHPASTNode $root) {
-    $calls = $this->getFunctionCalls($root, array('is_null'));
+    $calls = $this->getFunctionCalls($root, ['is_null']);
 
     foreach ($calls as $call) {
       $parameters = $call->getChildOfType(1, 'n_CALL_PARAMETER_LIST');

@@ -5,7 +5,7 @@ final class ArcanistSwitchMultipleDefaultStatementsXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/switch-multiple-defaults/');
+      __DIR__.'/switch-multiple-defaults/');
   }
 
 }

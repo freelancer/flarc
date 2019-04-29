@@ -18,10 +18,10 @@ final class ArcanistMissingReturnTypeXHPASTLinterRule
       return;
     }
 
-    $nodes = $root->selectDescendantsOfTypes(array(
+    $nodes = $root->selectDescendantsOfTypes([
       'n_FUNCTION_DECLARATION',
       'n_METHOD_DECLARATION',
-    ));
+    ]);
 
     foreach ($nodes as $node) {
       // Return type is not empty
@@ -69,7 +69,7 @@ final class ArcanistMissingReturnTypeXHPASTLinterRule
    */
   private function functionHasReturnValue(XHPASTNode $function) {
     $closures = $this->getAnonymousClosures($function);
-    $nodes = $function->selectDescendantsOfTypes(array('n_RETURN', 'n_YIELD'));
+    $nodes = $function->selectDescendantsOfTypes(['n_RETURN', 'n_YIELD']);
     foreach ($nodes as $node) {
       foreach ($closures as $closure) {
         if ($node->isDescendantOf($closure)) {

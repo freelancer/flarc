@@ -26,7 +26,7 @@
  */
 final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
 
-  private $affectedTests = array();
+  private $affectedTests = [];
   private $sourceDirectory;
   private $testDirectory;
 
@@ -92,7 +92,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       $this->getConfigPath('unit.phpunit.test-directory'));
 
     if ($this->getRunAllTests()) {
-      $this->setPaths(array($this->testDirectory));
+      $this->setPaths([$this->testDirectory]);
     }
     $this->affectedTests = $this->getAffectedTests();
 
@@ -103,8 +103,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     $binary = $this->getBinaryPath('unit.phpunit.binary', 'phpunit');
     $config = $this->getConfigPath('unit.phpunit.config');
 
-    $futures = array();
-    $output  = array();
+    $futures = [];
+    $output  = [];
 
     foreach ($this->affectedTests as $source_path => $test_paths) {
       foreach ((array)$test_paths as $test_path) {
@@ -112,7 +112,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
           continue;
         }
 
-        $args = array();
+        $args = [];
 
         $clover_output = null;
         $junit_output   = new TempFile();
@@ -141,7 +141,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       }
     }
 
-    $results = array();
+    $results = [];
     $futures = new FutureIterator($futures);
 
     foreach ($futures->limit(4) as $test => $future) {
@@ -174,7 +174,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    * @return list<string>
    */
   public function getAffectedTests() {
-    $tests = array();
+    $tests = [];
 
     foreach ($this->getPaths() as $path) {
       $tests[$path] = $this->getTestsForPath($path);
@@ -194,7 +194,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    *                       input path.
    */
   private function getTestsForPath($path) {
-    $tests = array();
+    $tests = [];
 
     if (!$this->sourceDirectory) {
       throw new PhutilInvalidStateException('setSourceDirectory');
@@ -218,7 +218,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     }
 
     if (!preg_match('/\.php$/', $path)) {
-      return array();
+      return [];
     }
 
     if (FlarcFilesystem::isDescendant($path, $this->testDirectory)) {
@@ -255,11 +255,11 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    * @return list<string>
    */
   private function getTestsInDirectory($path) {
-    $tests = array();
+    $tests = [];
     $path = rtrim($path, '/');
 
     if (!Filesystem::pathExists($path)) {
-      return array();
+      return [];
     }
 
     $files = id(new FileFinder($path))
@@ -409,13 +409,13 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     $repo_dependencies = phutil_json_decode($composer_lock);
     $repo_dependencies = $repo_dependencies['packages'];
     $local_dependencies = phutil_json_decode($installed);
-    $local_dependency_versions = array();
+    $local_dependency_versions = [];
     foreach ($local_dependencies as $dependency) {
       $name = $dependency['name'];
       $local_dependency_versions[$name] = $dependency['version'];
     }
 
-    $stale_dependencies = array();
+    $stale_dependencies = [];
     foreach ($repo_dependencies as $dependency) {
       $name = $dependency['name'];
 

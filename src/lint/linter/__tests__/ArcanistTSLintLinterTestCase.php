@@ -58,23 +58,23 @@ final class ArcanistTSLintLinterTestCase
 
     list($data, $expect, $xform, $config) = array_merge(
       $contents,
-      array(null, null));
+      [null, null]);
 
     $basename = basename($file);
 
     if ($config) {
       $config = phutil_json_decode($config);
     } else {
-      $config = array();
+      $config = [];
     }
     PhutilTypeSpec::checkMap(
       $config,
-      array(
+      [
         'config' => 'optional map<string, wild>',
         'path' => 'optional string',
         'mode' => 'optional string',
         'stopped' => 'optional bool',
-      ));
+      ]);
 
     $exception = null;
     $after_lint = null;
@@ -108,12 +108,12 @@ final class ArcanistTSLintLinterTestCase
       $engine->setConfigurationManager($configuration_manager);
 
       $path_name = idx($config, 'path', $path);
-      $engine->setPaths(array($path_name));
+      $engine->setPaths([$path_name]);
 
       $linter->addPath($path_name);
       $linter->addData($path_name, $data);
 
-      foreach (idx($config, 'config', array()) as $key => $value) {
+      foreach (idx($config, 'config', []) as $key => $value) {
         $linter->setLinterConfigurationValue($key, $value);
       }
 
@@ -175,7 +175,7 @@ final class ArcanistTSLintLinterTestCase
 
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/tslint/');
+    $this->executeTestsInDirectory(__DIR__.'/tslint/');
   }
 
 }

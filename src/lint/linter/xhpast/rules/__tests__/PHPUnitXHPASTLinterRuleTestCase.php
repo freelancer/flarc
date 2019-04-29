@@ -3,7 +3,7 @@
 final class PHPUnitXHPASTLinterRuleTestCase extends PhutilTestCase {
 
   public function testUseMapping() {
-    $dir   = dirname(__FILE__).'/use-mapping/';
+    $dir   = __DIR__.'/use-mapping/';
     $files = id(new FileFinder($dir))
       ->withType('f')
       ->withSuffix('php.test')
@@ -13,11 +13,11 @@ final class PHPUnitXHPASTLinterRuleTestCase extends PhutilTestCase {
       list($tree, $expect) = $this->readTestData($dir.'/'.$file);
 
       $root    = $tree->getRootNode();
-      $classes = $root->selectDescendantsOfTypes(array(
+      $classes = $root->selectDescendantsOfTypes([
         'n_CLASS_DECLARATION',
         'n_INTERFACE_DECLARATION',
         'n_FUNCTION_DECLARATION',
-      ));
+      ]);
 
       foreach ($classes as $class) {
         $id = (string)$class->getID();
@@ -79,7 +79,7 @@ final class PHPUnitXHPASTLinterRuleTestCase extends PhutilTestCase {
     $tree = XHPASTTree::newFromData($data);
     $expect = phutil_json_decode($expect);
 
-    return array($tree, $expect);
+    return [$tree, $expect];
   }
 
 }

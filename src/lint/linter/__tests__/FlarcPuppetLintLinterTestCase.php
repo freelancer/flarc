@@ -4,7 +4,7 @@ final class FlarcPuppetLintLinterTestCase
   extends ArcanistExternalLinterTestCase {
 
   public function testLinter() {
-    $this->executeTestsInDirectory(dirname(__FILE__).'/puppet-lint/');
+    $this->executeTestsInDirectory(__DIR__.'/puppet-lint/');
   }
 
 }

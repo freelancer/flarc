@@ -5,7 +5,7 @@ final class ArcanistForExpressionSpacingXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/for-expression-spacing/');
+      __DIR__.'/for-expression-spacing/');
   }
 
 }

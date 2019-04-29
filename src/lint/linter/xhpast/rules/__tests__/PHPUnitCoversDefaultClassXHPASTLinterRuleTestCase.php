@@ -5,7 +5,7 @@ final class PHPUnitCoversDefaultClassXHPASTLinterRuleTestCase
 
   public function testLinter() {
     $this->executeTestsInDirectory(
-      dirname(__FILE__).'/phpunit-covers-default-class/');
+      __DIR__.'/phpunit-covers-default-class/');
   }
 
 }
