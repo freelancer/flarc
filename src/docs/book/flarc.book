@@ -1,0 +1,22 @@
+{
+  "name": "flarc",
+  "title": "Flarc Technical Documentation",
+  "short": "Flarc Tech Docs",
+  "preface": "Technical documentation for the Freelancer Arcanist library.",
+  "root": "../../",
+  "uri.source": "https://phabricator.tools.flnltd.com/diffusion/FLARC/browse/master/%f$%l",
+  "rules": {
+    "(\\.diviner$)": "DivinerArticleAtomizer",
+    "(\\.php$)": "DivinerPHPAtomizer"
+  },
+  "groups": {
+    "lint": {
+      "name": "Lint",
+      "include": "(^src/lint/)"
+    },
+    "unit": {
+      "name": "Unit Testing",
+      "include": "(^src/unit/)"
+    }
+  }
+}
