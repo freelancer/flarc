@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @todo Remove this after https://secure.phabricator.com/D13917.
- * @todo Submit this upstream after T27678.
- */
 final class ArcanistGlobalConstantXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {
 

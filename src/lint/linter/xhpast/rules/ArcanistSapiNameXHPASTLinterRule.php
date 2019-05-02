@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @todo Submit this upstream after T27678.
- */
 final class ArcanistSapiNameXHPASTLinterRule extends ArcanistXHPASTLinterRule {
 
   const ID = 1022;

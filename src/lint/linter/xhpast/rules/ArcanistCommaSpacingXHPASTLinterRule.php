@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @todo Submit this upstream after T27678. See
- * https://phabricator.freelancer.com/differential/diff/593341/.
- */
 final class ArcanistCommaSpacingXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {
 

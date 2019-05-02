@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @todo Submit this upstream after T27678. This linter rule could possibly be
- * merged with `ArcanistGlobalVariableXHPASTLinterRule`.
+ * @todo This linter rule could possibly be merged with `ArcanistGlobalVariableXHPASTLinterRule`.
  */
 final class ArcanistGlobalsSuperglobalXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {

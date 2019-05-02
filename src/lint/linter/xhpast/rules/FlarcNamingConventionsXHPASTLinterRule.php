@@ -8,7 +8,7 @@
  * exact one of these linter rules.
  *
  * @todo Submit this class upstream (as improvements to
- * `ArcanistNamingConventionsXHPASTLinterRule`) after T27678.
+ * `ArcanistNamingConventionsXHPASTLinterRule`).
  */
 final class FlarcNamingConventionsXHPASTLinterRule
   extends ArcanistXHPASTLinterRule {

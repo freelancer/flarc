@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @todo Submit this upstream after T27678.
- */
 final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
 
   const LINT_SYNTAX_ERROR = 1;

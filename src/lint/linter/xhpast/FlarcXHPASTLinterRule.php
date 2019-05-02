@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @todo Submit the methods contained within this class upstream (to the
- *       `ArcanistXHPASTLinterRule` class) after T27678.
- */
 abstract class FlarcXHPASTLinterRule extends ArcanistXHPASTLinterRule {
 
   /**
