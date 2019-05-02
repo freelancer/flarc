@@ -1,5 +1,28 @@
 = flarc =
 
-`flarc` is a library that contains
+`flarc` is a
+[[https://secure.phabricator.com/book/phabcontrib/article/adding_new_classes/#creating-libraries |
+libphutil library]] that contains various
 [[https://secure.phabricator.com/book/phabricator/article/arcanist/ | Arcanist]]
-extensions used at Freelancer.com.
+extensions used at Freelancer.com, mostly relating to
+[[https://secure.phabricator.com/book/phabricator/article/arcanist_extending_lint/ |
+linting]] and testing integrations.
+
+== Usage ==
+To use `flarc`, you must clone the repository into a location that Arcanist
+knows how to load it. Arcanist adjusts the PHP include path in
+@{function:arcanist_adjust_php_include_path} so that libphutil libraries can
+be loaded from any of the following locations:
+
+  # A directory adjacent to `arcanist/` itself.
+  # Anywhere in the normal PHP [[https://www.php.net/manual/en/ini.core.php#ini.include-path | `include_path`]].
+  # Inside `arcanist/externals/includes/`.
+
+To load `flarc` so that it is available for use, add `flarc/src` to the `load`
+path:
+
+```lang=json, name=.arcconfig
+{
+  "load": ["flarc/src"]
+}
+```
