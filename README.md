@@ -10,9 +10,9 @@ knows how to load it. Arcanist adjusts the PHP include path in
 `arcanist_adjust_php_include_path` so that libphutil libraries can
 be loaded from any of the following locations:
 
-  # A directory adjacent to `arcanist/` itself.
-  # Anywhere in the normal PHP [`include_path`][include_path].
-  # Inside `arcanist/externals/includes/`.
+  1. A directory adjacent to `arcanist/` itself.
+  2. Anywhere in the normal PHP [`include_path`][include_path].
+  3. Inside `arcanist/externals/includes/`.
 
 To load `flarc` so that it is available for use, add `flarc/src` to the `load`
 path:
