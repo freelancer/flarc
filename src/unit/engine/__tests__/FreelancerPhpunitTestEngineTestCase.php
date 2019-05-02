@@ -21,19 +21,19 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
     $engine = $this->createTestEngine();
 
     $test_cases = [
-      array(
+      [
         array(),
         array(),
-      ),
-      array(
+      ],
+      [
         array(
           'some/file.php',
         ),
         array(
           'some/file.php' => array(),
         ),
-      ),
-      array(
+      ],
+      [
         array(
           'src/SomeClass.php',
         ),
@@ -42,8 +42,8 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
             'test/SomeClassTest.php',
           ),
         ),
-      ),
-      array(
+      ],
+      [
         array(
           'test/SomeTest.php',
         ),
@@ -52,7 +52,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
             'test/SomeTest.php',
           ),
         ),
-      ),
+      ],
     ];
 
     foreach ($test_cases as $test_case) {
@@ -70,7 +70,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
 
   public function testGetStaleDependencies() {
     $test_cases = [
-      array(
+      [
         array(
           'packages' => array(
             array(
@@ -98,7 +98,7 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
           ),
         ),
         array('A', 'C'),
-      ),
+      ],
     ];
 
     foreach ($test_cases as $test_case) {

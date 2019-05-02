@@ -27,13 +27,13 @@ final class FlarcNamingConventionsXHPASTLinterRule
 
   public function getLinterConfigurationOptions() {
     return parent::getLinterConfigurationOptions() + [
-      'xhpast.naminghook' => array(
+      'xhpast.naminghook' => [
         'type' => 'optional string',
         'help' => pht(
           'Name of a concrete subclass of `%s` which enforces more '.
           'granular naming convention rules for symbols.',
           'ArcanistXHPASTLintNamingHook'),
-      ),
+      ],
     ];
   }
 

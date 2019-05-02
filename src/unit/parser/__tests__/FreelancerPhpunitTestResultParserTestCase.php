@@ -19,62 +19,62 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
 
   public function testGetTestName() {
     $test_cases = [
-      array(
+      [
         '',
         '',
         array(
           '',
           '',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeClassTest',
         'SomeClassTest::testSomeMethod',
         array(
           'SomeClassTest',
           'testSomeMethod',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeTest::testB',
         'SomeTest::testB with data set #0 (1, 2, 3)',
         array(
           'SomeTest',
           'testB with data set #0',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeTest::testB',
         "SomeTest::testB with data set #1 ('foo', 'bar', 'baz')",
         array(
           'SomeTest',
           'testB with data set #1',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeTest::testB',
         'SomeTest::testB with data set #2 (array(), null, stdClass Object ())',
         array(
           'SomeTest',
           'testB with data set #2',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeTest::testC',
         'SomeTest::testC with data set "one" (1, 2, 3)',
         array(
           'SomeTest',
           'testC with data set "one"',
         ),
-      ),
-      array(
+      ],
+      [
         'SomeTest::testD',
         "SomeTest::testD with data set #3 ('Foo::bar')",
         array(
           'SomeTest',
           'testD with data set #3',
         ),
-      ),
+      ],
     ];
 
     foreach ($test_cases as $test_case) {
@@ -90,16 +90,16 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
 
   public function testParseCloverCoverage() {
     $test_cases = [
-      array(
+      [
         Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/1.xml'),
         array(),
-      ),
-      array(
+      ],
+      [
         Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/2.xml'),
         array(
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
         ),
-      ),
+      ],
     ];
 
     foreach ($test_cases as $test_case) {
