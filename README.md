@@ -1,10 +1,10 @@
-= flarc =
+# flarc
 
 `flarc` is a [libphutil library] that contains various [Arcanist][arcanist]
 extensions used at Freelancer.com, mostly relating to [linting][lint] and
 testing integrations.
 
-== Usage ==
+## Usage
 To use `flarc`, you must clone the repository into a location that Arcanist
 knows how to load it. Arcanist adjusts the PHP include path in
 `arcanist_adjust_php_include_path` so that libphutil libraries can
