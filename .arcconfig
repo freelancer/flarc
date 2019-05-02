@@ -1,5 +1,5 @@
 {
-  "phabricator.uri": "https://phabricator.freelancer.com",
+  "phabricator.uri": "https://phabricator.tools.flnltd.com",
   "load": [
     "src/"
   ]
