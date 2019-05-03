@@ -29,13 +29,19 @@ final class FlarcFunctionDeclarationXHPASTLinterRule
         trim($matches[1]) != $rectified_function_declaration) {
 
         // non-greedy match the first `{` met
-        $this->raiseLintMessage($declaration, trim($matches[1]), $rectified_function_declaration);
+        $this->raiseLintMessage(
+          $declaration,
+          trim($matches[1]),
+          $rectified_function_declaration);
       } else if (preg_match('/^(.*)\)$/', $original_function_declaration, $matches) &&
         !empty($matches) &&
         $matches[0] != $rectified_function_declaration) {
 
         // function declared but not defined, which end with `;`
-        $this->raiseLintMessage($declaration, $matches[0], $rectified_function_declaration);
+        $this->raiseLintMessage(
+          $declaration,
+          $matches[0],
+          $rectified_function_declaration);
       }
     }
   }
@@ -57,8 +63,13 @@ final class FlarcFunctionDeclarationXHPASTLinterRule
     $function_declaration = 'function ';
 
     // modifiers such as `abstract`, `static`, `public`...
-    $function_declaration = sprintf('%s %s',
-      implode(' ', array_map([$this, 'getNodeString'], $declaration->getChildByIndex(0)->getChildren())),
+    $function_declaration = sprintf(
+      '%s %s',
+      implode(
+        ' ',
+        array_map(
+          [$this, 'getNodeString'],
+          $declaration->getChildByIndex(0)->getChildren())),
       $function_declaration);
 
     // Reference '&'
@@ -78,18 +89,26 @@ final class FlarcFunctionDeclarationXHPASTLinterRule
       $this->extractUseDeclaration($declaration->getChildByIndex(4));
 
     // Return type declaration
-    $function_declaration .=
-      rtrim(sprintf(': %s', $this->getNodeString($declaration->getChildByIndex(5))), ': ');
+    $function_declaration .= rtrim(
+      sprintf(
+        ': %s',
+        $this->getNodeString($declaration->getChildByIndex(5))),
+      ': ');
     return trim($function_declaration);
   }
 
   private function extractParameterDeclaration(XHPASTNode $node): string {
     $chunks = array_map(
       function (XHPASTNode $child_node): string {
-        $chunks = array_map([$this, 'getNodeString'], $child_node->getChildren());
+        $chunks = array_map(
+          [$this, 'getNodeString'],
+          $child_node->getChildren());
+
         // Reindex, so that the index start from 0.
         $chunks = array_values($chunks);
-        return trim(sprintf('%s %s = %s', $chunks[0], $chunks[1], $chunks[2]), ' = ');
+        return trim(
+          sprintf('%s %s = %s', $chunks[0], $chunks[1], $chunks[2]),
+          ' = ');
       },
       $node->getChildren());
     return sprintf('(%s)', implode(', ', $chunks));
@@ -99,12 +118,18 @@ final class FlarcFunctionDeclarationXHPASTLinterRule
     if ($node->getTypeName() == 'n_EMPTY') {
       return '';
     } else {
-      return sprintf(' use (%s)', implode(', ', array_map([$this, 'getNodeString'], $node->getChildren())));
+      return sprintf(
+        ' use (%s)',
+        implode(
+          ', ',
+          array_map([$this, 'getNodeString'], $node->getChildren())));
     }
   }
 
-  private function raiseLintMessage(XHPASTNode $declaration,
-    $original_function_declaration, $rectified_function_declaration) {
+  private function raiseLintMessage(
+    XHPASTNode $declaration,
+    $original_function_declaration,
+    $rectified_function_declaration) {
 
     $this->raiseLintAtOffset(
       $declaration->getOffset(),

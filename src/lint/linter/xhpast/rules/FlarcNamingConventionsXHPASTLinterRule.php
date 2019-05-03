@@ -254,9 +254,9 @@ final class FlarcNamingConventionsXHPASTLinterRule
 
       $vars = $def->selectDescendantsOfType('n_VARIABLE');
 
-      // Keep track of which local variables have been visited. This is necessary
-      // because we only want to complain about the variable name if the
-      // variable is being declared, rather than on every reference to the
+      // Keep track of which local variables have been visited. This is
+      // necessary because we only want to complain about the variable name if
+      // the variable is being declared, rather than on every reference to the
       // variable.
       $visited_local_vars = [];
 

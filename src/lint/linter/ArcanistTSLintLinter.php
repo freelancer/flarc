@@ -111,7 +111,11 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
       $errors = phutil_json_decode($stdout);
     } catch (PhutilJSONParserException $ex) {
       throw new PhutilProxyException(
-        pht("`%s` returned unparseable output:\n\n%s\n%s", 'tslint', $stdout, $stderr),
+        pht(
+          "`%s` returned unparseable output:\n\n%s\n%s",
+          'tslint',
+          $stdout,
+          $stderr),
         $ex);
     }
 

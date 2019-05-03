@@ -59,12 +59,12 @@ final class ArcanistMissingTypeDeclarationXHPASTLinterRule
           $this->raiseLintAtNode(
             $variable,
             pht(
-              'Type declaration is missing for parameter `%s`. If you cannot add type '.
-              'declaration because the parameter could be multiple types, you should '.
-              'document it using `%s type1|type2` or `%s %s` in the docblock.',
+              'Type declaration is missing for parameter `%s`. If you cannot '.
+              'add a type declaration because the parameter could be multiple '.
+              'types, you should document it as `%s` or `%s`.',
               $variable->getConcreteString(),
-              '@param',
-              '@param', 'mixed'));
+              '@param type1|type2',
+              '@param mixed'));
         }
       }
     }

@@ -45,7 +45,15 @@
       "type": "xhpast",
       "include": "(\\.php$)",
       "standard": "phutil.xhpast",
-      "xhpast.php-version": "7.1"
+      "xhpast.php-version": "7.1",
+      "severity": {
+        "1032": "disabled",
+        "2001": "disabled",
+        "2002": "disabled",
+        "2004": "disabled",
+        "2005": "disabled",
+        "2006": "disabled"
+      }
     }
   }
 }

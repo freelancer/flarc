@@ -37,10 +37,12 @@ final class ArcanistReturnNullInsteadOfFalseXHPASTLinterRule
             pht(
               'You should return `%s` rather than `%s` to indicate the '.
               'absence of a return value and declare the return type as '.
-              'nullable type. If this function is intended to return a boolean '.
-              'value, you can disregard this message (but you should explicitly '.
-              'declare the return type for this function as `%s`)',
-              'null', 'false', 'bool'));
+              'nullable type. If this function is intended to return a '.
+              'boolean value, you can disregard this message (but you should '.
+              'explicitly declare the return type for this function as `%s`).',
+              'null',
+              'false',
+              'bool'));
         }
       }
     }

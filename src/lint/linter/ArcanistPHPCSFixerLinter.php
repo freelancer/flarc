@@ -5,9 +5,8 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
 
   /**
    * See https://github.com/FriendsOfPHP/PHP-CS-Fixer#exit-codes for reference
-   * return codes that do not indicate error are ignored as they are not 'error code'.
-   *
-   * @var array
+   * return codes that do not indicate error are ignored as they are not an
+   * error code.
    */
   private $errCodeMsg = [
     1 => 'General error (or PHP minimal requirement not matched).',
@@ -26,7 +25,9 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
   }
 
   public function getInfoDescription(): string {
-    return pht('The PHP Coding Standards Fixer (PHP CS Fixer) tool fixes your code to follow standards;');
+    return pht(
+      'The PHP Coding Standards Fixer (PHP CS Fixer) tool '.
+      'fixes your code to follow standards.');
   }
 
   public function getLinterName(): string {
@@ -42,7 +43,9 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
   }
 
   public function getInstallInstructions(): string {
-    return pht('See %s.', 'https://github.com/FriendsOfPHP/PHP-CS-Fixer#installation');
+    return pht(
+      'See %s.',
+      'https://github.com/FriendsOfPHP/PHP-CS-Fixer#installation');
   }
 
   public function getLinterConfigurationOptions(): array {
@@ -122,14 +125,18 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
           ->setChar(1) // first char in the line
           ->setCode('PHP-CS-Fixer')
           ->setName('PHP-CS-Fixer')
-          ->setDescription(sprintf('(%s) '.
-            'Please consider the following changes', implode(', ', $file['appliedFixers'])))
+          ->setDescription(
+            pht(
+              '(%s) Please consider the following changes',
+              implode(', ', $file['appliedFixers'])))
           ->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE)
           ->setBypassChangedLineFiltering(true)
           ->setOriginalText($hunk->getOriginal())
           ->setReplacementText($hunk->getReplacement());
       }
     }
+
     return $messages;
   }
+
 }

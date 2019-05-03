@@ -21,7 +21,9 @@ EOT;
       $config_content);
 
     $linter = parent::getLinter();
-    $linter->setLinterConfigurationValue('phpstan.config', (string)$config_path);
+    $linter->setLinterConfigurationValue(
+      'phpstan.config',
+      (string)$config_path);
 
     return $linter;
   }

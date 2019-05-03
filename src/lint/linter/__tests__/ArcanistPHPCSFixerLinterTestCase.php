@@ -21,7 +21,9 @@ EOT;
       $config_data);
 
     $linter = parent::getLinter();
-    $linter->setLinterConfigurationValue('php-cs-fixer.config', (string)$this->config);
+    $linter->setLinterConfigurationValue(
+      'php-cs-fixer.config',
+      (string)$this->config);
 
     return $linter;
   }

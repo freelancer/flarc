@@ -165,7 +165,8 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
       $this->raiseLintAtToken(
         $docblock,
         pht(
-          'This function/method is not a generator, but its docblock has a `%s` tag',
+          'This function/method is not a generator but its '.
+          'docblock has a `%s` tag.',
           '@return Generator'));
       return true;
     }
@@ -227,7 +228,9 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
     $yields = [];
 
     $closures = $this->getAnonymousClosures($function);
-    foreach ($function->selectDescendantsOfTypes(['n_RETURN', 'n_YIELD']) as $node) {
+    $nodes = $function->selectDescendantsOfTypes(['n_RETURN', 'n_YIELD']);
+
+    foreach ($nodes as $node) {
       foreach ($closures as $closure) {
         if ($node->isDescendantOf($closure)) {
           continue 2;
@@ -240,6 +243,8 @@ final class ArcanistDocblockCommentReturnTagXHPASTLinterRule
         $yields[] = $node;
       }
     }
+
     return [$returns, $yields];
   }
+
 }

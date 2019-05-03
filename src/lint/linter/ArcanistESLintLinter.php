@@ -103,7 +103,8 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
       ],
       'eslint.no-inline-config' => [
         'type' => 'optional bool',
-        'help' => pht('Prevents comments from changing configuration or rules.'),
+        'help' => pht(
+          'Prevents comments from changing configuration or rules.'),
       ],
     ];
 
@@ -138,7 +139,11 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
       $files = phutil_json_decode($stdout);
     } catch (PhutilJSONParserException $ex) {
       throw new PhutilProxyException(
-        pht("`%s` returned unparseable output:\n\n%s\n%s", 'eslint', $stdout, $stderr),
+        pht(
+          "`%s` returned unparseable output:\n\n%s\n%s",
+          'eslint',
+          $stdout,
+          $stderr),
         $ex);
     }
 

@@ -20,7 +20,9 @@ final class ArcanistMissingTypeAnnotationXHPASTLinterRule
 
     foreach ($nodes as $node) {
       if (!$this->getDocBlockTag($node, 'var')) {
-        $this->raiseLintAtNode($node, pht('Missing %s annotation on the class property', '@var'));
+        $this->raiseLintAtNode(
+          $node,
+          pht('Missing `%s` annotation on the class property.', '@var'));
       }
     }
   }

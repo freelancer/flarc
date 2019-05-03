@@ -20,7 +20,8 @@ final class FlarcDiffParserTestCase extends PhutilTestCase {
     if (count($contents) < 3) {
       throw new Exception(
         pht(
-          "Expected '%s' separating test case and results (line, original text, changed text).",
+          "Expected '%s' separating test case and results ".
+          '(line, original text, changed text).',
           '~~~~~~~~~~'));
     }
 

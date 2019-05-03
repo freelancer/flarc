@@ -53,10 +53,11 @@ final class ArcanistMissingReturnTypeXHPASTLinterRule
           $node,
           pht(
             'Return type is missing for this function/method. If you cannot '.
-            'declare the return type because the returned value could be one of '.
-            'multiple types, you should document it using the `%s type1|type2` or '.
-            '`%s %s` syntax in the docblock.',
-            '@return', '@return', 'mixed'));
+            'declare the return type because the returned value could be one '.
+            'of multiple types, you should document it using the `%s` or `%s` '.
+            'syntax in the docblock.',
+            '@return type1|type2',
+            '@return mixed'));
       }
     }
   }

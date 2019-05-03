@@ -6,10 +6,10 @@
 final class FlarcDiffParser extends Phobject {
 
   /**
-   * Main entry, used for parsing diff into format of array of FlarcDiffHunk Objects
+   * Parse a diff into format of array of @{class:FlarcDiffHunk} objects.
    *
-   * @param string $raw_diff the full diff generated
-   * @return list<FlarcDiffHunk> array of replacements
+   * @param  string               the full diff generated
+   * @return list<FlarcDiffHunk>  array of replacements
    */
   public function parseDiff(string $raw_diff): array {
     $parsed_hunks = [];
@@ -22,8 +22,8 @@ final class FlarcDiffParser extends Phobject {
   /**
    * parse the raw hunk into FlarcDiffHunk object
    *
-   * @param array $raw_hunk raw hunk that has line and text
-   * @return FlarcDiffHunk parsed hunk
+   * @param  array          raw hunk that has line and text
+   * @return FlarcDiffHunk  parsed hunk
    */
   private function parseHunk(array $raw_hunk) {
     $diff = idx($raw_hunk, 'text');
@@ -51,14 +51,17 @@ final class FlarcDiffParser extends Phobject {
       }
     }
 
-    return new FlarcDiffHunk($line_num, implode("\n", $original), implode("\n", $replacement));
+    return new FlarcDiffHunk(
+      $line_num,
+      implode("\n", $original),
+      implode("\n", $replacement));
   }
 
   /**
    * Split the full diff into smaller hunks separated by regex /@@.*?@@/m
    *
-   * @param $raw_diff string raw generated diff
-   * @return  iterable each yield gives a ['line' => $line, 'text' => $text]
+   * @param  string    raw generated diff
+   * @return iterable  each yield gives a ['line' => $line, 'text' => $text]
    */
   private function getHunks($raw_diff) {
     $regex_diff = '/^@@\s+-(?P<origLine>\d+),.*?@@\n?/ms';

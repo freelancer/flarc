@@ -14,7 +14,9 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
   }
 
   public function getInfoDescription(): string {
-    return pht('PHP Static Analysis Tool - discover bugs in your code without running it!');
+    return pht(
+      'PHP Static Analysis Tool - discover bugs in your code '.
+      'without running it!');
   }
 
   public function getLinterName(): string {

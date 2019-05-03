@@ -56,8 +56,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
         if ($enable_coverage === true) {
           throw new ArcanistUsageException(
             pht(
-              'You specified `%s` but %s is not available, so coverage can not '.
-              'be enabled for `%s`.',
+              'You specified `%s` but %s is not available, '.
+              'so coverage can not be enabled for `%s`.',
               '--coverage',
               'XDebug',
               __CLASS__));
