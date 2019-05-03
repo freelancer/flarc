@@ -22,36 +22,36 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
 
     $test_cases = [
       [
-        array(),
-        array(),
+        [],
+        [],
       ],
       [
-        array(
+        [
           'some/file.php',
-        ),
-        array(
-          'some/file.php' => array(),
-        ),
+        ],
+        [
+          'some/file.php' => [],
+        ],
       ],
       [
-        array(
+        [
           'src/SomeClass.php',
-        ),
-        array(
-          'src/SomeClass.php' => array(
+        ],
+        [
+          'src/SomeClass.php' => [
             'test/SomeClassTest.php',
-          ),
-        ),
+          ],
+        ],
       ],
       [
-        array(
+        [
           'test/SomeTest.php',
-        ),
-        array(
-          'test/SomeTest.php' => array(
+        ],
+        [
+          'test/SomeTest.php' => [
             'test/SomeTest.php',
-          ),
-        ),
+          ],
+        ],
       ],
     ];
 
@@ -71,33 +71,33 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
   public function testGetStaleDependencies() {
     $test_cases = [
       [
-        array(
-          'packages' => array(
-            array(
+        [
+          'packages' => [
+            [
               'name' => 'A',
               'version' => '1.1.0',
-            ),
-            array(
+            ],
+            [
               'name' => 'B',
               'version' => '1.0.0',
-            ),
-            array(
+            ],
+            [
               'name' => 'C',
               'version' => '1.0.1',
-            ),
-          ),
-        ),
-        array(
-          array(
+            ],
+          ],
+        ],
+        [
+          [
             'name' => 'A',
             'version' => '1.0.1',
-          ),
-          array(
+          ],
+          [
             'name' => 'B',
             'version' => '1.0.0',
-          ),
-        ),
-        array('A', 'C'),
+          ],
+        ],
+        ['A', 'C'],
       ],
     ];
 

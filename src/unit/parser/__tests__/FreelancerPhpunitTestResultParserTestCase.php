@@ -22,58 +22,58 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
       [
         '',
         '',
-        array(
+        [
           '',
           '',
-        ),
+        ],
       ],
       [
         'SomeClassTest',
         'SomeClassTest::testSomeMethod',
-        array(
+        [
           'SomeClassTest',
           'testSomeMethod',
-        ),
+        ],
       ],
       [
         'SomeTest::testB',
         'SomeTest::testB with data set #0 (1, 2, 3)',
-        array(
+        [
           'SomeTest',
           'testB with data set #0',
-        ),
+        ],
       ],
       [
         'SomeTest::testB',
         "SomeTest::testB with data set #1 ('foo', 'bar', 'baz')",
-        array(
+        [
           'SomeTest',
           'testB with data set #1',
-        ),
+        ],
       ],
       [
         'SomeTest::testB',
         'SomeTest::testB with data set #2 (array(), null, stdClass Object ())',
-        array(
+        [
           'SomeTest',
           'testB with data set #2',
-        ),
+        ],
       ],
       [
         'SomeTest::testC',
         'SomeTest::testC with data set "one" (1, 2, 3)',
-        array(
+        [
           'SomeTest',
           'testC with data set "one"',
-        ),
+        ],
       ],
       [
         'SomeTest::testD',
         "SomeTest::testD with data set #3 ('Foo::bar')",
-        array(
+        [
           'SomeTest',
           'testD with data set #3',
-        ),
+        ],
       ],
     ];
 
@@ -91,14 +91,14 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
   public function testParseCloverCoverage() {
     $test_cases = [
       [
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/1.xml'),
-        array(),
+        Filesystem::readFile(__DIR__.'/phpunit-xml/1.xml'),
+        [],
       ],
       [
-        Filesystem::readFile(dirname(__FILE__).'/phpunit-xml/2.xml'),
-        array(
+        Filesystem::readFile(__DIR__.'/phpunit-xml/2.xml'),
+        [
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
-        ),
+        ],
       ],
     ];
 
