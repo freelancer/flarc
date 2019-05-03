@@ -1,6 +1,4 @@
 {
   "phabricator.uri": "https://phabricator.tools.flnltd.com",
-  "load": [
-    "src/"
-  ]
+  "load": ["src/"]
 }
