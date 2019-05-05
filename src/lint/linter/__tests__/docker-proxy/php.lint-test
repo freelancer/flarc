@@ -1,0 +1,15 @@
+<?php
+
+function f() {
+  this is bad syntax;
+}
+~~~~~~~~~
+error:4:
+~~~~~~~~~
+~~~~~~~~~
+{
+  "config": {
+    "docker-proxy.image.name": "php",
+    "docker-proxy.linter.type": "php"
+  }
+}
