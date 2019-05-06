@@ -69,7 +69,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 /* -(  ArcanistLinter  )----------------------------------------------------- */
 
 
-  public function getInfoDescription(): ?string {
+  public function getInfoDescription(): string {
     return pht(
       'Proxies calls to an `%s` by executing external commands '.
       'within a Docker container.',

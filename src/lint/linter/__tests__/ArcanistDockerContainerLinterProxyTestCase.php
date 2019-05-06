@@ -1,46 +1,76 @@
 <?php
 
 /**
- * @todo Use a mock linter instead of @{class:ArcanistPhpLinter}.
+ * @phutil-external-symbol class Mockery
  */
 final class ArcanistDockerContainerLinterProxyTestCase
   extends ArcanistExternalLinterTestCase {
 
+  protected function didRunOneTest($test): void {
+    // Clean up the `Mockery` container used by the current test and run any
+    // verification tasks needed for our expectations.
+    Mockery::close();
+  }
+
   protected function getLinter(): ArcanistLinter {
-    return new ArcanistDockerContainerLinterProxy();
+    $mock = Mockery::mock(ArcanistExternalLinter::class);
+    $mock->makePartial();
+    $mock->shouldAllowMockingProtectedMethods();
+
+    $linter = new ArcanistDockerContainerLinterProxy();
+    $linter->setProxiedLinter($mock);
+
+    return $linter;
   }
 
   public function testGetImage(): void {
     $linter = $this->getLinter();
-    $image  = 'ubuntu';
 
+    $image = 'ubuntu';
     $linter->setImage($image);
+
     $this->assertEqual($image, $linter->getImage());
   }
 
   public function testGetProxiedLinter(): void {
-    $linter  = $this->getLinter();
-    $proxied = new ArcanistPhpLinter();
+    $linter = $this->getLinter();
 
+    $proxied = Mockery::mock(ArcanistExternalLinter::class);
     $linter->setProxiedLinter($proxied);
+
     $this->assertEqual($proxied, $linter->getProxiedLinter());
   }
 
   public function testGetLinterPriority(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->getLinterPriority(),
-      $linter->getLinterPriority());
+    $priority = 1.0;
+    $proxied->expects()->getLinterPriority()->andReturn($priority);
+
+    $this->assertEqual($priority, $linter->getLinterPriority());
   }
 
   public function testSetCustomSeverityMap(): void {
-    $this->assertSkipped(pht('Not yet implemented.'));
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
+    $severity = ArcanistLintSeverity::SEVERITY_ADVICE;
+    $linter->setCustomSeverityMap([$code => $severity]);
+
+    $this->assertEqual($severity, $proxied->getLintMessageSeverity($code));
   }
 
   public function testAddCustomSeverityMap(): void {
-    $this->assertSkipped(pht('Not yet implemented.'));
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
+    $severity = ArcanistLintSeverity::SEVERITY_ADVICE;
+    $linter->addCustomSeverityMap([$code => $severity]);
+
+    $this->assertEqual($severity, $proxied->getLintMessageSeverity($code));
   }
 
   public function testGetCacheVersion(): void {
@@ -48,16 +78,17 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testCanRun(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->canRun(),
-      $linter->canRun());
+    $proxied->expects()->canRun()->andReturns(true);
+
+    $this->assertTrue($linter->canRun());
   }
 
   public function testGetLinterName(): void {
-    $this->assertEqual(null, $this->getLinter()->getLinterName());
+    $linter = $this->getLinter();
+    $this->assertEqual(null, $linter->getLinterName());
   }
 
   public function testGetVersion(): void {
@@ -65,44 +96,67 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLintSeverityMap(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->getLintSeverityMap(),
-      $linter->getLintSeverityMap());
+    $map = [
+      1 => ArcanistLintSeverity::SEVERITY_ADVICE,
+    ];
+    $proxied->expects()->getLintSeverityMap()->andReturns($map);
+
+    $this->assertEqual($map, $linter->getLintSeverityMap());
   }
 
   public function testGetLintNameMap(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->getLintNameMap(),
-      $linter->getLintNameMap());
+    $map = [
+      1 => pht('Syntax Error'),
+    ];
+    $proxied->expects()->getLintNameMap()->andReturns($map);
+
+    $this->assertEqual($map, $linter->getLintNameMap());
   }
 
   public function testGetCacheGranularity(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->getCacheGranularity(),
-      $linter->getCacheGranularity());
+    $granularity = ArcanistLinter::GRANULARITY_GLOBAL;
+    $proxied->expects()->getCacheGranularity()->andReturns($granularity);
+
+    $this->assertEqual($granularity, $linter->getCacheGranularity());
   }
 
   public function testGetLinterConfigurationName(): void {
-    $this->assertEqual(
-      'docker-proxy',
-      $this->getLinter()->getLinterConfigurationName());
+    $linter = $this->getLinter();
+    $this->assertEqual('docker-proxy', $linter->getLinterConfigurationName());
   }
 
   public function testSetLinterConfigurationValue(): void {
-    $this->assertSkipped(pht('Not yet implemented.'));
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $config = [
+      'foo' => 'bar',
+    ];
+    foreach ($config as $key => $value) {
+      $proxied->expects()->setLinterConfigurationValue($key, $value);
+    }
+
+    $linter->setLinterConfigurationValue('docker-proxy.linter.config', $config);
+    $this->assertTrue(true);
   }
 
   public function testCanCustomizeLintSeverities(): void {
-    $this->assertSkipped(pht('Not yet implemented.'));
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $proxied->expects()->canCustomizeLintSeverities()->andReturns(false);
+
+    $config_options = $linter->getLinterConfigurationOptions();
+    $this->assertFalse(isset($config_options['severity']));
   }
 
   public function testGetPaths(): void {
@@ -117,12 +171,12 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testShouldExpectCommandErrors(): void {
-    $proxied = new ArcanistPhpLinter();
-    $linter  = $this->getLinter()->setProxiedLinter($proxied);
+    $linter  = $this->getLinter();
+    $proxied = $linter->getProxiedLinter();
 
-    $this->assertEqual(
-      $proxied->shouldExpectCommandErrors(),
-      $linter->shouldExpectCommandErrors());
+    $proxied->expects()->shouldExpectCommandErrors()->andReturns(true);
+
+    $this->assertTrue($linter->shouldExpectCommandErrors());
   }
 
   public function testGetMandatoryFlags(): void {
