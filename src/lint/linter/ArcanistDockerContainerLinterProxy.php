@@ -141,7 +141,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
         'help' => pht('`%s` to be proxied.', parent::class),
       ],
       'docker-proxy.linter.config' => [
-        'type' => 'map<string,wild>',
+        'type' => 'optional map<string,wild>',
         'help' => pht('Configuration for the proxied `%s`.', parent::class),
       ],
     ];
