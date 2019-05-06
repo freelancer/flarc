@@ -63,7 +63,7 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
 
   public function getVersion() {
     list($stdout) = execx(
-      '%C version',
+      'CHECKPOINT_DISABLE=true %C version',
       $this->getExecutableCommand());
 
     $matches = null;
