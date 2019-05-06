@@ -3,6 +3,30 @@
 /**
  * A proxy linter that can be used to execute an @{class:ArcanistExternalLinter}
  * within a Docker container.
+ *
+ * For example, suppose that you want to use @{class:ArcanistRuboCopLinter} but,
+ * for whatever reason, you don't want developers to need to have RuboCop
+ * installed locally (or perhaps even Ruby itself).
+ *
+ * ```lang=json, name=.arclint
+ * {
+ *   "linters": {
+ *     "rubocop": {
+ *       "type": "docker-proxy",
+ *       "include": "(\\.rb$)",
+ *
+ *       "docker-proxy.image.name": "kakakakakku/rubocop",
+ *       "docker-proxy.linter.type": "rubocop",
+ *       "docker-proxy.linter.config": {
+ *         "rubocop.config": ".rubocop.yml"
+ *       },
+ *       "severity": {
+ *         "Style/StringLiterals": "error"
+ *       }
+ *     }
+ *   }
+ * }
+ * ```
  */
 final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
@@ -31,7 +55,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function setProxiedLinter(ArcanistExternalLinter $linter) {
-    // NOTE: `ArcanistLinterTestCase` doesn't call `setEngine`.
+    // TODO: `ArcanistLinterTestCase` doesn't call `setEngine`.
     $engine = $this->getEngine();
     if ($engine !== null) {
       $linter->setEngine($engine);
