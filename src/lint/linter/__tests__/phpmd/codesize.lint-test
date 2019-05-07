@@ -1,0 +1,1069 @@
+<?php
+
+class Codesize {
+  private $bar = true;
+
+  public function longMethod(): bool {
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    if ($bar == true) {
+      $bar = false;
+    }
+    if ($bar == false) {
+      $bar = true;
+    }
+    return $bar;
+  }
+}
+~~~~~~~~
+warning:3:0
+warning:6:0
+~~~~~~~~
+~~~~~~~~
+{
+  "config": {
+    "phpmd.ruleset": "codesize"
+  }
+}
