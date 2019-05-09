@@ -319,7 +319,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    */
   private function parseTestResults($path, $junit_ouput, $clover, $stderr): array {
     $results = Filesystem::readFile($junit_ouput);
-    return id(new FreelancerPhpunitTestResultParser())
+    return id(new FlarcJunitTestResultParser())
       ->setEnableCoverage($clover !== null)
       ->setProjectRoot($this->getProjectRoot())
       ->setCoverageFile($clover)

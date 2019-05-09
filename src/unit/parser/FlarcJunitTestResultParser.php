@@ -1,17 +1,18 @@
 <?php
 
 /**
- * Test result parser for PHPUnit.
+ * Test result parser for JUnit.
  *
- * This class parses PHPUnit test results produced with the `--log-junit` flag
- * and Clover XML coverage data produced with the `--coverage-clover` flag.
+ * This class parses JUnit test results and Clover XML coverage data - for
+ * example, as produced by PHPUnit with the `--log-junit` and
+ * `--coverage-clover` flags.
  * This class is based on @{class:ArcanistPhpunitTestResultParser}.
  *
  * @task config   Configuration
  * @task parser   Test Result Parsing
  * @task utility  Utility
  */
-final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
+final class FlarcJunitTestResultParser extends ArcanistTestResultParser {
 
   private $fileLineCounts = [];
 
@@ -67,14 +68,13 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
 
 
   /**
-   * Parse test results from the PHPUnit JUnit report.
+   * Parse test results from the JUnit report.
    *
-   * This method converts output from PHPUnit (produced with the `--log-junit`
-   * and `--coverage-clover` flags) to instances of
+   * This method converts output from JUnit to instances of
    * @{class:ArcanistUnitTestResult}.
    *
    * @param  string                        Path of the test file.
-   * @param  string                        String containing the PHPUnit JUnit
+   * @param  string                        String containing the JUnit
    *                                       report.
    * @return list<ArcanistUnitTestResult>  Unit test results.
    */
@@ -124,11 +124,11 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
 
 
   /**
-   * Convert "testsuite" and "test" attributes from PHPUnit JSON output to test
+   * Convert "testsuite" and "test" attributes from JUnit JSON output to test
    * namespace and test name.
    *
-   * @param  string                The "testsuite" reported by PHPUnit.
-   * @param  string                The "test" reported by PHPUnit.
+   * @param  string                The "testsuite" reported by JUnit.
+   * @param  string                The "test" reported by JUnit.
    * @return pair<string, string>  The test namespace and test name.
    *
    * @task utility
@@ -148,10 +148,9 @@ final class FreelancerPhpunitTestResultParser extends ArcanistTestResultParser {
   }
 
   /**
-   * Parse the Clover XML output.
+   * Parse the Clover XML output generated alongside JUnit's output.
    *
-   * Parses the Clover coverage XML output produced by PHPUnit with the
-   * `--coverage-clover` flag. The return value from this method maps source
+   * The return value from this method maps source
    * code paths to a "coverage string", which describes the //line// coverage
    * of the source file. The length of the coverage string is equal to the
    * number of lines contained within the source file. Each character within

@@ -1,9 +1,9 @@
 <?php
 
-final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
+final class FlarcJunitTestResultParserTestCase extends PhutilTestCase {
 
   public function testGetFileLineCount() {
-    $parser = new FreelancerPhpunitTestResultParser();
+    $parser = new FlarcJunitTestResultParser();
 
     // Calculate the number of lines contained within the current file
     // and then compare with the value returned by @{method:getFileLineCount}.
@@ -82,7 +82,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
 
       $this->assertEqual(
         $expected,
-        FreelancerPhpunitTestResultParser::getTestName(
+        FlarcJunitTestResultParser::getTestName(
           $test_suite,
           $test_name));
     }
@@ -105,7 +105,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
     foreach ($test_cases as $test_case) {
       list($input, $expected) = $test_case;
 
-      $parser = id(new FreelancerPhpunitTestResultParser())
+      $parser = id(new FlarcJunitTestResultParser())
         ->setAffectedTests(array_fill_keys(array_keys($expected), true));
 
       foreach ($expected as $path => $coverage_string) {
@@ -118,7 +118,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
 
   public function testParseCloverCoverageWithInvalidData() {
     $exception = null;
-    $parser = new FreelancerPhpunitTestResultParser();
+    $parser = new FlarcJunitTestResultParser();
 
     try {
       $parser->parseCloverCoverage('');
@@ -136,7 +136,7 @@ final class FreelancerPhpunitTestResultParserTestCase extends PhutilTestCase {
         ->setResult(ArcanistUnitTestResult::RESULT_BROKEN)
         ->setUserData('Something is broken'),
     ];
-    $results = id(new FreelancerPhpunitTestResultParser())
+    $results = id(new FlarcJunitTestResultParser())
       ->setStderr('Something is broken')
       ->parseTestResults('src/BrokenTest.php', '');
 
