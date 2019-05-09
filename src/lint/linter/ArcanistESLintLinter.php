@@ -153,8 +153,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
           ->setPath($file['filePath'])
           ->setLine($message['line'])
           ->setChar($message['column'])
-          ->setDescription($message['message'])
-          ->setOriginalText($message['source']);
+          ->setDescription($message['message']);
 
         switch ($message['severity']) {
           case 1:
