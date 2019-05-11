@@ -1,5 +1,5 @@
-resource "aws_route53_record" "test" {
-  records = records = []
+resource "test" "test" {
+  value = value = []
 }
 ~~~~~~~~~~
-error:2:13
+error:2:11
