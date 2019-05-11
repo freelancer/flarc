@@ -70,7 +70,7 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
       $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^Terraform v(?P<version>\d+\.\d+\.\d+)$/m';
+    $regex = '/^Terraform v(?P<version>\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\d+)?)$/m';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;
