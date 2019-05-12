@@ -5,17 +5,16 @@ final class ArcanistStylelintLinterTestCase
 
   private $config;
 
-  protected function getLinter() {
-    $this->config = new TempFile();
+  protected function getLinter(): ArcanistStylelintLinter {
+    $this->config = new TempFile('stylelintrc');
 
     Filesystem::writeFile(
       $this->config,
-      phutil_json_encode(
-        [
-          'rules' => [
-            'color-no-invalid-hex' => true,
-          ],
-        ]));
+      phutil_json_encode([
+        'rules' => [
+          'color-no-invalid-hex' => true,
+        ],
+      ]));
 
     $linter = parent::getLinter();
     $linter->setLinterConfigurationValue(
@@ -25,7 +24,8 @@ final class ArcanistStylelintLinterTestCase
     return $linter;
   }
 
-  public function testLinter() {
+  public function testLinter(): void {
     $this->executeTestsInDirectory(__DIR__.'/stylelint/');
   }
+
 }

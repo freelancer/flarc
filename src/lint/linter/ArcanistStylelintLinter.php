@@ -4,109 +4,122 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
 
   private $config;
 
-  public function getInfoName() {
+  public function getInfoName(): string {
     return 'stylelint';
   }
 
-  public function getInfoURI() {
-    return 'http://stylelint.io/';
+  public function getInfoURI(): string {
+    return 'https://stylelint.io';
   }
 
-  public function getInfoDescription() {
+  public function getInfoDescription(): string {
     return pht(
-      'A mighty, modern %s linter that helps you enforce consistent '.
-      'conventions and avoid errors in your stylesheets.',
-      'CSS');
+      'A mighty, modern linter that helps you avoid errors and '.
+      'enforce conventions in your styles.');
   }
 
-  public function getLinterName() {
+  public function getLinterName(): string {
     return 'stylelint';
   }
 
-  public function getLinterConfigurationName() {
+  public function getLinterConfigurationName(): string {
     return 'stylelint';
   }
 
-  public function getDefaultBinary() {
-    return 'stylelint';
-  }
-
-  public function getVersion() {
-    list($stdout) = execx(
-      '%C --version',
-      $this->getExecutableCommand());
-
-    $matches = null;
-    if (!preg_match('/^(?P<version>\d+\.\d+\.\d+)$/', $stdout, $matches)) {
-      return false;
-    }
-
-    return $matches['version'];
-  }
-
-  public function getInstallInstructions() {
-    return pht(
-      'Install %s with `%s`.',
-      'stylelint',
-      'npm install -g stylelint');
-  }
-
-  public function getUpdateInstructions() {
-    return pht(
-      'Update %s with `%s`.',
-      'stylelint',
-      'npm install -g stylelint');
-  }
-
-  protected function getMandatoryFlags() {
-    $options = [];
-
-    $options[] = '--formatter=json';
-    $options[] = '--no-color';
-
-    if ($this->config) {
-      $options[] = '--config='.$this->config;
-    }
-
-    return $options;
-  }
-
-  public function getLinterConfigurationOptions() {
+  public function getLinterConfigurationOptions(): array {
     $options = [
       'stylelint.config' => [
         'type' => 'optional string',
-        'help' => pht('%s configuration file.', 'stylelint'),
+        'help' => pht('Path to a %s configuration file.', 'stylelint'),
       ],
     ];
 
     return $options + parent::getLinterConfigurationOptions();
   }
 
-  public function setLinterConfigurationValue($key, $value) {
+  public function setLinterConfigurationValue($key, $value): void {
     switch ($key) {
       case 'stylelint.config':
         $this->config = $value;
         return;
 
       default:
-        return parent::setLinterConfigurationValue($key, $value);
+        parent::setLinterConfigurationValue($key, $value);
+        return;
     }
   }
 
-  protected function parseLinterOutput($path, $err, $stdout, $stderr) {
-    $messages = [];
+  public function getDefaultBinary(): string {
+    return 'stylelint';
+  }
 
+  public function getInstallInstructions(): string {
+    return pht(
+      'Install %s with `%s`.',
+      'stylelint',
+      'npm install --global stylelint');
+  }
+
+  public function getUpdateInstructions(): string {
+    return pht(
+      'Update %s with `%s`.',
+      'stylelint',
+      'npm install --global stylelint');
+  }
+
+  protected function getMandatoryFlags(): array {
+    $options = [
+      '--formatter=json',
+    ];
+
+    if ($this->config !== null) {
+      $options[] = '--config='.$this->config;
+    }
+
+    return $options;
+  }
+
+  public function getVersion(): ?string {
+    list($stdout) = execx('%C --version', $this->getExecutableCommand());
+
+    $matches = null;
+    $regex = '/^(?P<version>\d+\.\d+\.\d+)$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
+      return null;
+    }
+
+    return $matches['version'];
+  }
+
+  /**
+   * Get a version string used for caching lint results.
+   *
+   * The implementation of this method was mostly copied from
+   * @{method:ArcanistExternalLinter::getCacheVersion} but was adapted in order
+   * to ensure that only flags which actually affect the linter results are
+   * used within the lint cache key.
+   */
+  public function getCacheVersion(): ?string {
+    // TODO: Implement this method.
+    return parent::getCacheVersion();
+  }
+
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     try {
       $files = phutil_json_decode($stdout);
     } catch (PhutilJSONParserException $ex) {
       throw new PhutilProxyException(
-        pht('`%s` returned unparseable output.', 'stylelint'),
+        pht(
+          "Failed to parse `%s` output.\n\nSTDOUT\n%s",
+          'stylelint',
+          $stdout),
         $ex);
     }
 
-    foreach ($files as $file) {
-      foreach ($file['warnings'] as $warning) {
-        $message = id(new ArcanistLintMessage())
+    return array_map(
+      function (array $warning) use ($path): ArcanistLintMessage {
+        $message = (new ArcanistLintMessage())
           ->setPath($path)
           ->setLine($warning['line'])
           ->setChar($warning['column'])
@@ -124,15 +137,13 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
             break;
 
           default:
-            // This shouldn't be reached, but just in case...
+            // This shouldn't be reached, but just in case.
             $message->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE);
             break;
         }
 
-        $messages[] = $message;
-      }
-    }
-
-    return $messages;
+        return $message;
+      },
+      array_merge(...array_column($files, 'warnings')));
   }
 }

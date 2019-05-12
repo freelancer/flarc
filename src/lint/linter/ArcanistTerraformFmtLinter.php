@@ -83,7 +83,7 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
    * Get a version string used for caching lint results.
    *
    * The implementation of this method was mostly copied from
-   * @{method:ArcanistExternalLinter:getCacheVersion} but was adapted in order
+   * @{method:ArcanistExternalLinter::getCacheVersion} but was adapted in order
    * to ensure that only flags which actually affect the linter results are
    * used within the lint cache key.
    */
