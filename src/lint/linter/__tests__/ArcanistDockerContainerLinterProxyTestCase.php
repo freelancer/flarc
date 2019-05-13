@@ -17,11 +17,14 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
+    $linter = $this->getLinter();
+
+    $engine = new ArcanistUnitTestableLintEngine();
+    $linter->setEngine($engine);
+
     $mock = Mockery::mock(ArcanistExternalLinter::class);
     $mock->makePartial();
     $mock->shouldAllowMockingProtectedMethods();
-
-    $linter = $this->getLinter();
     $linter->setProxiedLinter($mock);
 
     return $linter;
@@ -37,12 +40,15 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetProxiedLinter(): void {
-    $linter = $this->getLinterWithMockProxiedLinter();
-
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = Mockery::mock(ArcanistExternalLinter::class);
+
+    $engine = new ArcanistUnitTestableLintEngine();
+    $linter->setEngine($engine);
     $linter->setProxiedLinter($proxied);
 
     $this->assertEqual($proxied, $linter->getProxiedLinter());
+    $this->assertEqual($engine, $proxied->getEngine());
   }
 
   public function testGetLinterPriority(): void {

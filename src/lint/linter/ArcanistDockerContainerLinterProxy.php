@@ -55,13 +55,15 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function setProxiedLinter(ArcanistExternalLinter $linter) {
-    // TODO: `ArcanistLinterTestCase` doesn't call `setEngine`.
     $engine = $this->getEngine();
-    if ($engine !== null) {
-      $linter->setEngine($engine);
+
+    if ($this->engine === null) {
+      throw new PhutilInvalidStateException('setEngine');
     }
 
+    $linter->setEngine($engine);
     $this->proxiedLinter = $linter;
+
     return $this;
   }
 
