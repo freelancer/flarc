@@ -13,18 +13,22 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   protected function getLinter(): ArcanistLinter {
+    return new ArcanistDockerContainerLinterProxy();
+  }
+
+  protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
     $mock = Mockery::mock(ArcanistExternalLinter::class);
     $mock->makePartial();
     $mock->shouldAllowMockingProtectedMethods();
 
-    $linter = new ArcanistDockerContainerLinterProxy();
+    $linter = $this->getLinter();
     $linter->setProxiedLinter($mock);
 
     return $linter;
   }
 
   public function testGetImage(): void {
-    $linter = $this->getLinter();
+    $linter = $this->getLinterWithMockProxiedLinter();
 
     $image = 'ubuntu';
     $linter->setImage($image);
@@ -33,7 +37,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetProxiedLinter(): void {
-    $linter = $this->getLinter();
+    $linter = $this->getLinterWithMockProxiedLinter();
 
     $proxied = Mockery::mock(ArcanistExternalLinter::class);
     $linter->setProxiedLinter($proxied);
@@ -42,7 +46,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLinterPriority(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $priority = 1.0;
@@ -52,7 +56,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testSetCustomSeverityMap(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
@@ -63,7 +67,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testAddCustomSeverityMap(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
@@ -78,7 +82,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testCanRun(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $proxied->expects()->canRun()->andReturns(true);
@@ -87,7 +91,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLinterName(): void {
-    $linter = $this->getLinter();
+    $linter = $this->getLinterWithMockProxiedLinter();
     $this->assertEqual(null, $linter->getLinterName());
   }
 
@@ -96,7 +100,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLintSeverityMap(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $map = [
@@ -108,7 +112,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLintNameMap(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $map = [
@@ -120,7 +124,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetCacheGranularity(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $granularity = ArcanistLinter::GRANULARITY_GLOBAL;
@@ -130,12 +134,12 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLinterConfigurationName(): void {
-    $linter = $this->getLinter();
+    $linter = $this->getLinterWithMockProxiedLinter();
     $this->assertEqual('docker-proxy', $linter->getLinterConfigurationName());
   }
 
   public function testSetLinterConfigurationValue(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $config = [
@@ -150,7 +154,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testCanCustomizeLintSeverities(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $proxied->expects()->canCustomizeLintSeverities()->andReturns(false);
@@ -171,7 +175,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testShouldExpectCommandErrors(): void {
-    $linter  = $this->getLinter();
+    $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
     $proxied->expects()->shouldExpectCommandErrors()->andReturns(true);
