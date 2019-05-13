@@ -94,7 +94,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this;
   }
 
-  public function getCacheVersion(): string {
+  public function getCacheVersion(): ?string {
     // TODO: This method should be proxied.
     return parent::getCacheVersion();
   }
