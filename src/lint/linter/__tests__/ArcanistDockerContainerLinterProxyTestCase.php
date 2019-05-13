@@ -31,7 +31,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetImage(): void {
-    $linter = $this->getLinterWithMockProxiedLinter();
+    $linter = $this->getLinter();
 
     $image = 'ubuntu';
     $linter->setImage($image);
@@ -40,7 +40,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetProxiedLinter(): void {
-    $linter  = $this->getLinterWithMockProxiedLinter();
+    $linter  = $this->getLinter();
     $proxied = Mockery::mock(ArcanistExternalLinter::class);
 
     $engine = new ArcanistUnitTestableLintEngine();
@@ -151,7 +151,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetLinterConfigurationName(): void {
-    $linter = $this->getLinterWithMockProxiedLinter();
+    $linter = $this->getLinter();
     $this->assertEqual('docker-proxy', $linter->getLinterConfigurationName());
   }
 
