@@ -84,7 +84,13 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testGetCacheVersion(): void {
-    $this->assertSkipped(pht('Not yet implemented.'));
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $version = '123';
+    $proxied->expects()->getCacheVersion()->andReturn($version);
+
+    $this->assertEqual($version, $linter->getCacheVersion());
   }
 
   public function testCanRun(): void {
