@@ -188,11 +188,13 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   protected function canCustomizeLintSeverities(): bool {
-    if ($this->proxiedLinter !== null) {
-      return $this->getProxiedLinter()->canCustomizeLintSeverities();
+    // NOTE: This condition should only be `true` in `ArcanistLintersWorkflow`,
+    // in which case we just assume that lint severities can be customized.
+    if ($this->proxiedLinter === null) {
+      return true;
     }
 
-    return parent::canCustomizeLintSeverities();
+    return $this->getProxiedLinter()->canCustomizeLintSeverities();
   }
 
   protected function shouldLintBinaryFiles(): bool {

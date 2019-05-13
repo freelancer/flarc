@@ -169,6 +169,13 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $this->assertFalse(isset($config_options['severity']));
   }
 
+  public function testCanCustomizeLintSeveritiesWithoutProxiedLinter(): void {
+    $linter  = $this->getLinter();
+
+    $config_options = $linter->getLinterConfigurationOptions();
+    $this->assertTrue(isset($config_options['severity']));
+  }
+
   public function testGetPaths(): void {
     // TODO: Write test coverage for @{method:shouldLintBinaryFiles},
     // @{method:shouldLintDeletedFiles}, @{method:shouldLintDirectories} and
