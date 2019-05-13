@@ -104,8 +104,8 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this->getProxiedLinter()->canRun();
   }
 
-  public function getLinterName(): ?string {
-    return null;
+  public function getLinterName(): string {
+    return $this->getProxiedLinter()->getLinterName();
   }
 
   public function getVersion(): ?string {

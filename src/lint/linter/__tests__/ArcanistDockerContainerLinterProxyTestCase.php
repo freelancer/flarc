@@ -104,7 +104,12 @@ final class ArcanistDockerContainerLinterProxyTestCase
 
   public function testGetLinterName(): void {
     $linter = $this->getLinterWithMockProxiedLinter();
-    $this->assertEqual(null, $linter->getLinterName());
+    $proxied = $linter->getProxiedLinter();
+
+    $name = 'Linter';
+    $proxied->expects()->getLinterName()->andReturns($name);
+
+    $this->assertEqual($name, $linter->getLinterName());
   }
 
   public function testGetVersion(): void {
