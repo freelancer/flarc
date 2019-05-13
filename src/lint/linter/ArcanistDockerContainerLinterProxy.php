@@ -217,6 +217,13 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
 
+/* -(  ArcanistFutureLinter  )----------------------------------------------- */
+
+  protected function didResolveLinterFutures(array $futures): void {
+    $this->getProxiedLinter()->didResolveLinterFutures($futures);
+  }
+
+
 /* -(  ArcanistExternalLinter  )--------------------------------------------- */
 
 

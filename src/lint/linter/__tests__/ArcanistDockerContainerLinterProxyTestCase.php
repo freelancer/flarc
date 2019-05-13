@@ -193,6 +193,20 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $this->assertSkipped(pht('Not yet implemented.'));
   }
 
+  public function testDidResolveLinterFutures(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $futures = [new ExecFuture('true')];
+    $proxied->expects()->didResolveLinterFutures($futures);
+
+    $method = new ReflectionMethod($linter, 'didResolveLinterFutures');
+    $method->setAccessible(true);
+    $method->invoke($linter, $futures);
+
+    $this->assertTrue(true);
+  }
+
   public function testShouldExpectCommandErrors(): void {
     $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
