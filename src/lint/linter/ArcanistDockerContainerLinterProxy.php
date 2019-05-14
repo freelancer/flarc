@@ -154,7 +154,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       ],
     ];
 
-    return $options + parent::getLinterConfigurationOptions();
+    return $options + ArcanistLinter::getLinterConfigurationOptions();
   }
 
   public function setLinterConfigurationValue($key, $value): void {
