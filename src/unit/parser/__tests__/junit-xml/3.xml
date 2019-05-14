@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1455068075">
+  <project timestamp="1455068075">
+    <file name="test.ts" path="src/test.ts">
+      <line num="4" type="method" name="someMethod" crap="2.15" count="1"/>
+      <line num="5" type="stmt" count="1"/>
+      <line num="6" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="0"/>
+      <metrics loc="11" ncloc="11" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="4" coveredelements="2"/>
+    </file>
+    <metrics files="1" loc="11" ncloc="11" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="4" coveredelements="2"/>
+  </project>
+</coverage>

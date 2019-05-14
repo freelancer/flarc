@@ -180,10 +180,10 @@ final class FlarcJunitTestResultParser extends ArcanistTestResultParser {
     $files = $dom->getElementsByTagName('file');
 
     foreach ($files as $file) {
-      // Change absolute paths to be relative to the project root directory.
-      $file_path = Filesystem::readablePath(
-        $file->getAttribute('name'),
-        $this->projectRoot);
+      $file_path = $file->getAttribute('path') ?:
+        Filesystem::readablePath(
+          $file->getAttribute('name'),
+          $this->projectRoot);
 
       $any_line_covered = false;
       $coverage = str_repeat('N', $this->getFileLineCount($file_path));

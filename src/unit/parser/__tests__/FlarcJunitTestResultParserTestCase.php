@@ -91,13 +91,19 @@ final class FlarcJunitTestResultParserTestCase extends PhutilTestCase {
   public function testParseCloverCoverage() {
     $test_cases = [
       [
-        Filesystem::readFile(__DIR__.'/phpunit-xml/1.xml'),
+        Filesystem::readFile(__DIR__.'/junit-xml/1.xml'),
         [],
       ],
       [
-        Filesystem::readFile(__DIR__.'/phpunit-xml/2.xml'),
+        Filesystem::readFile(__DIR__.'/junit-xml/2.xml'),
         [
           'src/SomeClass.php' => 'NNNNCCNUNNNNNNN',
+        ],
+      ],
+      [
+        Filesystem::readFile(__DIR__.'/junit-xml/3.xml'),
+        [
+          'src/test.ts' => 'NNNNCCNUNNNNNNN',
         ],
       ],
     ];
