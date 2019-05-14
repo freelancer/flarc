@@ -132,13 +132,19 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
 
     return array_map(
       function (array $warning) use ($path): ArcanistLintMessage {
+        // TODO: We could possibly make this more human-readable.
+        $name = $warning['rule'];
+
+        // Remove rule suffix from description text.
+        $description = rtrim($warning['text'], ' ('.$warning['rule'].')');
+
         $message = (new ArcanistLintMessage())
           ->setPath($path)
           ->setLine($warning['line'])
           ->setChar($warning['column'])
           ->setCode($warning['rule'])
-          ->setName($warning['rule'])
-          ->setDescription($warning['text']);
+          ->setName($name)
+          ->setDescription($description);
 
         // Map stylelint severities to `ArcanistLintSeverity`.
         $severity_map = [
