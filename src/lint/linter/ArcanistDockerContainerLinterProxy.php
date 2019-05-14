@@ -97,7 +97,9 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function getCacheVersion(): ?string {
-    return $this->getProxiedLinter()->getCacheVersion();
+    // TODO: This method isn't currently proxied because calling
+    // `$this->getProxiedLinter()->getCacheVersion()` will bypass Docker.
+    return parent::getCacheVersion();
   }
 
   public function canRun(): bool {
@@ -109,7 +111,8 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function getVersion(): ?string {
-    // TODO: This method should be proxied.
+    // TODO: This method isn't currently proxied because calling
+    // `$this->getProxiedLinter()->getVersion()` will bypass Docker.
     return parent::getVersion();
   }
 
