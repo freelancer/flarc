@@ -262,13 +262,9 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       sprintf('type=bind,source=%s,target=%s', $project_root, $project_root),
       '--rm',
       sprintf('--workdir=%s', $project_root),
-      $this->getImage(),
     ];
 
-    return array_merge(
-      $flags,
-      [$this->getProxiedLinter()->getBinary()],
-      $this->getProxiedLinter()->getCommandFlags());
+    return $flags;
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
@@ -277,6 +273,29 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
   protected function getPathArgumentForLinterFuture($path): PhutilCommandString {
     return $this->getProxiedLinter()->getPathArgumentForLinterFuture($path);
+  }
+
+  protected function buildFutures(array $paths): array {
+    $bin = csprintf(
+      '%C %Ls %s %C %Ls',
+      $this->getExecutableCommand(),
+      $this->getCommandFlags(),
+      $this->getImage(),
+      $this->getProxiedLinter()->getExecutableCommand(),
+      $this->getProxiedLinter()->getCommandFlags());
+    $futures = [];
+
+    foreach ($paths as $path) {
+      $disk_path     = $this->getEngine()->getFilePathOnDisk($path);
+      $path_argument = $this->getPathArgumentForLinterFuture($disk_path);
+
+      $future = new ExecFuture('%C %C', $bin, $path_argument);
+      $future->setCWD($this->getProjectRoot());
+
+      $futures[$path] = $future;
+    }
+
+    return $futures;
   }
 
 }
