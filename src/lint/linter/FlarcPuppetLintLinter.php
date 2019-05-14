@@ -25,10 +25,6 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     return pht('Check that your Puppet manifests conform to the style guide.');
   }
 
-  public function getAdditionalInformation() {
-    return array();
-  }
-
   public function getLinterName(): string {
     return 'Puppet Lint';
   }
