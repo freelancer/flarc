@@ -11,6 +11,8 @@
  */
 final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
 
+  private $config;
+
   public function getInfoName(): string {
     return 'Puppet Lint';
   }
@@ -33,6 +35,29 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     return 'flarc-puppet-lint';
   }
 
+  public function getLinterConfigurationOptions(): array {
+    $options = [
+      'puppet-lint.config' => [
+        'type' => 'optional string',
+        'help' => pht(' Load `%s` options from file.', 'puppet-lint'),
+      ],
+    ];
+
+    return $options + parent::getLinterConfigurationOptions();
+  }
+
+  public function setLinterConfigurationValue($key, $value): void {
+    switch ($key) {
+      case 'puppet-lint.config':
+        $this->config = $value;
+        return;
+
+      default:
+        parent::setLinterConfigurationValue($key, $value);
+        return;
+    }
+  }
+
   public function getDefaultBinary(): string {
     return 'puppet-lint';
   }
@@ -52,12 +77,18 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags(): array {
-    return [
+    $flags = [
       '--with-context',
       '--error-level=all',
       '--show-ignored',
       '--json',
     ];
+
+    if ($this->config !== null) {
+      $flags[] = '--config='.$this->config;
+    }
+
+    return $flags;
   }
 
   public function getVersion(): ?string {

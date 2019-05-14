@@ -81,15 +81,15 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
     //   - `--disable-default-ignores`
     //   - `--cache`
     //   - `--report-needless-disables`
-    $options = [
+    $flags = [
       '--formatter=json',
     ];
 
     if ($this->config !== null) {
-      $options[] = '--config='.$this->config;
+      $flags[] = '--config='.$this->config;
     }
 
-    return $options;
+    return $flags;
   }
 
   public function getVersion(): ?string {
