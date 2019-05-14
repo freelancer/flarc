@@ -65,10 +65,10 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
-    $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
+    $code     = 1;
     $severity = ArcanistLintSeverity::SEVERITY_ADVICE;
-    $linter->setCustomSeverityMap([$code => $severity]);
 
+    $linter->setCustomSeverityMap([$code => $severity]);
     $this->assertEqual($severity, $proxied->getLintMessageSeverity($code));
   }
 
@@ -76,10 +76,22 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $linter  = $this->getLinterWithMockProxiedLinter();
     $proxied = $linter->getProxiedLinter();
 
-    $code = ArcanistPhpLinter::LINT_PARSE_ERROR;
+    $code     = 1;
     $severity = ArcanistLintSeverity::SEVERITY_ADVICE;
-    $linter->addCustomSeverityMap([$code => $severity]);
 
+    $linter->addCustomSeverityMap([$code => $severity]);
+    $this->assertEqual($severity, $proxied->getLintMessageSeverity($code));
+  }
+
+  public function testSetCustomSeverityRules(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $code     = 1;
+    $pattern  = pregsprintf('^%s$', '', $code);
+    $severity = ArcanistLintSeverity::SEVERITY_ADVICE;
+
+    $linter->setCustomSeverityRules([$pattern => $severity]);
     $this->assertEqual($severity, $proxied->getLintMessageSeverity($code));
   }
 

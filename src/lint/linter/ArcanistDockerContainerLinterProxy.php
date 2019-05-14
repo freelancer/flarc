@@ -100,6 +100,11 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this;
   }
 
+  public function setCustomSeverityRules(array $rules) {
+    $this->getProxiedLinter()->setCustomSeverityRules($rules);
+    return $this;
+  }
+
   public function getCacheVersion(): ?string {
     // TODO: This method isn't currently proxied because calling
     // `$this->getProxiedLinter()->getCacheVersion()` will bypass Docker.
