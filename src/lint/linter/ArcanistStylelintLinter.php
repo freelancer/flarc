@@ -68,6 +68,15 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags(): array {
+    // TODO: Consider adding the following additional flags:
+    //
+    //   - `--config-basedir`
+    //   - `--ignore-path`
+    //   - `--syntax`
+    //   - `--ignore-disables`
+    //   - `--disable-default-ignores`
+    //   - `--cache`
+    //   - `--report-needless-disables`
     $options = [
       '--formatter=json',
     ];
