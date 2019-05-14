@@ -49,6 +49,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
   public function setLinterConfigurationValue($key, $value): void {
     switch ($key) {
       case 'puppet-lint.config':
+        Filesystem::assertExists($value);
         $this->config = $value;
         return;
 
