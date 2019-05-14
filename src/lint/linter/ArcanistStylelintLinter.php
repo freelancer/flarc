@@ -49,6 +49,10 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
     }
   }
 
+  protected function getDefaultMessageSeverity($code): ?string {
+    return null;
+  }
+
   public function getDefaultBinary(): string {
     return 'stylelint';
   }
@@ -136,23 +140,20 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
           ->setName($warning['rule'])
           ->setDescription($warning['text']);
 
-        switch ($warning['severity']) {
-          case 'error':
-            $message->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
-            break;
+        // Map stylelint severities to `ArcanistLintSeverity`.
+        $severity_map = [
+          'error'   => ArcanistLintSeverity::SEVERITY_ERROR,
+          'warning' => ArcanistLintSeverity::SEVERITY_WARNING,
+        ];
 
-          case 'warning':
-            $message->setSeverity(ArcanistLintSeverity::SEVERITY_WARNING);
-            break;
-
-          default:
-            // This shouldn't be reached, but just in case.
-            $message->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE);
-            break;
-        }
+        $message->setSeverity(
+          coalesce(
+            $this->getLintMessageSeverity($warning['rule']),
+            $severity_map[$warning['severity']]));
 
         return $message;
       },
       array_merge(...array_column($files, 'warnings')));
   }
+
 }

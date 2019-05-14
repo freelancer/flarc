@@ -1,0 +1,14 @@
+a {
+  color: #zzzzzz;
+}
+~~~~~~~~~~
+advice:2:10
+~~~~~~~~~~
+~~~~~~~~~~
+{
+  "config": {
+    "severity": {
+      "color-no-invalid-hex": "advice"
+    }
+  }
+}
