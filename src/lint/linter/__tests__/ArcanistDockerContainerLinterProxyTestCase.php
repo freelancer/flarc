@@ -181,11 +181,52 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $this->assertTrue(isset($config_options['severity']));
   }
 
-  public function testGetPaths(): void {
-    // TODO: Write test coverage for @{method:shouldLintBinaryFiles},
-    // @{method:shouldLintDeletedFiles}, @{method:shouldLintDirectories} and
-    // @{method:shouldLintSymbolicLinks}.
-    $this->assertSkipped(pht('Not yet implemented.'));
+  public function testShouldLintBinaryFiles(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $proxied->expects()->shouldLintBinaryFiles()->andReturns(true);
+
+    $method = new ReflectionMethod($linter, 'shouldLintBinaryFiles');
+    $method->setAccessible(true);
+
+    $this->assertTrue($method->invoke($linter));
+  }
+
+  public function testShouldLintDeletedFiles(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $proxied->expects()->shouldLintDeletedFiles()->andReturns(true);
+
+    $method = new ReflectionMethod($linter, 'shouldLintDeletedFiles');
+    $method->setAccessible(true);
+
+    $this->assertTrue($method->invoke($linter));
+  }
+
+  public function testShouldLintDirectories(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $proxied->expects()->shouldLintDirectories()->andReturns(true);
+
+    $method = new ReflectionMethod($linter, 'shouldLintDirectories');
+    $method->setAccessible(true);
+
+    $this->assertTrue($method->invoke($linter));
+  }
+
+  public function testShouldLintSymbolicLinks(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $proxied->expects()->shouldLintSymbolicLinks()->andReturns(true);
+
+    $method = new ReflectionMethod($linter, 'shouldLintSymbolicLinks');
+    $method->setAccessible(true);
+
+    $this->assertTrue($method->invoke($linter));
   }
 
   public function testGetLintCodeFromLinterConfigurationKey(): void {
