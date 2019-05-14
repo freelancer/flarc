@@ -13,7 +13,14 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   protected function getLinter(): ArcanistLinter {
-    return new ArcanistDockerContainerLinterProxy();
+    $linter = new ArcanistDockerContainerLinterProxy();
+
+    // TODO: Remove this after https://secure.phabricator.com/D20515
+    // has been landed.
+    $engine = new ArcanistUnitTestableLintEngine();
+    $linter->setEngine($engine);
+
+    return $linter;
   }
 
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
