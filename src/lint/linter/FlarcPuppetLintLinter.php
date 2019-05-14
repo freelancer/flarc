@@ -53,6 +53,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
 
   protected function getMandatoryFlags(): array {
     return [
+      '--with-context',
       '--error-level=all',
       '--show-ignored',
       '--json',
@@ -92,6 +93,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
       function (array $result) use ($path): ArcanistLintMessage {
         $name = ucwords(str_replace('_', ' ', $result['check']));
 
+        // TODO: Utilize `$result['context']`.
         $message = (new ArcanistLintMessage())
           ->setPath($path)
           ->setLine($result['line'])
