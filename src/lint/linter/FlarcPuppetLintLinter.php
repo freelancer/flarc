@@ -25,6 +25,10 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     return pht('Check that your Puppet manifests conform to the style guide.');
   }
 
+  public function getAdditionalInformation() {
+    return array();
+  }
+
   public function getLinterName(): string {
     return 'Puppet Lint';
   }
@@ -57,6 +61,12 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
         parent::setLinterConfigurationValue($key, $value);
         return;
     }
+  }
+
+  protected function getLintCodeFromLinterConfigurationKey($code): string {
+    // TODO: We should validate `$code` against the output from
+    // `puppet-lint --list-checks`.
+    return $code;
   }
 
   public function getDefaultBinary(): string {
