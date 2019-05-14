@@ -75,8 +75,8 @@ final class ArcanistDuplicateClassDeclarationXHPASTLinterRule
    *                       of the input node, otherwise `false`.
    *
    * @todo This method is copied from
-   * @{class:ArcanistDuplicateFunctionDeclarationXHPASTLinterRule} and should
-   * be moved to a parent class.
+   *   @{class:ArcanistDuplicateFunctionDeclarationXHPASTLinterRule} and should
+   *   be moved to a parent class.
    */
   protected function hasAncestorOfTypes(XHPASTNode $node, array $types) {
     $types = array_fill_keys($types, true);

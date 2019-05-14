@@ -35,7 +35,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
   /**
    * @todo We should maybe attempt to validate the image name (see
-   * https://stackoverflow.com/a/37867949).
+   *   https://stackoverflow.com/a/37867949).
    */
   public function getImage(): string {
     if ($this->image === null) {
