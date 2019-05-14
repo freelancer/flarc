@@ -1,95 +1,121 @@
 <?php
 
 /**
+ * An improved version of @{class:ArcanistPuppetLintLinter}.
+ *
+ * An improved version of @{class:ArcanistPuppetLintLinter} which uses `--json`
+ * instead of `--log-format`.
+ *
  * @todo This linter should no longer be required after
- *       https://secure.phabricator.com/D17854.
+ *   https://secure.phabricator.com/D17854.
  */
 final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
 
-  public function getInfoName() {
-    return 'puppet-lint';
+  public function getInfoName(): string {
+    return 'Puppet Lint';
   }
 
-  public function getInfoURI() {
-    return 'http://puppet-lint.com/';
+  public function getInfoURI(): string {
+    return 'http://puppet-lint.com';
   }
 
-  public function getInfoDescription() {
-    return pht(
-      'Use `%s` to check that your Puppet manifests '.
-      'conform to the style guide.',
-      'puppet-lint');
+  public function getInfoDescription(): string {
+    return pht('Check that your Puppet manifests conform to the style guide.');
   }
 
-  public function getLinterName() {
-    return 'PUPPETLINT';
+  public function getLinterName(): string {
+    return 'Puppet Lint';
   }
 
-  public function getLinterConfigurationName() {
-    // Ideally this would be set to `puppet-lint`, but doing so would conflict
-    // with `ArcanistPuppetLintLinter`.
+  public function getLinterConfigurationName(): string {
+    // NOTE: Ideally this would be set to `puppet-lint`, but doing so would
+    // conflict with `ArcanistPuppetLintLinter`.
     return 'flarc-puppet-lint';
   }
 
-  public function getDefaultBinary() {
+  public function getDefaultBinary(): string {
     return 'puppet-lint';
   }
 
-  public function getInstallInstructions() {
+  public function getInstallInstructions(): string {
     return pht(
-      'Install puppet-lint using `%s`.',
+      'Install `%s` using `%s`.',
+      'puppet-lint',
       'gem install puppet-lint');
   }
 
-  public function getVersion() {
-    list($stdout) = execx('%C --version', $this->getExecutableCommand());
-
-    $matches = [];
-    $regex = '/^puppet-lint (?P<version>\d+\.\d+\.\d+)$/';
-
-    if (preg_match($regex, $stdout, $matches)) {
-      return $matches['version'];
-    } else {
-      return false;
-    }
+  public function getUpdateInstructions(): string {
+    return pht(
+      'Update `%s` using `%s`.',
+      'puppet-lint',
+      'gem install puppet-lint');
   }
 
-  protected function getMandatoryFlags() {
+  protected function getMandatoryFlags(): array {
     return [
       '--error-level=all',
       '--json',
     ];
   }
 
-  protected function parseLinterOutput($path, $status, $stdout, $stderr) {
-    $output = idx(phutil_json_decode($stdout), 0);
-    $messages = [];
+  public function getVersion(): ?string {
+    list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
-    foreach ($output as $message) {
-      $messages[] = id(new ArcanistLintMessage())
-        ->setPath($path)
-        ->setLine($message['line'])
-        ->setChar($message['column'])
-        ->setCode(strtoupper($message['check']))
-        ->setSeverity($this->getLintMessageSeverity($message['kind']))
-        ->setName(ucwords(str_replace('_', ' ', $message['check'])))
-        ->setDescription(ucfirst($message['message']));
+    $matches = null;
+    $regex = '/^puppet-lint (?P<version>\d+\.\d+\.\d+)$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
+      return null;
     }
 
-    return $messages;
+    return $matches['version'];
   }
 
-  protected function getDefaultMessageSeverity($kind) {
-    switch ($kind) {
-      case 'error':
-        return ArcanistLintSeverity::SEVERITY_ERROR;
+  /**
+   * Get a version string used for caching lint results.
+   *
+   * The implementation of this method was mostly copied from
+   * @{method:ArcanistExternalLinter::getCacheVersion} but was adapted in order
+   * to ensure that only flags which actually affect the linter results are
+   * used within the lint cache key.
+   */
+  public function getCacheVersion(): ?string {
+    // TODO: Implement this method.
+    return parent::getCacheVersion();
+  }
 
-      case 'warning':
-        return ArcanistLintSeverity::SEVERITY_WARNING;
+  protected function parseLinterOutput($path, $status, $stdout, $stderr): array {
+    $results = phutil_json_decode($stdout)[0];
 
-      default:
-        return ArcanistLintSeverity::SEVERITY_ADVICE;
-    }
+    return array_map(
+      function (array $result) use ($path): ArcanistLintMessage {
+        $name = ucwords(str_replace('_', ' ', $result['check']));
+
+        $message = (new ArcanistLintMessage())
+          ->setPath($path)
+          ->setLine($result['line'])
+          ->setChar($result['column'])
+          ->setCode($result['check'])
+          ->setName($name)
+          ->setDescription(ucfirst($result['message']));
+
+        switch ($result['kind']) {
+          case 'error':
+            $message->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
+            break;
+
+          case 'warning':
+            $message->setSeverity(ArcanistLintSeverity::SEVERITY_WARNING);
+            break;
+
+          default:
+            $message->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE);
+            break;
+        }
+
+        return $message;
+      },
+      $results);
   }
 
 }

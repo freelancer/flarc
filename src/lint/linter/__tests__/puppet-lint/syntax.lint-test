@@ -1,0 +1,4 @@
+notify { 'test':
+  message => 'test',
+~~~~~~~~~~
+error:1:16
