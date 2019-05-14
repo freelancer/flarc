@@ -12,7 +12,7 @@ final class ArcanistPHPMDLinter extends ArcanistExternalLinter {
     return 'https://github.com/phpmd/phpmd';
   }
 
-  public function getInfoDescription() {
+  public function getInfoDescription(): string {
     return pht(
       'PHPMD is a spin-off project of PHP Depend and aims to be a PHP '.
       'equivalent of the well known Java tool PMD.');
