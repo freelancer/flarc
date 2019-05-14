@@ -248,7 +248,6 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       'run',
       '--mount',
       sprintf('type=bind,source=%s,target=%s', $project_root, $project_root),
-      '--read-only',
       '--rm',
       sprintf('--workdir=%s', $project_root),
       $this->getImage(),
