@@ -54,6 +54,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
   protected function getMandatoryFlags(): array {
     return [
       '--error-level=all',
+      '--show-ignored',
       '--json',
     ];
   }
@@ -106,6 +107,10 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
 
           case 'warning':
             $message->setSeverity(ArcanistLintSeverity::SEVERITY_WARNING);
+            break;
+
+          case 'ignored':
+            $message->setSeverity(ArcanistLintSeverity::SEVERITY_DISABLED);
             break;
 
           default:

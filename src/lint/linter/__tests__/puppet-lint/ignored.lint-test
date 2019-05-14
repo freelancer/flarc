@@ -1,0 +1,7 @@
+notify { 'test':
+  # lint:ignore:double_quoted_strings
+  message => "test",
+  # lint:endignore
+}
+~~~~~~~~~~
+disabled:3:14
