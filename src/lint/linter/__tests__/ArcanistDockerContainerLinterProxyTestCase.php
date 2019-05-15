@@ -277,6 +277,21 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   public function testLinter(): void {
+    // On macOS, `$TMPDIR` points to a seemingly random path under `/var/folders`
+    // (see http://osxdaily.com/2018/08/17/where-temp-folder-mac-access/).
+    // According to the
+    // [[https://docs.docker.com/docker-for-mac/osxfs/#namespaces | `osxfs`]]
+    // documentation:
+    //
+    // > By default, you can share files in `/Users`, `/Volumes`, `/private`
+    // > and `/tmp` directly. All other paths used in `-v` bind mounts are
+    // > sourced from the Moby Linux VM running the Docker containers. If a
+    // > macOS path is not shared and does not exist in the VM, an attempt to
+    // > bind mount it fails rather than create it in the VM.
+    if (PHP_OS === 'Darwin') {
+      putenv('TMPDIR='.realpath('/tmp'));
+    }
+
     $this->executeTestsInDirectory(__DIR__.'/docker-proxy/');
   }
 
