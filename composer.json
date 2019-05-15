@@ -1,7 +1,7 @@
 {
   "config": {
     "classmap-authoritative": true,
-    "prepend-autoloader": true,
+    "prepend-autoloader": false,
     "sort-packages": true
   },
   "require-dev": {
