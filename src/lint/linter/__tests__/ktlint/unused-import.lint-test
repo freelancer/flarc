@@ -1,0 +1,10 @@
+package org.jetbrains.kotlin.demo
+
+import java.util.concurrent.atomic.AtomicLong
+import java.util.Array
+
+class TestClass {
+    val counter = AtomicLong()
+}
+~~~~~~~~~~
+error:4:1

@@ -1,0 +1,7 @@
+package org.jetbrains.kotlin.demo
+
+class TestClass {
+  val counter = Test()
+}
+~~~~~~~~~~
+error:4:1
