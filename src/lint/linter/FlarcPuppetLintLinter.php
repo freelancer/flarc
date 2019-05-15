@@ -98,6 +98,10 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     return $flags;
   }
 
+  /**
+   * @todo We require a version of `puppet-lint` greater than or equal to 2.3.0,
+   *   but we can't currently enforce this. See P3118.
+   */
   public function getVersion(): ?string {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
