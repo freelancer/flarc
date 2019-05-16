@@ -276,12 +276,24 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   protected function buildFutures(array $paths): array {
+    // NOTE: We can't call `$this->getProxiedLinter()->getExecutableCommand()`
+    // as that will attempt to execute the command directly (bypassing Docker)
+    // in @{method:ArcanistExternalLinter::checkBinaryConfiguration}.
+    if ($this->getProxiedLinter()->shouldUseInterpreter()) {
+      $cmd = csprintf(
+        '%s %s',
+        $this->getProxiedLinter()->getInterpreter(),
+        $this->getProxiedLinter()->getBinary());
+    } else {
+      $cmd = csprintf('%s', $this->getProxiedLinter()->getBinary());
+    }
+
     $bin = csprintf(
       '%C %Ls %s %C %Ls',
       $this->getExecutableCommand(),
       $this->getCommandFlags(),
       $this->getImage(),
-      $this->getProxiedLinter()->getExecutableCommand(),
+      $cmd,
       $this->getProxiedLinter()->getCommandFlags());
     $futures = [];
 
