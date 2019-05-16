@@ -9,9 +9,9 @@ To use `flarc`, you must clone the repository into a location that Arcanist know
   2. Anywhere in the normal PHP [`include_path`](https://www.php.net/manual/en/ini.core.php#ini.include-path).
   3. Inside `arcanist/externals/includes/`.
 
-To load `flarc` so that it is available for use, add `flarc/src` to the `load` path:
+To load `flarc` so that it is available for use, add `flarc/src` to the `load` path in the project's `.arcconfig`:
 
-```json
+```
 {
   "load": ["flarc/src"]
 }
