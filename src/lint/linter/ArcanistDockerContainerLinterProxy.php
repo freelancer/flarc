@@ -258,6 +258,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
     $flags = [
       'run',
+      '--entrypoint=',
       '--mount',
       sprintf('type=bind,source=%s,target=%s', $project_root, $project_root),
       '--rm',
