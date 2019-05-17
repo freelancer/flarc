@@ -39,6 +39,11 @@ final class ArcanistKTLintLinter extends ArcanistExternalLinter {
   }
 
   protected function getMandatoryFlags(): array {
+    // TODO: Consider adding the following additional flags:
+    //
+    //   - `--editorconfig`
+    //   - `--experimental`
+    //   - `--ruleset`
     return [
       '--reporter=json',
     ];
