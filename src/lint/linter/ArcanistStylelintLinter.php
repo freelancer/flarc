@@ -159,7 +159,7 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
 
         return $message;
       },
-      array_mergev(array_column($files, 'warnings'));
+      array_mergev(array_column($files, 'warnings')));
   }
 
 }
