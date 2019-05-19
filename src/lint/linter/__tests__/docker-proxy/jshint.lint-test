@@ -1,0 +1,11 @@
+console.log('foobar')
+~~~~~~~~~~
+warning:1:22
+~~~~~~~~~
+~~~~~~~~~
+{
+  "config": {
+    "docker-proxy.image.name": "hyzual/jshint",
+    "docker-proxy.linter.type": "jshint"
+  }
+}

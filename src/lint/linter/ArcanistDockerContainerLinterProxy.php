@@ -265,19 +265,19 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       sprintf('--workdir=%s', $project_root),
     ];
 
-    // Special Case for JSHint to load reporter file
+    // NOTE: `ArcanistJSHintLinter` passes a custom reporter file to `jshint`,
+    // which must be readable within the Docker container.
     $proxied = $this->getProxiedLinter();
     if ($proxied instanceof ArcanistJSHintLinter) {
-      $reflector = new ReflectionClass(get_class($proxied));
-      $linter_location = dirname($reflector->getFileName())
-        .DIRECTORY_SEPARATOR
-        .'reporter.js';
+      $reporter = Filesystem::resolvePath(
+        'reporter.js',
+        dirname((new ReflectionClass($proxied))->getFileName()));
 
       $flags[] = '--mount';
       $flags[] = sprintf(
         'type=bind,source=%s,target=%s',
-        $linter_location,
-        $linter_location);
+        $reporter,
+        $reporter);
     }
 
     return $flags;
