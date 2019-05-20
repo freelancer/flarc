@@ -1,0 +1,13 @@
+#!/bin/sh
+if [[ $X ]]; then
+  echo "derp"
+fi
+~~~~~~~~~~
+~~~~~~~~~~
+~~~~~~~~~~
+{
+  "config": {
+    "shellcheck.shell": "bash"
+  }
+}
+

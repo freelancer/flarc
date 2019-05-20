@@ -1,0 +1,6 @@
+#!/bin/sh
+$(
+~~~~~~~~~~
+error:2:1
+advice:2:1
+error:3:1
