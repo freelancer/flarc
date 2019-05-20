@@ -30,6 +30,8 @@
  */
 final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
+  const ENV_SHOULD_PROXY = 'DOCKER_LINTER_PROXY';
+
   private $image;
   private $proxiedLinter;
   private $shouldProxy;
@@ -60,12 +62,44 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this;
   }
 
+  /**
+   * Determine whether calls to the external linter should be proxied through a
+   * Docker container.
+   *
+   * The "proxy external commands through a Docker container" behavior is
+   * currently opt-in (i.e. disabled by default) as this concept should be
+   * considered to be experimental. Users can opt-in to the new behavior by
+   * setting the environment variable `DOCKER_LINTER_PROXY` to `yes`.
+   *
+   * WARNING: In the future, the default behavior will change from opt-in to
+   * opt-out.
+   *
+   * @todo We should consider removing this method (and, more generally, the
+   *   opt-in/opt-out behavior) in the future.
+   */
   public function shouldProxy(): bool {
-    if ($this->shouldProxy === null) {
-      $this->shouldProxy = getenv('DOCKER_LINTER_PROXY') === 'yes';
+    if ($this->shouldProxy !== null) {
+      return $this->shouldProxy;
     }
 
-    return $this->shouldProxy;
+    switch (getenv(self::ENV_SHOULD_PROXY)) {
+      case 'no':
+        return false;
+
+      case 'yes':
+        return true;
+
+      case false:
+        break;
+
+      default:
+        throw new ArcanistUsageException(
+          pht(
+            "Unexpected value for environment variable '%s'.",
+            self::ENV_SHOULD_PROXY));
+    }
+
+    return false;
   }
 
   public function setProxiedLinter(ArcanistExternalLinter $linter) {

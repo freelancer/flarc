@@ -20,7 +20,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
-    $linter = $this->getLinter();
+    $linter = new ArcanistDockerContainerLinterProxy();
 
     $engine = new ArcanistUnitTestableLintEngine();
     $linter->setEngine($engine);
@@ -52,6 +52,43 @@ final class ArcanistDockerContainerLinterProxyTestCase
 
     $this->assertEqual($proxied, $linter->getProxiedLinter());
     $this->assertEqual($engine, $proxied->getEngine());
+  }
+
+  public function testShouldProxy(): void {
+    $linter = $this->getLinterWithMockProxiedLinter();
+
+    // Default behavior
+    $this->assertFalse($linter->shouldProxy());
+
+    $linter->setShouldProxy(false);
+    $this->assertFalse($linter->shouldProxy());
+
+    $linter->setShouldProxy(true);
+    $this->assertTrue($linter->shouldProxy());
+  }
+
+  public function testShouldProxyFromEnvironment(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+
+    $set_env = function (?string $value): void {
+      $key = ArcanistDockerContainerLinterProxy::ENV_SHOULD_PROXY;
+
+      if ($value !== null) {
+        putenv($key.'='.$value);
+      } else {
+        putenv($key);
+      }
+    };
+
+    try {
+      $set_env('no');
+      $this->assertFalse($linter->shouldProxy());
+
+      $set_env('yes');
+      $this->assertTrue($linter->shouldProxy());
+    } finally {
+      $set_env(null);
+    }
   }
 
   public function testGetLinterPriority(): void {
