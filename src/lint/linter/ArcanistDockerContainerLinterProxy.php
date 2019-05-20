@@ -32,6 +32,8 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
 
   private $image;
   private $proxiedLinter;
+  private $shouldProxy;
+
 
   /**
    * @todo We should maybe attempt to validate the image name (see
@@ -58,6 +60,14 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this;
   }
 
+  public function shouldProxy(): bool {
+    if ($this->shouldProxy === null) {
+      $this->shouldProxy = getenv('DOCKER_LINTER_PROXY') === 'yes';
+    }
+
+    return $this->shouldProxy;
+  }
+
   public function setProxiedLinter(ArcanistExternalLinter $linter) {
     $engine = $this->getEngine();
 
@@ -68,6 +78,11 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     $linter->setEngine($engine);
     $this->proxiedLinter = $linter;
 
+    return $this;
+  }
+
+  public function setShouldProxy(bool $should_proxy) {
+    $this->shouldProxy = $should_proxy;
     return $this;
   }
 
@@ -290,6 +305,10 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   protected function buildFutures(array $paths): array {
+    if (!$this->shouldProxy()) {
+      return $this->getProxiedLinter()->buildFutures($paths);
+    }
+
     // NOTE: We can't call `$this->getProxiedLinter()->getExecutableCommand()`
     // as that will attempt to execute the command directly (bypassing Docker)
     // in @{method:ArcanistExternalLinter::checkBinaryConfiguration}.

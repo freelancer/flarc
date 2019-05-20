@@ -13,7 +13,10 @@ final class ArcanistDockerContainerLinterProxyTestCase
   }
 
   protected function getLinter(): ArcanistLinter {
-    return new ArcanistDockerContainerLinterProxy();
+    $linter = new ArcanistDockerContainerLinterProxy();
+    $linter->setShouldProxy(true);
+
+    return $linter;
   }
 
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
