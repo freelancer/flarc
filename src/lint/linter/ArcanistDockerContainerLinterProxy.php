@@ -256,11 +256,14 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   protected function getMandatoryFlags(): array {
     $project_root = $this->getProjectRoot();
 
+    $docker_mount = function (string $path): string {
+      return sprintf('type=bind,source=%s,target=%s', $path, $path);
+    };
+
     $flags = [
       'run',
       '--entrypoint=',
-      '--mount',
-      sprintf('type=bind,source=%s,target=%s', $project_root, $project_root),
+      '--mount='.$docker_mount($project_root),
       '--rm',
       sprintf('--workdir=%s', $project_root),
     ];
@@ -272,12 +275,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       $reporter = Filesystem::resolvePath(
         'reporter.js',
         dirname((new ReflectionClass($proxied))->getFileName()));
-
-      $flags[] = '--mount';
-      $flags[] = sprintf(
-        'type=bind,source=%s,target=%s',
-        $reporter,
-        $reporter);
+      $flags[] = '--mount='.$docker_mount($reporter);
     }
 
     return $flags;
