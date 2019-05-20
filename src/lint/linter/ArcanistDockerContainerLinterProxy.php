@@ -51,23 +51,10 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function getMounts(): array {
-    $mounts = [];
+    $mounts = $this->mounts;
 
     // Always mount the project root directory.
-    $mounts[] = $this->getProjectRoot();
-
-    // NOTE: `ArcanistJSHintLinter` passes a custom reporter file to `jshint`,
-    // which must be readable within the Docker container.
-    $proxied = $this->getProxiedLinter();
-    if ($proxied instanceof ArcanistJSHintLinter) {
-      $reporter = Filesystem::resolvePath(
-        'reporter.js',
-        dirname((new ReflectionClass($proxied))->getFileName()));
-      $mounts[] = $reporter;
-    }
-
-    // Mount custom paths.
-    $mounts = array_merge($mounts, $this->mounts);
+    array_unshift($mounts, $this->getProjectRoot());
 
     return array_map(
       function (string $path): string {
