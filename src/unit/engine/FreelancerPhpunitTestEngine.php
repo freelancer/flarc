@@ -27,6 +27,7 @@
 final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
 
   private $affectedTests = [];
+  private $shouldRunInDocker;
   private $sourceDirectory;
   private $testDirectory;
 
@@ -67,6 +68,10 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
       } else {
         $enable_coverage = true;
       }
+    }
+
+    if (getenv('RUN_PHPUNIT_IN_DOCKER')) {
+      $this->shouldRunInDocker = true;
     }
 
     // Check whether Composer dependencies are up-to-date.
@@ -112,21 +117,12 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
           continue;
         }
 
-        $args = [];
-
-        $clover_output = null;
-        $junit_output   = new TempFile();
-
-        if ($config) {
-          $args[] = '--configuration='.$config;
-        }
-        $args[] = '-d display_errors=stderr';
-        $args[] = '--log-junit='.$junit_output;
-
-        if ($enable_coverage !== false) {
-          $clover_output = new TempFile();
-          $args[] = '--coverage-clover='.$clover_output;
-        }
+        $output_files = $this->generateOutputFiles($enable_coverage);
+        $args = $this->getBinaryArgs(
+          $config,
+          $enable_coverage,
+          $output_files['junit'],
+          $output_files['clover']);
 
         $futures[$test_path] = new ExecFuture(
           '%s %Ls %s',
@@ -134,10 +130,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
           $args,
           $test_path);
 
-        $output[$test_path] = [
-          'clover' => $clover_output,
-          'junit' => $junit_output,
-        ];
+        $output[$test_path] = $output_files;
       }
     }
 
@@ -339,7 +332,17 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
    * @param  string|null  The default value.
    * @return string       The path to the executable.
    */
-  protected function getBinaryPath($key, $default = null) {
+  protected function getBinaryPath(string $key,
+    ?string $default = null): string {
+    if ($this->shouldRunInDocker) {
+      if (!Filesystem::binaryExists('docker')) {
+        throw new ArcanistUsageException(
+          'Docker does not seem to be installed. Please install Docker.');
+      }
+
+      return 'docker';
+    }
+
     $bin = $this
       ->getConfigurationManager()
       ->getConfigFromAnySource($key, $default);
@@ -380,6 +383,52 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     }
 
     return $path;
+  }
+
+  protected function getBinaryArgs(string $config, bool $enable_coverage,
+    string $junit_output, ?string $clover_output = null): array {
+    if ($this->shouldRunInDocker) {
+      $docker_image = $this->getConfigurationManager()
+        ->getConfigFromAnySource('unit.phpunit.docker-image');
+      $phpunit_path = $this->getConfigurationManager()
+        ->getConfigFromAnySource('unit.phpunit.binary');
+
+      $args = [
+        'run',
+        '--rm',
+        '--volume='.$this->getProjectRoot().':'.$this->getProjectRoot(),
+        '--volume='.$junit_output.':'.$junit_output,
+        '--workdir='.$this->getProjectRoot(),
+      ];
+
+      if ($enable_coverage != false) {
+        $args[] = '--volume='.$clover_output.':'.$clover_output;
+      }
+
+      $args[] = $docker_image;
+      $args[] = $phpunit_path;
+    } else {
+      $args = [];
+    }
+
+    if ($config) {
+      $args[] = '--configuration='.$config;
+    }
+    $args[] = '-d display_errors=stderr';
+    $args[] = '--log-junit='.$junit_output;
+
+    if ($enable_coverage !== false) {
+      $args[] = '--coverage-clover='.$clover_output;
+    }
+
+    return $args;
+  }
+
+  protected function generateOutputFiles(bool $enable_coverage): array {
+    return [
+      'clover' => $enable_coverage ? new TempFile() : null,
+      'junit' => new TempFile(),
+    ];
   }
 
   /**
