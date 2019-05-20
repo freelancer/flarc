@@ -33,6 +33,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   const ENV_SHOULD_PROXY = 'DOCKER_LINTER_PROXY';
 
   private $image;
+  private $mounts = [];
   private $proxiedLinter;
   private $shouldProxy;
 
@@ -49,12 +50,52 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this->image;
   }
 
+  public function getMounts(): array {
+    $mounts = [];
+
+    // Always mount the project root directory.
+    $mounts[] = $this->getProjectRoot();
+
+    // NOTE: `ArcanistJSHintLinter` passes a custom reporter file to `jshint`,
+    // which must be readable within the Docker container.
+    $proxied = $this->getProxiedLinter();
+    if ($proxied instanceof ArcanistJSHintLinter) {
+      $reporter = Filesystem::resolvePath(
+        'reporter.js',
+        dirname((new ReflectionClass($proxied))->getFileName()));
+      $mounts[] = $reporter;
+    }
+
+    // Mount custom paths.
+    $mounts = array_merge($mounts, $this->mounts);
+
+    return array_map(
+      function (string $path): string {
+        return sprintf('type=bind,source=%s,target=%s', $path, $path);
+      },
+      $mounts);
+  }
+
   public function getProxiedLinter(): ArcanistExternalLinter {
     if ($this->proxiedLinter === null) {
       throw new PhutilInvalidStateException('setProxiedLinter');
     }
 
     return $this->proxiedLinter;
+  }
+
+  /**
+   * Mount an additional path into the Docker container.
+   *
+   * By default, the project root directory is mounted into the Docker
+   * container. If the external linter requires access to any files outside of
+   * the project root directory, they must be mounted explicitly.
+   */
+  public function mount(string $path) {
+    Filesystem::assertExists($path);
+    $this->mounts[] = $path;
+
+    return $this;
   }
 
   public function setImage(string $image) {
@@ -305,26 +346,15 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   protected function getMandatoryFlags(): array {
     $project_root = $this->getProjectRoot();
 
-    $docker_mount = function (string $path): string {
-      return sprintf('type=bind,source=%s,target=%s', $path, $path);
-    };
-
     $flags = [
       'run',
       '--entrypoint=',
-      '--mount='.$docker_mount($project_root),
       '--rm',
       sprintf('--workdir=%s', $project_root),
     ];
 
-    // NOTE: `ArcanistJSHintLinter` passes a custom reporter file to `jshint`,
-    // which must be readable within the Docker container.
-    $proxied = $this->getProxiedLinter();
-    if ($proxied instanceof ArcanistJSHintLinter) {
-      $reporter = Filesystem::resolvePath(
-        'reporter.js',
-        dirname((new ReflectionClass($proxied))->getFileName()));
-      $flags[] = '--mount='.$docker_mount($reporter);
+    foreach ($this->getMounts() as $mount) {
+      $flags[] = '--mount='.$mount;
     }
 
     return $flags;

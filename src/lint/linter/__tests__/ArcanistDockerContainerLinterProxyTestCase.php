@@ -22,7 +22,13 @@ final class ArcanistDockerContainerLinterProxyTestCase
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
     $linter = new ArcanistDockerContainerLinterProxy();
 
+    $working_copy = ArcanistWorkingCopyIdentity::newDummyWorkingCopy();
+    $configuration_manager = new ArcanistConfigurationManager();
+    $configuration_manager->setWorkingCopyIdentity($working_copy);
+
     $engine = new ArcanistUnitTestableLintEngine();
+    $engine->setWorkingCopy($working_copy);
+    $engine->setConfigurationManager($configuration_manager);
     $linter->setEngine($engine);
 
     $mock = Mockery::mock(ArcanistExternalLinter::class);
@@ -40,6 +46,16 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $linter->setImage($image);
 
     $this->assertEqual($image, $linter->getImage());
+  }
+
+  public function testMount(): void {
+    $linter = $this->getLinterWithMockProxiedLinter();
+
+    $path  = __FILE__;
+    $mount = sprintf('type=bind,source=%s,target=%s', $path, $path);
+
+    $linter->mount($path);
+    $this->assertTrue(in_array($mount, $linter->getMounts()));
   }
 
   public function testGetProxiedLinter(): void {
