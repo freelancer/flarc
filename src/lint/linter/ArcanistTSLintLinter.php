@@ -5,51 +5,51 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
   private $config;
   private $project;
 
-  public function getInfoName() {
+  public function getInfoName(): string {
     return 'TSLint';
   }
 
-  public function getInfoURI() {
+  public function getInfoURI(): string {
     return 'https://palantir.github.io/tslint/';
   }
 
-  public function getInfoDescription() {
+  public function getInfoDescription(): string {
     return pht(
       'TSLint is an extensible static analysis tool that checks TypeScript '.
       'code for readability, maintainability, and functionality errors.');
   }
 
-  public function getLinterName() {
+  public function getLinterName(): string {
     return 'TSLint';
   }
-  public function getLinterConfigurationName() {
+  public function getLinterConfigurationName(): string {
     return 'tslint';
   }
 
-  public function getDefaultBinary() {
+  public function getDefaultBinary(): string {
     return 'tslint';
   }
 
-  public function getVersion() {
+  public function getVersion(): string {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
     return $stdout;
   }
 
-  public function getInstallInstructions() {
+  public function getInstallInstructions(): string {
     return pht(
       'Install %s with `%s`.',
       'TSLint',
       'yarn global add tslint typescript');
   }
 
-  public function getUpdateInstructions() {
+  public function getUpdateInstructions(): string {
     return pht(
       'Update %s with `%s`.',
       'TSLint',
       'yarn global update tslint typescript');
   }
 
-  protected function getMandatoryFlags() {
+  protected function getMandatoryFlags(): array {
     $options = [];
 
     $options[] = '--format';
@@ -99,7 +99,7 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
     }
   }
 
-  protected function parseLinterOutput($path, $err, $stdout, $stderr) {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     $errors = [];
 
     if (strlen($stderr)) {

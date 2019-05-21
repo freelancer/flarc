@@ -5,7 +5,7 @@ final class ArcanistTSLintLinterTestCase
 
   private $config;
 
-  protected function getLinter() {
+  protected function getLinter(): ArcanistLinter {
     // We need to specify this configuration as newer versions of TSLint do not
     // enable any linter rules by default.
     $this->config = new TempFile('config.json');
@@ -22,7 +22,7 @@ final class ArcanistTSLintLinterTestCase
     return $linter;
   }
 
-  protected function executeTestsInDirectory($root) {
+  protected function executeTestsInDirectory($root): void {
     $linter = $this->getLinter();
 
     $files = id(new FileFinder($root))
@@ -44,7 +44,7 @@ final class ArcanistTSLintLinterTestCase
         $root));
   }
 
-  private function lintFile($file, ArcanistLinter $linter) {
+  private function lintFile($file, ArcanistLinter $linter): void {
     $linter = clone $linter;
 
     $contents = Filesystem::readFile($file);
@@ -174,7 +174,7 @@ final class ArcanistTSLintLinterTestCase
   }
 
 
-  public function testLinter() {
+  public function testLinter(): void {
     $this->executeTestsInDirectory(__DIR__.'/tslint/');
   }
 
