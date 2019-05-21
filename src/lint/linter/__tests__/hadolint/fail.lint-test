@@ -1,0 +1,3 @@
+FROM ubuntu
+~~~~~~~~~~
+warning:1:1:DL3006:Hadolint DL3006

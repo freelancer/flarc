@@ -1,0 +1,4 @@
+FROM ubuntu:bionic
+RUN echo "Key:\tValue"
+~~~~~~~~~~
+advice:2:1:SC2028:Hadolint SC2028
