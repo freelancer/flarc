@@ -25,6 +25,6 @@ class X {
  public function f3 ($a) {}
 }
 ~~~~~~~~~~
-warning:2:1
-warning:10:2
-warning:16:2
+warning:2:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.
+warning:10:2:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.
+warning:16:2:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.

@@ -9,7 +9,7 @@ some_func(
   $arg1
   , $arg2, $arg3);
 ~~~~~~~~~~
-warning:9:8
+warning:9:8:XHP1020:Spacing Around Commas
 ~~~~~~~~~~
 <?php
 

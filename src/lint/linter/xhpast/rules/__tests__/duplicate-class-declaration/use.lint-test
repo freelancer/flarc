@@ -6,5 +6,5 @@ use Y as Z;
 class Y {}
 class Z {}
 ~~~~~~~~~~
-error:3:7
-error:7:7
+error:3:7:XHP1016:Duplicate `class` Declaration
+error:7:7:XHP1016:Duplicate `class` Declaration

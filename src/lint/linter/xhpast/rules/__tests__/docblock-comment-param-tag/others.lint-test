@@ -25,4 +25,4 @@ function f4 (array $a = null) {}
  */
 function f5 (array $a) {}
 ~~~~~~~~~~
-warning:22:1
+warning:22:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.

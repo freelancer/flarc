@@ -17,4 +17,4 @@ function f($a) {
     $b = func_get_args();
 }
 ~~~~~~~~~
-warning:3:1
+warning:3:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.

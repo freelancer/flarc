@@ -8,4 +8,4 @@ final class SomeTest extends PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~
-warning:8:3
+warning:8:3:XHP1001:Explicit `@covers` Specification

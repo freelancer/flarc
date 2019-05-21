@@ -8,5 +8,5 @@ final class SomeOtherTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~
-warning:4:3
-warning:8:3
+warning:4:3:XHP1001:Explicit `@covers` Specification
+warning:8:3:XHP1001:Explicit `@covers` Specification

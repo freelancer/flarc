@@ -5,4 +5,4 @@
  */
 final class MyTestCase extends TestCase {}
 ~~~~~~~~~~
-warning:3:1
+warning:3:1:XHP1021:Explicit `@coversDefaultClass` Specification

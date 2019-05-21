@@ -25,5 +25,5 @@ function f3 (Bar $a) {}
  */
 function f4 (Foo\Baz $a) {}
 ~~~~~~~~~~
-warning:2:1
-warning:23:1
+warning:2:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.
+warning:23:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.

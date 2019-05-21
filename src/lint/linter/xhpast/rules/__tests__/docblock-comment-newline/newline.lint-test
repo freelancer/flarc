@@ -43,10 +43,10 @@ function f4() {}
  */
 function f5() {}
 ~~~~~~~~~~
-advice:3:1
-advice:10:1
-advice:25:5
-advice:31:5
+advice:3:1:XHP2003:Leading/Trailing NewLines in Docblocks
+advice:10:1:XHP2003:Leading/Trailing NewLines in Docblocks
+advice:25:5:XHP2003:Leading/Trailing NewLines in Docblocks
+advice:31:5:XHP2003:Leading/Trailing NewLines in Docblocks
 ~~~~~~~~~~
 <?php
 

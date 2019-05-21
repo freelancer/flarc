@@ -8,5 +8,5 @@ for ($i = 0; $i < 10; $i++) {
 end:
 echo 'end';
 ~~~~~~~~~~
-error:4:5
-error:8:1
+error:4:5:XHP1002:Use of `goto` Statement
+error:8:1:XHP1002:Use of `goto` Statement

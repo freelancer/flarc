@@ -10,12 +10,12 @@ f(function   &(bool $b=true, &$c,   ...$param) use   ( $z,$y   )  : bool {
 });
 f(function  ( )use ( $x) {});
 ~~~~~~~~~~
-advice:4:3
-advice:5:3
-advice:6:3
-advice:7:3
-advice:8:3
-advice:11:3
+advice:4:3:XHP1033:Function/Method Declaration Format
+advice:5:3:XHP1033:Function/Method Declaration Format
+advice:6:3:XHP1033:Function/Method Declaration Format
+advice:7:3:XHP1033:Function/Method Declaration Format
+advice:8:3:XHP1033:Function/Method Declaration Format
+advice:11:3:XHP1033:Function/Method Declaration Format
 ~~~~~~~~~~
 <?php
 

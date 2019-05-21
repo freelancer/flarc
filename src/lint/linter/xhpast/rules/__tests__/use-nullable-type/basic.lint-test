@@ -22,4 +22,4 @@ class C {
   }
 }
 ~~~~~~~~~~
-advice:7:12
+advice:7:12:XHP1032:Return `null` instead of `false`

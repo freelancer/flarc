@@ -9,7 +9,7 @@ function my_function() {
   return 'hello';
 }
 ~~~~~~~~~~
-warning:7:1
+warning:7:1:XHP1013:Newline After `use` Statement
 ~~~~~~~~~~
 <?php
 

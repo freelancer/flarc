@@ -10,7 +10,7 @@ function php_sapi_name() {
 // false positives.
 echo php_sapi_name();
 ~~~~~~~~~~
-advice:11:6
+advice:11:6:XHP1022:Use of `php_sapi_name` Function
 ~~~~~~~~~~
 <?php
 

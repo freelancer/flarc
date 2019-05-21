@@ -4,5 +4,5 @@ $y = "${GLOBALS['y']}";
 $z = "$somevar";
 $z = "${_POST['x']}";
 ~~~~~~~~~~
-warning:2:6
-warning:3:6
+warning:2:6:XHP1024:`$GLOBALS` Superglobal
+warning:3:6:XHP1024:`$GLOBALS` Superglobal

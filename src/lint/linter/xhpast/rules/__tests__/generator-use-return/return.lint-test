@@ -26,5 +26,5 @@ function valid3 () {
 
 
 ~~~~~~~~~~
-error:6:3
-error:11:3
+error:6:3:XHP1027:Generators cannot return values using `return`.
+error:11:3:XHP1027:Generators cannot return values using `return`.

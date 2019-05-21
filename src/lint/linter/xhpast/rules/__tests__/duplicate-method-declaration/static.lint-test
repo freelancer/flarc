@@ -4,4 +4,4 @@ class ClassName {
   public static function someMethod() {}
 }
 ~~~~~~~~~~
-error:4:26
+error:4:26:XHP1003:Duplicate Method Declaration

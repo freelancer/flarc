@@ -4,4 +4,4 @@ class SomeClass {
   public function someMethod($parameter) {}
 }
 ~~~~~~~~~~
-error:4:19
+error:4:19:XHP1003:Duplicate Method Declaration

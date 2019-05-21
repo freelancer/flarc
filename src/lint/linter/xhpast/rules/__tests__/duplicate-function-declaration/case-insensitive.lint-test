@@ -2,4 +2,4 @@
 function some_function() {}
 function SOME_FUNCTION() {}
 ~~~~~~~~~~
-error:3:10
+error:3:10:XHP1005:Duplicate `function` Declaration

@@ -9,11 +9,11 @@ $array = array(
   'baz',
 );
 ~~~~~~~~~~
-advice:2:10
-advice:3:10
-advice:4:10
-advice:5:10
-advice:6:10
+advice:2:10:XHP1025:Long Array Syntax
+advice:3:10:XHP1025:Long Array Syntax
+advice:4:10:XHP1025:Long Array Syntax
+advice:5:10:XHP1025:Long Array Syntax
+advice:6:10:XHP1025:Long Array Syntax
 ~~~~~~~~~~
 <?php
 $array = [];

@@ -3,4 +3,4 @@ exec { 'test':
   refreshonly => true,
 }
 ~~~~~~~~~~
-warning:2:13
+warning:2:13:arrow_alignment:Arrow Alignment

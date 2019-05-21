@@ -4,4 +4,4 @@ interface SomeInterface {
   public function someMethod();
 }
 ~~~~~~~~~~
-error:4:19
+error:4:19:XHP1003:Duplicate Method Declaration

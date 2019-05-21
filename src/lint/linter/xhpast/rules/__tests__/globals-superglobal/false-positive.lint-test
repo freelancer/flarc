@@ -5,4 +5,4 @@ function foo() {
   $GLOBALS = array();
 }
 ~~~~~~~~~~
-warning:5:3
+warning:5:3:XHP1024:`$GLOBALS` Superglobal

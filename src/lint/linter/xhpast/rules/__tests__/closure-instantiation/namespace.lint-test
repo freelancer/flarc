@@ -5,4 +5,4 @@ namespace SomeNamespace;
 new Closure();
 new \Closure();
 ~~~~~~~~~~
-error:6:1
+error:6:1:XHP1028:Instantiation of `Closure`

@@ -17,8 +17,8 @@ use baz;
  * There should be a space before this comment.
  */
 ~~~~~~~~~~
-warning:7:1
-warning:12:1
+warning:7:1:XHP1013:Newline After `use` Statement
+warning:12:1:XHP1013:Newline After `use` Statement
 ~~~~~~~~~~
 <?php
 

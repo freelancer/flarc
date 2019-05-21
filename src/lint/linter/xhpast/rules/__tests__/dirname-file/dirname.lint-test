@@ -3,9 +3,9 @@ echo dirname(__FILE__);
 echo dirname(dirname(__FILE__));
 echo dirname(__file__);
 ~~~~~~~~~~
-warning:2:6
-warning:3:14
-warning:4:6
+warning:2:6:XHP1009:`dirname(__FILE__)` Usage
+warning:3:14:XHP1009:`dirname(__FILE__)` Usage
+warning:4:6:XHP1009:`dirname(__FILE__)` Usage
 ~~~~~~~~~~
 <?php
 echo __DIR__;

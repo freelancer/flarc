@@ -10,4 +10,4 @@ function f(?array $a) {}
  */
 function f(?array $a) {}
 ~~~~~~~~~~
-warning:8:1
+warning:8:1:XHP2001:`@param` Tag Incompatible with Function/Method Declaration.

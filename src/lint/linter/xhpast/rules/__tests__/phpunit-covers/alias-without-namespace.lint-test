@@ -6,4 +6,4 @@ final class SomeTest extends TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~
-warning:6:3
+warning:6:3:XHP1001:Explicit `@covers` Specification

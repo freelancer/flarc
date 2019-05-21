@@ -6,6 +6,6 @@ class SomeMethod {
   private function someMethod() {}
 }
 ~~~~~~~~~~
-error:4:19
-error:5:22
-error:6:20
+error:4:19:XHP1003:Duplicate Method Declaration
+error:5:22:XHP1003:Duplicate Method Declaration
+error:6:20:XHP1003:Duplicate Method Declaration

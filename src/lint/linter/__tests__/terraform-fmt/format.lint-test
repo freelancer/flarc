@@ -2,7 +2,7 @@ output "something" {
 value = "something"
 }
 ~~~~~~~~~~
-warning:1:1
+warning:1:1:TERRAFORMFMT2:Formatting Issue
 ~~~~~~~~~~
 output "something" {
   value = "something"

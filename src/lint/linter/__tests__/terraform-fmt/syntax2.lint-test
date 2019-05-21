@@ -2,4 +2,4 @@ resource "test" "test" {
   value = value = []
 }
 ~~~~~~~~~~
-error:2:11
+error:2:11:TERRAFORMFMT1:Syntax Error

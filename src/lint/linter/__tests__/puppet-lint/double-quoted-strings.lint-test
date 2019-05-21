@@ -4,4 +4,4 @@ user { 'dave':
   comment => "This is a double quoted string",
 }
 ~~~~~~~~~~
-warning:4:14
+warning:4:14:double_quoted_strings:Double Quoted Strings

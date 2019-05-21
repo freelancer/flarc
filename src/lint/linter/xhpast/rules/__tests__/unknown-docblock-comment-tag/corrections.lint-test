@@ -14,10 +14,10 @@
  */
 class SomeClass {}
 ~~~~~~~~~~
-advice:10:4
-advice:11:4
-advice:12:4
-advice:13:4
+advice:10:4:XHP1017:Unknown Docblock Comment Tag
+advice:11:4:XHP1017:Unknown Docblock Comment Tag
+advice:12:4:XHP1017:Unknown Docblock Comment Tag
+advice:13:4:XHP1017:Unknown Docblock Comment Tag
 ~~~~~~~~~~
 <?php
 

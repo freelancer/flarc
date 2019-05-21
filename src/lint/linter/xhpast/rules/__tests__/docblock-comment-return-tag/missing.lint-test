@@ -40,7 +40,7 @@ class X {
   }
 }
 ~~~~~~~~~~
-warning:3:1
-warning:15:1
-warning:23:3
-warning:35:3
+warning:3:1:XHP2002:Incorrect Docblock `@return` Tag
+warning:15:1:XHP2002:Incorrect Docblock `@return` Tag
+warning:23:3:XHP2002:Incorrect Docblock `@return` Tag
+warning:35:3:XHP2002:Incorrect Docblock `@return` Tag

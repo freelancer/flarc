@@ -36,20 +36,20 @@ function f1 (int $a   = 100 ) : int {
   return 0;
 }
 ~~~~~~~~~~
-advice:4:1
-advice:5:1
-advice:8:1
-advice:9:1
-advice:10:1
-advice:15:3
-advice:18:3
-advice:21:3
-advice:23:3
-advice:25:3
-advice:27:3
-advice:30:1
-advice:32:1
-advice:33:11
+advice:4:1:XHP1033:Function/Method Declaration Format
+advice:5:1:XHP1033:Function/Method Declaration Format
+advice:8:1:XHP1033:Function/Method Declaration Format
+advice:9:1:XHP1033:Function/Method Declaration Format
+advice:10:1:XHP1033:Function/Method Declaration Format
+advice:15:3:XHP1033:Function/Method Declaration Format
+advice:18:3:XHP1033:Function/Method Declaration Format
+advice:21:3:XHP1033:Function/Method Declaration Format
+advice:23:3:XHP1033:Function/Method Declaration Format
+advice:25:3:XHP1033:Function/Method Declaration Format
+advice:27:3:XHP1033:Function/Method Declaration Format
+advice:30:1:XHP1033:Function/Method Declaration Format
+advice:32:1:XHP1033:Function/Method Declaration Format
+advice:33:11:XHP1033:Function/Method Declaration Format
 ~~~~~~~~~~
 <?php
 

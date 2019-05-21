@@ -6,4 +6,4 @@
  */
 function some_function() {}
 ~~~~~~~~~~
-warning:3:1
+warning:3:1:XHP2002:Incorrect Docblock `@return` Tag

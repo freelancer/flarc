@@ -45,5 +45,5 @@ final class SomeTest extends PHPUnit\Framework\TestCase {
   
 }
 ~~~~~~~~~~
-warning:5:3
-warning:9:3
+warning:5:3:XHP1001:Explicit `@covers` Specification
+warning:9:3:XHP1001:Explicit `@covers` Specification

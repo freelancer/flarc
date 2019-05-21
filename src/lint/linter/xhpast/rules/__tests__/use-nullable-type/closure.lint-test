@@ -13,5 +13,5 @@ function func() {
   };
 }
 ~~~~~~~~~~
-advice:7:10
-advice:12:12
+advice:7:10:XHP1032:Return `null` instead of `false`
+advice:12:12:XHP1032:Return `null` instead of `false`

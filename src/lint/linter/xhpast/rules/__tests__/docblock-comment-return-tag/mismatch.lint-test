@@ -26,6 +26,6 @@ class X {
   function s() {}
 }
 ~~~~~~~~~~
-warning:7:3
-warning:13:1
-warning:26:3
+warning:7:3:XHP2002:Incorrect Docblock `@return` Tag
+warning:13:1:XHP2002:Incorrect Docblock `@return` Tag
+warning:26:3:XHP2002:Incorrect Docblock `@return` Tag

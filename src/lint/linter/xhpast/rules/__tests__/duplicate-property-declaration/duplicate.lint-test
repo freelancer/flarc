@@ -4,4 +4,4 @@ class SomeClass {
   public $property;
 }
 ~~~~~~~~~~
-error:4:10
+error:4:10:XHP1006:Duplicate Property Declaration

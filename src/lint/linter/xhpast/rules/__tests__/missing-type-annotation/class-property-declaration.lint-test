@@ -17,7 +17,7 @@ class Vegetable {
    */
   private $multiline;
 }
-~~~~~~~~~~~~~~~~~~~~~~
-warning:5:3
-warning:7:3
-warning:13:3
+~~~~~~~~~~
+warning:5:3:XHP2006:Missing type annotation
+warning:7:3:XHP2006:Missing type annotation
+warning:13:3:XHP2006:Missing type annotation

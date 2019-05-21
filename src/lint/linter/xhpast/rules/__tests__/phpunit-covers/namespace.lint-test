@@ -10,4 +10,4 @@ final class SomeTest extends \PHPUnit\Framework\TestCase {
   public function testSomething() {}
 }
 ~~~~~~~~~~
-warning:10:3
+warning:10:3:XHP1001:Explicit `@covers` Specification

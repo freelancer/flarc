@@ -5,8 +5,8 @@ switch ($x) {
   default; break;
 }
 ~~~~~~~~~~
-warning:4:9
-warning:5:10
+warning:4:9:XHP1010:`case` Succeeded By Semicolon
+warning:5:10:XHP1010:`case` Succeeded By Semicolon
 ~~~~~~~~~~
 <?php
 switch ($x) {

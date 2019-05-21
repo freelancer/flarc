@@ -5,5 +5,5 @@ function foobar() {
   return $GLOBALS['x'];
 }
 ~~~~~~~~~~
-warning:2:1
-warning:5:10
+warning:2:1:XHP1024:`$GLOBALS` Superglobal
+warning:5:10:XHP1024:`$GLOBALS` Superglobal

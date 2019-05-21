@@ -2,7 +2,7 @@
 namespace foo;
 // Comment
 ~~~~~~~~~~
-warning:2:1
+warning:2:1:XHP1007:Newline After `namespace` Declaration
 ~~~~~~~~~~
 <?php
 namespace foo;

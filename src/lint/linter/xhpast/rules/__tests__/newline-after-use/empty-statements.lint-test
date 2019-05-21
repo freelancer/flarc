@@ -4,8 +4,8 @@ use Foo;;
 use Bar;
 ;
 ~~~~~~~~~~
-warning:3:1
-warning:4:1
+warning:3:1:XHP1013:Newline After `use` Statement
+warning:4:1:XHP1013:Newline After `use` Statement
 ~~~~~~~~~~
 <?php
 

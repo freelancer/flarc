@@ -2,4 +2,4 @@
 some_label:
 echo 'No goto here...';
 ~~~~~~~~~~
-error:2:1
+error:2:1:XHP1002:Use of `goto` Statement

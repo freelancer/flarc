@@ -10,11 +10,11 @@ function foo7 (  ) :bool {
 	return true;
 }
 ~~~~~~~~~~
-advice:4:1
-advice:5:1
-advice:6:1
-advice:8:1
-advice:9:1
+advice:4:1:XHP1033:Function/Method Declaration Format
+advice:5:1:XHP1033:Function/Method Declaration Format
+advice:6:1:XHP1033:Function/Method Declaration Format
+advice:8:1:XHP1033:Function/Method Declaration Format
+advice:9:1:XHP1033:Function/Method Declaration Format
 ~~~~~~~~~~
 <?php
 

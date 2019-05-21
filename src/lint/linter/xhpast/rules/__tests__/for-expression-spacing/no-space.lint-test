@@ -4,8 +4,8 @@ for ($i = 0;$i < 10;$i++) {
   print $i;
 }
 ~~~~~~~~~~
-warning:3:12
-warning:3:20
+warning:3:12:XHP1019:`for` Expression Spacing
+warning:3:20:XHP1019:`for` Expression Spacing
 ~~~~~~~~~~
 <?php
 

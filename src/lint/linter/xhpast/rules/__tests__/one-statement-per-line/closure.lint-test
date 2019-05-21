@@ -3,8 +3,8 @@
 function () { return; };
 function () { $x = null; return $x; };
 ~~~~~~~~~~
-warning:4:15
-warning:4:26
+warning:4:15:XHP94:One Statement Per Line
+warning:4:26:XHP94:One Statement Per Line
 ~~~~~~~~~~
 <?php
 

@@ -4,4 +4,4 @@ define('FOO', 'BAR');
 define('FOO', 'BAR', false);
 define('FOO', 'BAR', true);
 ~~~~~~~~~~
-warning:5:1
+warning:5:1:XHP1023:Case-Insensitive Named Constant

@@ -24,5 +24,5 @@ final class YetAnotherTest extends \PHPUnit\Framework\TestCase {
   }
 }
 ~~~~~~~~~~
-warning:12:1
-warning:21:1
+warning:12:1:XHP1021:Explicit `@coversDefaultClass` Specification
+warning:21:1:XHP1021:Explicit `@coversDefaultClass` Specification

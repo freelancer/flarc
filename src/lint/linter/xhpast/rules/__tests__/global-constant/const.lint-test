@@ -1,4 +1,4 @@
 <?php
 const FOO = false;
 ~~~~~~~~~~
-advice:2:1
+advice:2:1:XHP1004:Global Constant Definition

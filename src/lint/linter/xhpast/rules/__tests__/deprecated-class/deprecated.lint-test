@@ -9,11 +9,11 @@ class Baz implements Foo {}
 
 $x = new FooBarBaz();
 ~~~~~~~~~~
-warning:2:10
-warning:4:1
-warning:7:19
-warning:8:22
-warning:10:10
+warning:2:10:XHP1008:Use of Deprecated Class
+warning:4:1:XHP1008:Use of Deprecated Class
+warning:7:19:XHP1008:Use of Deprecated Class
+warning:8:22:XHP1008:Use of Deprecated Class
+warning:10:10:XHP1008:Use of Deprecated Class
 ~~~~~~~~~~
 ~~~~~~~~~~
 {
