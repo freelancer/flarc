@@ -1,9 +1,0 @@
-/* eslint "prettier/prettier": "error" */
-foobar(
-  "baz"
-);
-~~~~~~~~~~
-error:2:8
-~~~~~~~~~~
-/* eslint "prettier/prettier": "error" */
-foobar("baz");

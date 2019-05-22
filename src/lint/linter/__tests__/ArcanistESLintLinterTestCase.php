@@ -3,29 +3,22 @@
 final class ArcanistESLintLinterTestCase
   extends ArcanistExternalLinterTestCase {
 
-  private $config;
+  protected function getLinter(): ArcanistLinter {
+    $config = new TempFile('eslintrc');
 
-  protected function getLinter() {
-    // We need to specify this configuration as newer versions of ESLint do not
-    // enable any linter rules by default.
-    $this->config = new TempFile();
-
+    // NOTE: We use `json_encode` rather than `phutil_json_encode` since we
+    // need to set `$options` to include `JSON_FORCE_OBJECT`.
     Filesystem::writeFile(
-      $this->config,
-      phutil_json_encode(
-        [
-          'plugins' => ['prettier'],
-        ]));
+      $config,
+      json_encode([], JSON_FORCE_OBJECT));
 
     $linter = parent::getLinter();
-    $linter->setLinterConfigurationValue(
-      'eslint.config',
-      (string)$this->config);
+    $linter->setLinterConfigurationValue('eslint.config', $config);
 
     return $linter;
   }
 
-  public function testLinter() {
+  public function testLinter(): void {
     $this->executeTestsInDirectory(__DIR__.'/eslint/');
   }
 
