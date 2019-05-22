@@ -6,6 +6,10 @@
 final class ArcanistDockerContainerLinterProxyTestCase
   extends ArcanistExternalLinterTestCase {
 
+  protected function willRunOneTest($test_method_name) {
+    putenv(ArcanistDockerContainerLinterProxy::ENV_SHOULD_PROXY);
+  }
+
   protected function didRunOneTest($test): void {
     // Clean up the `Mockery` container used by the current test and run any
     // verification tasks needed for our expectations.
@@ -114,25 +118,16 @@ final class ArcanistDockerContainerLinterProxyTestCase
   public function testShouldProxyFromEnvironment(): void {
     $linter  = $this->getLinterWithMockProxiedLinter();
 
-    $set_env = function (?string $value): void {
+    $set_env = function (string $value): void {
       $key = ArcanistDockerContainerLinterProxy::ENV_SHOULD_PROXY;
-
-      if ($value !== null) {
-        putenv($key.'='.$value);
-      } else {
-        putenv($key);
-      }
+      putenv($key.'='.$value);
     };
 
-    try {
-      $set_env('no');
-      $this->assertFalse($linter->shouldProxy());
+    $set_env('no');
+    $this->assertFalse($linter->shouldProxy());
 
-      $set_env('yes');
-      $this->assertTrue($linter->shouldProxy());
-    } finally {
-      $set_env(null);
-    }
+    $set_env('yes');
+    $this->assertTrue($linter->shouldProxy());
   }
 
   public function testGetLinterPriority(): void {
