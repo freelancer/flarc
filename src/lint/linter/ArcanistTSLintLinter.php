@@ -32,7 +32,15 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
 
   public function getVersion(): string {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
-    return $stdout;
+
+    $matches = [];
+    $regex = '/^(?<version>\d+(?:\.\d+){2})$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
+      return null;
+    }
+
+    return $matches['version'];
   }
 
   public function getInstallInstructions(): string {

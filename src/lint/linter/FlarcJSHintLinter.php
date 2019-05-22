@@ -48,17 +48,16 @@ final class FlarcJSHintLinter extends ArcanistExternalLinter {
 
   public function getVersion(): ?string {
     // NOTE: `jshint --version` emits version information on stderr, not stdout.
-    list($stdout, $stderr) = execx(
-      '%C --version',
-      $this->getExecutableCommand());
+    list($stdout, $stderr) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    $regex = '/^jshint v(?P<version>\d+\.\d+\.\d+)$/';
-    if (preg_match($regex, $stderr, $matches)) {
-      return $matches['version'];
-    } else {
+    $regex = '/^jshint v(?<version>\d+(?:\.\d+){2})$/';
+
+    if (!preg_match($regex, $stderr, $matches)) {
       return null;
     }
+
+    return $matches['version'];
   }
 
   public function getInstallInstructions(): string {

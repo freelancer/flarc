@@ -36,7 +36,7 @@ final class ArcanistBlackLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    $regex = '/^black, version (?P<version>\d+\.\d+(?:b\d+)?)$/';
+    $regex = '/^black, version (?<version>\d+\.\d+(?:b\d+)?)$/';
 
     if (preg_match($regex, $stdout, $matches)) {
       return $matches['version'];

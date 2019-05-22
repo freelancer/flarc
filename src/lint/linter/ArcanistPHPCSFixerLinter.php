@@ -79,7 +79,9 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    if (!preg_match('/(?P<version>\d+\.\d+\.\d+)/', $stdout, $matches)) {
+    $regex = '/^PHP CS Fixer (?<version>\d+(?:\.\d+){2})\b/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
       return null;
     }
 

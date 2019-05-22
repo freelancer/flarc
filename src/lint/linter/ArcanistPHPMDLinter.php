@@ -64,14 +64,15 @@ final class ArcanistPHPMDLinter extends ArcanistExternalLinter {
 
   public function getVersion(): ?string {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
-    $matches = [];
 
-    $regex = '/^PHPMD (?P<version>\d+\.\d+\.\d+)\b/';
-    if (preg_match($regex, $stdout, $matches)) {
-      return $matches['version'];
-    } else {
+    $matches = [];
+    $regex = '/^PHPMD (?<version>\d+(?:\.\d+){2})$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
       return null;
     }
+
+    return $matches['version'];
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr): array {

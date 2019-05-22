@@ -43,13 +43,13 @@ final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
   }
 
   public function getVersion() {
-    list($stdout) = execx(
-      '%C --version',
-      $this->getExecutableCommand());
+    list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    if (!preg_match('/^(?P<version>\d+\.\d+\.\d+)$/', $stdout, $matches)) {
-      return false;
+    $regex = '/^(?<version>\d+\.\d+)$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
+      return null;
     }
 
     return $matches['version'];

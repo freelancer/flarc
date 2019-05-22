@@ -39,7 +39,7 @@ final class ArcanistComposerOutdatedLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^Composer version (?P<version>\d+\.\d+\.\d+)\b/';
+    $regex = '/^Composer version (?<version>\d+(?:\.\d+){2})\b/';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;

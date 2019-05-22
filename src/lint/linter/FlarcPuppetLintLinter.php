@@ -106,7 +106,7 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^puppet-lint (?P<version>\d+\.\d+\.\d+)$/';
+    $regex = '/^puppet-lint (?<version>\d+(?:\.\d+){2})$/';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;

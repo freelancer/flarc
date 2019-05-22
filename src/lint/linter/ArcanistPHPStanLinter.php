@@ -51,7 +51,9 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    if (!preg_match('/(?P<version>\d+\.\d+\.\d+)/', $stdout, $matches)) {
+    $regex = '/^PHPStan - PHP Static Analysis Tool (?<version>\d+(?:\.\d+){2})$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
       return null;
     }
 

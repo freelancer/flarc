@@ -53,7 +53,7 @@ final class ArcanistKTLintLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^(?P<version>\d+\.\d+\.\d+)$/';
+    $regex = '/^(?<version>\d+(?:\.\d+){2})$/';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;

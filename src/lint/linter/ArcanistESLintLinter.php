@@ -35,12 +35,12 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
   }
 
   public function getVersion() {
-    list($stdout) = execx(
-      '%C --version',
-      $this->getExecutableCommand());
+    list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    if (!preg_match('/^v(?P<version>\d+\.\d+\.\d+)$/', $stdout, $matches)) {
+    $regex = '/^v(?<version>\d+(?:\.\d+){2})$/';
+
+    if (!preg_match($regex, $stdout, $matches)) {
       return null;
     }
 
