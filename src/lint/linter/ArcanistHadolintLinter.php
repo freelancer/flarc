@@ -49,7 +49,7 @@ final class ArcanistHadolintLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^v(?P<version>\d+\.\d+\.\d+)-/';
+    $regex = '/^Haskell Dockerfile Linter v(?P<version>\d+\.\d+\.\d+)-/';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;

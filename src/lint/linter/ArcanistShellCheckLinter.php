@@ -73,7 +73,7 @@ final class ArcanistShellCheckLinter extends ArcanistExternalLinter {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = null;
-    $regex = '/^version: (?P<version>\d+\.\d+\.\d+)$/';
+    $regex = '/^version: (?P<version>\d+\.\d+\.\d+)$/m';
 
     if (!preg_match($regex, $stdout, $matches)) {
       return null;
