@@ -1,5 +1,0 @@
-<?php
-class X {}
-class Y {}
-~~~~~~~~~~
-warning:3:1:XHP1015:Single Declaration Per File

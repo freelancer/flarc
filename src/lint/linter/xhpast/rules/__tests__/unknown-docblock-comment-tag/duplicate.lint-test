@@ -1,9 +1,0 @@
-<?php
-
-/**
- * @tag
- * @tag
- */
-class SomeClass {}
-~~~~~~~~~~
-advice:3:1:XHP1017:Unknown Docblock Comment Tag

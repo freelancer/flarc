@@ -1,9 +1,0 @@
-<?php
-
-echo php_sapi_name();
-~~~~~~~~~~
-advice:3:6:XHP1022:Use of `php_sapi_name` Function
-~~~~~~~~~~
-<?php
-
-echo PHP_SAPI;

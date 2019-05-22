@@ -1,7 +1,0 @@
-<?php
-is_null($x);
-~~~~~~~~~~
-advice:2:1:XHP1018:Unnecessary Call to `is_null`
-~~~~~~~~~~
-<?php
-$x === null;

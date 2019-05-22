@@ -1,9 +1,0 @@
-<?php
-
-new closure();
-new Closure();
-new \Closure();
-~~~~~~~~~~
-error:3:1:XHP1028:Instantiation of `Closure`
-error:4:1:XHP1028:Instantiation of `Closure`
-error:5:1:XHP1028:Instantiation of `Closure`

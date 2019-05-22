@@ -1,9 +1,0 @@
-<?php
-
-/**
- * @return int
- * @return string
- */
-function some_function() {}
-~~~~~~~~~~
-warning:3:1:XHP2002:Incorrect Docblock `@return` Tag

@@ -1,7 +1,0 @@
-<?php
-class X {}
-interface X {}
-trait X {}
-~~~~~~~~~~
-error:3:11:XHP1016:Duplicate `class` Declaration
-error:4:7:XHP1016:Duplicate `class` Declaration

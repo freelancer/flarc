@@ -1,7 +1,0 @@
-<?php
-
-function foo1($a, $b, $unused, $unused) {}
-function foo2($a, $b, $unused, &$unused) {}
-~~~~~~~~~~
-error:3:32:XHP1030:Duplicate Function Parameter Names
-error:4:33:XHP1030:Duplicate Function Parameter Names

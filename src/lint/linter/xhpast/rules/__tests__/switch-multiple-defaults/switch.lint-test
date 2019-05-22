@@ -1,9 +1,0 @@
-<?php
-switch ($x) {
-  default: break;
-  default: break;
-  default: break;
-}
-~~~~~~~~~~
-error:4:3:XHP1011:Multiple `default` Blocks Within `switch` Statement
-error:5:3:XHP1011:Multiple `default` Blocks Within `switch` Statement

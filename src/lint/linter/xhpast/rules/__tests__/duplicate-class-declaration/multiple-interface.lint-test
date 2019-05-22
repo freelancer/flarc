@@ -1,5 +1,0 @@
-<?php
-interface X {}
-interface X {}
-~~~~~~~~~~
-error:3:11:XHP1016:Duplicate `class` Declaration

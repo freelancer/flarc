@@ -1,7 +1,0 @@
-<?php
-class SomeClass {
-  public function someMethod() {}
-  public function someMethod($parameter) {}
-}
-~~~~~~~~~~
-error:4:19:XHP1003:Duplicate Method Declaration

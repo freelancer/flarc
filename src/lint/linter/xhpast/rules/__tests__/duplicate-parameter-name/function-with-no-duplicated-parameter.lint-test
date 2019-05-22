@@ -1,6 +1,0 @@
-<?php
-
-function foo1() {}
-function foo2($bar, $baz) {}
-function foo3(&$bar, $baz) {}
-~~~~~~~~~~

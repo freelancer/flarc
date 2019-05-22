@@ -1,5 +1,0 @@
-<?php
-class X {}
-class X {}
-~~~~~~~~~~
-error:3:7:XHP1016:Duplicate `class` Declaration

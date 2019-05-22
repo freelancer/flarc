@@ -1,9 +1,0 @@
-<?php
-
-/**
- * @todo This is a comment.
- * @xyz
- */
-function some_function() {}
-~~~~~~~~~~
-advice:5:4:XHP1017:Unknown Docblock Comment Tag

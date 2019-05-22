@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @tag This comment contains the word "tag".
- */
-class SomeClass {}
-~~~~~~~~~~
-advice:4:4:XHP1017:Unknown Docblock Comment Tag

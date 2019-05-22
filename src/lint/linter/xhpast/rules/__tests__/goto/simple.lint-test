@@ -1,9 +1,0 @@
-<?php
-goto a;
-echo 'b';
-
-a:
-echo 'a';
-~~~~~~~~~~
-error:2:1:XHP1002:Use of `goto` Statement
-error:5:1:XHP1002:Use of `goto` Statement

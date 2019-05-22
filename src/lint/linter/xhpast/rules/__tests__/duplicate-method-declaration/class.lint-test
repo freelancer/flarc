@@ -1,9 +1,0 @@
-<?php
-class SomeClass {
-  public function someMethod() {}
-  public function someMethod() {}
-  public function someMethod() {}
-}
-~~~~~~~~~~
-error:4:19:XHP1003:Duplicate Method Declaration
-error:5:19:XHP1003:Duplicate Method Declaration

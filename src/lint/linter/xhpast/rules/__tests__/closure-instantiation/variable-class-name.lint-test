@@ -1,5 +1,0 @@
-<?php
-
-$class_name = 'SomeClass';
-new $class_name();
-~~~~~~~~~~

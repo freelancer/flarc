@@ -1,7 +1,0 @@
-<?php
-class X {}
-
-if ($x) {
-  class X {}
-}
-~~~~~~~~~~

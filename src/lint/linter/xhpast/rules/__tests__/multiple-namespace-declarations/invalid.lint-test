@@ -1,7 +1,0 @@
-<?php
-namespace Foo;
-class X {}
-namespace Bar;
-class X {}
-~~~~~~~~~~
-warning:4:1:XHP1026:Multiple `namespace` declarations

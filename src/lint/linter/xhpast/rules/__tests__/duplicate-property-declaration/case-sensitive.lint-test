@@ -1,6 +1,0 @@
-<?php
-class SomeClass {
-  public $property = 0;
-  public $PROPERTY = 1;
-}
-~~~~~~~~~~

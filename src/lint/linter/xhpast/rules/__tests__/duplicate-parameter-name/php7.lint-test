@@ -1,5 +1,0 @@
-<?php
-
-function f(array $arrays, array ...$arrays) {}
-~~~~~~~~~~
-error:3:36:XHP1030:Duplicate Function Parameter Names

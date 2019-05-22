@@ -1,7 +1,0 @@
-<?php
-trait SomeTrait {
-  public $property;
-  public $property;
-}
-~~~~~~~~~~
-error:4:10:XHP1006:Duplicate Property Declaration

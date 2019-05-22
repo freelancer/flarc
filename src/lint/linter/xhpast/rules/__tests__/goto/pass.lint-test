@@ -1,4 +1,0 @@
-<?php
-// No goto statements in this comment
-echo 'No goto statement here!';
-~~~~~~~~~~

@@ -1,6 +1,0 @@
-<?php
-class ClassName {
-  public function someMethod() {}
-  public function someOtherMethod() {}
-}
-~~~~~~~~~~

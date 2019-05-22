@@ -1,7 +1,0 @@
-<?php
-some_func($arg1,$arg2, $arg3);
-~~~~~~~~~~
-warning:2:16:XHP1020:Spacing Around Commas
-~~~~~~~~~~
-<?php
-some_func($arg1, $arg2, $arg3);

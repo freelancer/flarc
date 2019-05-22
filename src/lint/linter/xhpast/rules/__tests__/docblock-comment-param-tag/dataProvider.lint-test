@@ -1,8 +1,0 @@
-<?php
-final class SomeTest {
-  /**
-   * @dataProvider getData
-   */
-  public function testSomething($a, $b) {}
-}
-~~~~~~~~~~

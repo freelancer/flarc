@@ -1,9 +1,0 @@
-<?php
-class SomeClass {
-  public $property;
-  protected $property;
-  private $property;
-}
-~~~~~~~~~~
-error:4:13:XHP1006:Duplicate Property Declaration
-error:5:11:XHP1006:Duplicate Property Declaration
