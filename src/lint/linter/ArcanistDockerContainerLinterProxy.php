@@ -71,6 +71,19 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
     return $this->proxiedLinter;
   }
 
+  public function getProxiedLinterExecutableCommand(): PhutilCommandString {
+    $linter = $this->getProxiedLinter();
+
+    // NOTE: We can't call `$linter->getExecutableCommand()` as that will
+    // attempt to execute the command directly (bypassing Docker) in
+    // @{method:ArcanistExternalLinter::checkBinaryConfiguration}.
+    if ($linter->shouldUseInterpreter()) {
+      return csprintf('%s %s', $linter->getInterpreter(), $linter->getBinary());
+    } else {
+      return csprintf('%s', $linter->getBinary());
+    }
+  }
+
   /**
    * Mount an additional path into the Docker container.
    *
@@ -360,24 +373,12 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       return $this->getProxiedLinter()->buildFutures($paths);
     }
 
-    // NOTE: We can't call `$this->getProxiedLinter()->getExecutableCommand()`
-    // as that will attempt to execute the command directly (bypassing Docker)
-    // in @{method:ArcanistExternalLinter::checkBinaryConfiguration}.
-    if ($this->getProxiedLinter()->shouldUseInterpreter()) {
-      $cmd = csprintf(
-        '%s %s',
-        $this->getProxiedLinter()->getInterpreter(),
-        $this->getProxiedLinter()->getBinary());
-    } else {
-      $cmd = csprintf('%s', $this->getProxiedLinter()->getBinary());
-    }
-
     $bin = csprintf(
       '%C %Ls %s %C %Ls',
       $this->getExecutableCommand(),
       $this->getCommandFlags(),
       $this->getImage(),
-      $cmd,
+      $this->getProxiedLinterExecutableCommand(),
       $this->getProxiedLinter()->getCommandFlags());
     $futures = [];
 

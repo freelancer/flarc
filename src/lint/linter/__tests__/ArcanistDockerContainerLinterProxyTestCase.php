@@ -70,6 +70,34 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $this->assertEqual($engine, $proxied->getEngine());
   }
 
+  public function testGetProxiedLinterExecutableCommandWithoutInterpreter(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $binary = 'linter';
+    $proxied->expects()->shouldUseInterpreter()->andReturns(false);
+    $proxied->expects()->getDefaultBinary()->andReturns($binary);
+
+    $this->assertEqual(
+      (string)csprintf('%s', $binary),
+      (string)$linter->getProxiedLinterExecutableCommand());
+  }
+
+  public function testGetProxiedLinterExecutableCommandWithInterpreter(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $interpreter = 'interpreter';
+    $binary = 'linter';
+    $proxied->expects()->shouldUseInterpreter()->andReturns(true);
+    $proxied->expects()->getDefaultInterpreter()->andReturns($interpreter);
+    $proxied->expects()->getDefaultBinary()->andReturns($binary);
+
+    $this->assertEqual(
+      (string)csprintf('%s %s', $interpreter, $binary),
+      (string)$linter->getProxiedLinterExecutableCommand());
+  }
+
   public function testShouldProxy(): void {
     $linter = $this->getLinterWithMockProxiedLinter();
 
