@@ -65,21 +65,26 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function getMandatoryFlags(): array {
-    return [
+    $flags = [
       'analyse',
-      '--configuration='.$this->config,
       '--no-progress',
       '--error-format=json',
       '--memory-limit=-1',
       '--no-ansi',
       '--no-interaction',
     ];
+
+    if ($this->config !== null) {
+      $flags[] = '--configuration='.$this->config;
+    }
+
+    return $flags;
   }
 
   public function getLinterConfigurationOptions(): array {
     $options = [
       'phpstan.config' => [
-        'type' => 'string',
+        'type' => 'optional string',
         'help' => pht('The path to a %s configuration file', 'PHPStan'),
       ],
     ];
