@@ -51,7 +51,7 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
   public function getLinterConfigurationOptions(): array {
     $options = [
       'php-cs-fixer.config' => [
-        'type' => 'string',
+        'type' => 'optional string',
         'help' => pht('The path to a %s configuration file', 'php-cs-fixer'),
       ],
     ];
@@ -93,15 +93,20 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function getMandatoryFlags(): array {
-    return [
+    $flags = [
       'fix',
-      '--config='.$this->config,
       '--diff',
       '--diff-format=udiff',
       '--dry-run',
       '--format=json',
       '-vvv',
     ];
+
+    if ($this->config !== null) {
+      $flags[] = '--config='.$this->config;
+    }
+
+    return $flags;
   }
 
   protected function parseLinterOutput($_, $err, $stdout, $stderr) {
