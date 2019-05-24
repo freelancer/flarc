@@ -74,11 +74,17 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   public function getProxiedLinterExecutableCommand(): PhutilCommandString {
     $linter = $this->getProxiedLinter();
 
+    if ($linter->shouldUseInterpreter()) {
+      $interpreter = $linter->getInterpreter();
+    } else {
+      $interpreter = null;
+    }
+
     // NOTE: We can't call `$linter->getExecutableCommand()` as that will
     // attempt to execute the command directly (bypassing Docker) in
     // @{method:ArcanistExternalLinter::checkBinaryConfiguration}.
-    if ($linter->shouldUseInterpreter()) {
-      return csprintf('%s %s', $linter->getInterpreter(), $linter->getBinary());
+    if ($interpreter !== null) {
+      return csprintf('%s %s', $interpreter, $linter->getBinary());
     } else {
       return csprintf('%s', $linter->getBinary());
     }

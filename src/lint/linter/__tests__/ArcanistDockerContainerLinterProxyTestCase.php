@@ -102,6 +102,20 @@ final class ArcanistDockerContainerLinterProxyTestCase
       (string)$linter->getProxiedLinterExecutableCommand());
   }
 
+  public function testGetProxiedLinterExecutableCommandWithNullInterpreter(): void {
+    $linter  = $this->getLinterWithMockProxiedLinter();
+    $proxied = $linter->getProxiedLinter();
+
+    $binary = 'linter';
+    $proxied->expects()->shouldUseInterpreter()->andReturns(true);
+    $proxied->expects()->getDefaultInterpreter()->andReturns(null);
+    $proxied->expects()->getDefaultBinary()->andReturns($binary);
+
+    $this->assertEqual(
+      (string)csprintf('%s', $binary),
+      (string)$linter->getProxiedLinterExecutableCommand());
+  }
+
   public function testShouldProxy(): void {
     $linter = $this->getLinterWithMockProxiedLinter();
 
