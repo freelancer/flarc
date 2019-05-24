@@ -1,0 +1,15 @@
+def hello()
+  puts 'hello world'
+~~~~~~~~~~
+warning:2:0
+~~~~~~~~~
+~~~~~~~~~
+{
+  "config": {
+    "docker-proxy.image.name": "ruby",
+    "docker-proxy.linter.type": "ruby",
+    "severity": {
+      "syntax error": "warning"
+    }
+  }
+}
