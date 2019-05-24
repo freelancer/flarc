@@ -67,6 +67,8 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
 
     if ($this->config !== null) {
       $options[] = '--config='.$this->config;
+    } else {
+      $options[] = '--no-eslintrc';
     }
 
     if ($this->env !== null) {
