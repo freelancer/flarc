@@ -49,14 +49,12 @@ final class ArcanistYAMLLintLinter extends ArcanistExternalLinter {
   }
 
   public function getVersion(): ?string {
-    list($stdout) = execx('%C --version', $this->getExecutableCommand());
+    list($stdout, $stderr) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
-    if (!preg_match(
-      '/^yamllint\s(?P<version>\d+\.\d+\.\d+)$/',
-      $stdout,
-      $matches)
-    ) {
+    $regex = '/^yamllint (?P<version>\d+\.\d+\.\d+)$/';
+
+    if (!preg_match($regex, $stderr, $matches)) {
       return null;
     }
 
