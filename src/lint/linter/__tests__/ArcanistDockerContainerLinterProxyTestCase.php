@@ -6,7 +6,11 @@
 final class ArcanistDockerContainerLinterProxyTestCase
   extends ArcanistExternalLinterTestCase {
 
-  protected function willRunOneTest($test_method_name) {
+
+/* -(  Hooks  )-------------------------------------------------------------- */
+
+
+  protected function willRunOneTest($test): void {
     putenv(ArcanistDockerContainerLinterProxy::ENV_SHOULD_PROXY);
   }
 
@@ -14,6 +18,23 @@ final class ArcanistDockerContainerLinterProxyTestCase
     // Clean up the `Mockery` container used by the current test and run any
     // verification tasks needed for our expectations.
     Mockery::close();
+  }
+
+
+/* -(  Utility Methods  )---------------------------------------------------- */
+
+
+  protected function getLintEngine(): ArcanistLintEngine {
+    $working_copy = ArcanistWorkingCopyIdentity::newDummyWorkingCopy();
+
+    $configuration_manager = new ArcanistConfigurationManager();
+    $configuration_manager->setWorkingCopyIdentity($working_copy);
+
+    $engine = new ArcanistUnitTestableLintEngine();
+    $engine->setWorkingCopy($working_copy);
+    $engine->setConfigurationManager($configuration_manager);
+
+    return $engine;
   }
 
   protected function getLinter(): ArcanistLinter {
@@ -26,13 +47,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
   protected function getLinterWithMockProxiedLinter(): ArcanistLinter {
     $linter = new ArcanistDockerContainerLinterProxy();
 
-    $working_copy = ArcanistWorkingCopyIdentity::newDummyWorkingCopy();
-    $configuration_manager = new ArcanistConfigurationManager();
-    $configuration_manager->setWorkingCopyIdentity($working_copy);
-
-    $engine = new ArcanistUnitTestableLintEngine();
-    $engine->setWorkingCopy($working_copy);
-    $engine->setConfigurationManager($configuration_manager);
+    $engine = $this->getLintEngine();
     $linter->setEngine($engine);
 
     $mock = Mockery::mock(ArcanistExternalLinter::class);
@@ -42,6 +57,10 @@ final class ArcanistDockerContainerLinterProxyTestCase
 
     return $linter;
   }
+
+
+/* -(  Tests  )-------------------------------------------------------------- */
+
 
   public function testGetImage(): void {
     $linter = $this->getLinter();
