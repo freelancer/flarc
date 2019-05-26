@@ -1,0 +1,6 @@
+*** Keywords ***
+| Example Keyword
+| | log | hello, world
+~~~~~~~~~
+error:2:0:TooFewKeywordSteps
+error:3:0:RequireKeywordDocumentation

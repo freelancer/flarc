@@ -1,6 +1,7 @@
 <?php
 
 final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
+
   protected $maxLineLength = 100;
   protected $ruleFile;
 
@@ -136,4 +137,5 @@ final class ArcanistRobotFrameworkLintLinter extends ArcanistExternalLinter {
 
     return $messages;
   }
+
 }
