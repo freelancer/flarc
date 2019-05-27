@@ -103,11 +103,11 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
    * container. If the external linter requires access to any files outside of
    * the project root directory, they must be mounted explicitly.
    */
-  public function mount(string $path) {
+  public function mount(string $path): string {
     Filesystem::assertExists($path);
     $this->mounts[] = $path;
 
-    return $this;
+    return $path;
   }
 
   public function setImage(string $image) {

@@ -87,7 +87,7 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $path  = __FILE__;
     $mount = sprintf('type=bind,source=%s,target=%s', $path, $path);
 
-    $linter->mount($path);
+    $this->assertEqual($path, $linter->mount($path));
     $this->assertTrue(in_array($mount, $linter->getMounts()));
   }
 
