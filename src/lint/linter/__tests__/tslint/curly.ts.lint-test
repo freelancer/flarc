@@ -1,7 +1,0 @@
-var foo = 1;
-var bar = 2;
-if (foo === bar)
-    foo++;
-    bar++;
-~~~~~~~~~~
-error:2:0
