@@ -38,6 +38,12 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   private $shouldProxy;
 
 
+  public function __clone() {
+    if ($this->proxiedLinter !== null) {
+      $this->proxiedLinter = clone $this->proxiedLinter;
+    }
+  }
+
   /**
    * @todo We should maybe attempt to validate the image name (see
    *   https://stackoverflow.com/a/37867949).

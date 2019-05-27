@@ -62,6 +62,16 @@ final class ArcanistDockerContainerLinterProxyTestCase
 /* -(  Tests  )-------------------------------------------------------------- */
 
 
+  public function testClone(): void {
+    $linter_a = $this->getLinterWithMockProxiedLinter();
+    $linter_b = clone $linter_a;
+
+    $proxied_linter_a = $linter_a->getProxiedLinter();
+    $proxied_linter_b = $linter_b->getProxiedLinter();
+
+    $this->assertFalse($proxied_linter_a === $proxied_linter_b);
+  }
+
   public function testGetImage(): void {
     $linter = $this->getLinter();
 
