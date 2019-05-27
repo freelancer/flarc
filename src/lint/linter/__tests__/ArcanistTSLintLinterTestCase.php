@@ -6,13 +6,15 @@ final class ArcanistTSLintLinterTestCase
   private $config;
 
   protected function getLinter(): ArcanistLinter {
-    // We need to specify this configuration as newer versions of TSLint do not
-    // enable any linter rules by default.
-    $this->config = new TempFile('config.json');
+    $this->config = new TempFile('tslint.json');
 
-    $config = '{ "rules": { "no-eval": true, "curly": true } }';
-
-    Filesystem::writeFile($this->config, $config);
+    Filesystem::writeFile(
+      $this->config,
+      phutil_json_encode([
+        'rules' => [
+          'no-eval' => true,
+        ],
+      ]));
 
     $linter = parent::getLinter();
     $linter->setLinterConfigurationValue(
@@ -172,7 +174,6 @@ final class ArcanistTSLintLinterTestCase
     $compare_lint_method->invoke($this, $basename, $expect, $result);
     $compare_transform_method->invoke($this, $xform, $after_lint);
   }
-
 
   public function testLinter(): void {
     $this->executeTestsInDirectory(__DIR__.'/tslint/');
