@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ $X ]]; then
+if [[ -n $X ]]; then
   echo "derp"
 fi
 ~~~~~~~~~~
