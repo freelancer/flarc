@@ -1,0 +1,10 @@
+<?php
+class Foo {
+  public function test(): void {}
+}
+
+class Bar extends Foo {
+	public function test(string $test): void {}
+}
+~~~~~~
+error:7:2
