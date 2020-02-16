@@ -19,7 +19,7 @@ final class FreelancerPhpunitConsoleRenderer extends ArcanistUnitRenderer {
     }
 
     foreach ($errors as $error) {
-      echo $this->renderer->renderUnitResult($error);
+      echo $this->renderUnitResult($error);
     }
   }
 
