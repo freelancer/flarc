@@ -207,9 +207,8 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
 
         $results[] = $result;
       }
-
-      return $results;
     }
-  }
 
+    return $results;
+  }
 }
