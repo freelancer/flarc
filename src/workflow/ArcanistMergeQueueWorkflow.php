@@ -7,7 +7,7 @@
 final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
 
   private $branch;
-  private $revision;
+  private $revisions;
   private $messageFile;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
@@ -52,12 +52,7 @@ EOTEXT
 
   public function getArguments() {
     return array(
-      'revision' => array(
-        'param' => 'id',
-        'help' => pht(
-          'Use the message from a specific revision, rather than '.
-          'inferring the revision based on branch content.'),
-      ),
+      '*' => 'revisions',
     );
   }
 
@@ -68,11 +63,32 @@ EOTEXT
 
     $submitter = $this->getUserName();
 
-    $this->findRevision();
+    $this->findRevisions();
     $this->jenkinsSubmit($submitter);
 
     echo pht('Done submitting to Merge Queue.'), "\n";
     return 0;
+  }
+
+  private function readArguments() {
+    $repository_api = $this->getRepositoryAPI();
+
+    $branch = $this->getArgument('branch');
+    if (empty($branch)) {
+      $branch = $repository_api->getBranchName();
+      if (!strlen($branch)) {
+        $branch = $repository_api->getWorkingCopyRevision();
+      }
+      $branch = array($branch);
+    }
+
+    if (count($branch) !== 1) {
+      throw new ArcanistUsageException(
+        pht('Specify exactly one branch to land changes from.'));
+    }
+
+    $this->branch = head($branch);
+    return $branch;
   }
 
   public function validate() {
@@ -88,6 +104,69 @@ EOTEXT
     }
 
     $this->requireCleanWorkingCopy();
+  }
+
+  private function findRevisions() {
+    $this->revisions = array();
+    $repository_api = $this->getRepositoryAPI();
+
+    $revision_ids = $this->getArgument('revisions');
+    if ($revision_ids) {
+      foreach ($revision_ids as $revision_id) {
+        $revision_id = $this->normalizeRevisionID($revision_id);
+        $revisions = $this->getConduit()->callMethodSynchronous(
+          'differential.query',
+          array(
+            'ids' => array($revision_id),
+          ));
+        if (!$revisions) {
+          throw new ArcanistUsageException(pht(
+            "No such revision '%s'!",
+            "D{$revision_id}"));
+        }
+        $this->revisions = array_merge($this->revisions, $revisions);
+      }
+    } else {
+      $this->revisions = $repository_api->loadWorkingCopyDifferentialRevisions(
+        $this->getConduit(),
+        array());
+    }
+
+    if (!count($this->revisions)) {
+      throw new ArcanistUsageException(pht(
+        "arc cannot identify which revision exists on branch '%s'.".
+        "Update the revision with recent changes to synchronize the ".
+        "branch name and hashes, ".
+        "or use '%s' to amend the commit message at HEAD, or use ".
+        "'%s' to select a revision explicitly.",
+        $this->branch,
+        'arc amend',
+        '--revision <id>'));
+    }
+
+    foreach ($this->revisions as $revision) {
+      $rev_id = $revision['id'];
+      $rev_title = $revision['title'];
+      $this->checkRevisionState($revision);
+
+      $message = $this->getConduit()->callMethodSynchronous(
+        'differential.getcommitmessage',
+        array(
+          'revision_id' => $rev_id,
+        ));
+
+      $this->messageFile = new TempFile();
+      Filesystem::writeFile($this->messageFile, $message);
+
+      echo pht(
+        "Submitting revision '%s'...",
+        "D{$rev_id}: {$rev_title}")."\n";
+
+      $diff_phid = idx($revision, 'activeDiffPHID');
+      if ($diff_phid) {
+        $this->checkForBuildables($diff_phid);
+      }
+    }
   }
 
   private function jenkinsSubmit($submitter) {
@@ -119,12 +198,12 @@ EOTEXT
     }
 
     $build_url = self::JENKINS_URL.self::API_BUILD_URL.'/buildWithParameters';
-    $gaf_diff_id = 'D'.$this->revision['id'];
+    $gaf_diff_ids = array_map(function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
 
     $build_data = http_build_query(
       array(
         'author' => $submitter,
-        'gafDiffId' => $gaf_diff_id,
+        'gafDiffIds' => implode(',', $gaf_diff_ids),
       ));
 
     $ch = curl_init();
@@ -134,88 +213,6 @@ EOTEXT
     curl_setopt($ch, CURLOPT_USERPWD, $username.':'.$token);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_exec($ch);
-  }
-
-  private function readArguments() {
-    $repository_api = $this->getRepositoryAPI();
-
-    $branch = $this->getArgument('branch');
-    if (empty($branch)) {
-      $branch = $repository_api->getBranchName();
-      if (!strlen($branch)) {
-        $branch = $repository_api->getWorkingCopyRevision();
-      }
-      $branch = array($branch);
-    }
-
-    // TODO: Allow multiple branches
-    if (count($branch) !== 1) {
-      throw new ArcanistUsageException(
-        pht('Specify exactly one branch to land changes from.'));
-    }
-
-    $this->branch = head($branch);
-    return $branch;
-  }
-
-  private function findRevision() {
-    $repository_api = $this->getRepositoryAPI();
-
-    $revision_id = $this->getArgument('revision');
-    if ($revision_id) {
-      $revision_id = $this->normalizeRevisionID($revision_id);
-      $revisions = $this->getConduit()->callMethodSynchronous(
-        'differential.query',
-        array(
-          'ids' => array($revision_id),
-        ));
-      if (!$revisions) {
-        throw new ArcanistUsageException(pht(
-          "No such revision '%s'!",
-          "D{$revision_id}"));
-      }
-    } else {
-      $revisions = $repository_api->loadWorkingCopyDifferentialRevisions(
-        $this->getConduit(),
-        array());
-    }
-
-    if (!count($revisions)) {
-      throw new ArcanistUsageException(pht(
-        "arc cannot identify which revision exists on branch '%s'.".
-        "Update the revision with recent changes to synchronize the ".
-        "branch name and hashes, ".
-        "or use '%s' to amend the commit message at HEAD, or use ".
-        "'%s' to select a revision explicitly.",
-        $this->branch,
-        'arc amend',
-        '--revision <id>'));
-    }
-
-    // TODO: Extend to multiple revisions
-    $this->revision = head($revisions);
-    $rev_id = $this->revision['id'];
-    $rev_title = $this->revision['title'];
-
-    $this->checkRevisionState($this->revision);
-
-    $message = $this->getConduit()->callMethodSynchronous(
-      'differential.getcommitmessage',
-      array(
-        'revision_id' => $rev_id,
-      ));
-
-    $this->messageFile = new TempFile();
-    Filesystem::writeFile($this->messageFile, $message);
-
-    echo pht(
-      "Submitting revision '%s'...",
-      "D{$rev_id}: {$rev_title}")."\n";
-
-    $diff_phid = idx($this->revision, 'activeDiffPHID');
-    if ($diff_phid) {
-      $this->checkForBuildables($diff_phid);
-    }
   }
 
   private function checkRevisionState($revision) {
