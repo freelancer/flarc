@@ -9,6 +9,7 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   private $branch;
   private $revisions;
   private $messageFile;
+  private $skipTests;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
   const JENKINS_URL = 'https://ci.tools.flnltd.com';
@@ -52,6 +53,10 @@ EOTEXT
 
   public function getArguments() {
     return array(
+      'skip-tests' => array(
+        'help' => pht(
+          'Skip tests on the merge queue.'),
+        ),
       '*' => 'revisions',
     );
   }
@@ -87,6 +92,7 @@ EOTEXT
         pht('Specify exactly one branch to land changes from.'));
     }
 
+    $this->skipTests = $this->getArgument('skip-tests');
     $this->branch = head($branch);
     return $branch;
   }
@@ -197,14 +203,20 @@ EOTEXT
       );
     }
 
+
+
     $build_url = self::JENKINS_URL.self::API_BUILD_URL.'/buildWithParameters';
     $gaf_diff_ids = array_map(function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
+    $build_data = array(
+      'author' => $submitter,
+      'gafDiffIds' => implode(',', $gaf_diff_ids),
+    );
 
-    $build_data = http_build_query(
-      array(
-        'author' => $submitter,
-        'gafDiffIds' => implode(',', $gaf_diff_ids),
-      ));
+    if ($this->skipTests) {
+      $build_data['skipTest'] = 'true';
+    }
+
+    $build_data_http = http_build_query($build_data);
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $build_url);
