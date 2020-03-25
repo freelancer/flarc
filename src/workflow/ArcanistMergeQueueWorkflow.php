@@ -281,17 +281,13 @@ EOTEXT
     }
 
     if ($state_warning !== null) {
-      $prompt = pht('Submit revision in the wrong state?');
-
       id(new PhutilConsoleBlock())
         ->addParagraph(tsprintf('<bg:yellow>** %s **</bg>', $state_header))
         ->addParagraph(tsprintf('%B', $state_warning))
         ->draw();
 
-      $ok = phutil_console_confirm($prompt);
-      if (!$ok) {
-        throw new ArcanistUserAbortException();
-      }
+        throw new ArcanistUsageException(
+          pht('Revision is not in an accepted state.'));
     }
 
     if ($rev_auxiliary) {
