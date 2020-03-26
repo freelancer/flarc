@@ -342,8 +342,8 @@ EOTEXT
     try {
       $this->checkForBuildablesWithPlanBehaviors($diff_phid);
       return;
-    } catch (ArcanistUserAbortException $abort_ex) {
-      throw $abort_ex;
+    } catch (ArcanistUsageException $usage_ex) {
+      throw $usage_ex;
     } catch (Exception $ex) {
       // Continue with the older approach, below.
     }
@@ -379,17 +379,14 @@ EOTEXT
         pht('Harbormaster builds for the active diff completed successfully.'));
       return;
     }
-
     switch ($buildable['buildableStatus']) {
       case 'building':
         $message = pht(
           'Harbormaster is still building the active diff for this revision.');
-        $prompt = pht('Submit revision anyway, despite ongoing build?');
         break;
       case 'failed':
         $message = pht(
           'Harbormaster failed to build the active diff for this revision.');
-        $prompt = pht('Submit revision anyway, despite build failures?');
         break;
       default:
         // If we don't recognize the status, just bail.
@@ -423,9 +420,7 @@ EOTEXT
       pht('Harbormaster URI'),
       $buildable['uri']);
 
-    if (!phutil_console_confirm($prompt)) {
-      throw new ArcanistUserAbortException();
-    }
+    throw new ArcanistUsageException('Harbormaster builds ongoing or failed.');
   }
 
   private function checkForBuildablesWithPlanBehaviors($diff_phid) {
@@ -545,13 +540,11 @@ EOTEXT
         pht('BUILD FAILURES'),
         pht(
           'Harbormaster failed to build the active diff for this revision:'));
-      $prompt = pht('Submit revision anyway, despite build failures?');
     } else if ($ongoing_builds) {
       $this->writeWarn(
         pht('ONGOING BUILDS'),
         pht(
           'Harbormaster is still building the active diff for this revision:'));
-      $prompt = pht('Submit revision anyway, despite ongoing build?');
     }
 
     $show_builds = array_merge($failed_builds, $ongoing_builds);
@@ -583,8 +576,6 @@ EOTEXT
         $buildable_uri);
     }
 
-    if (!phutil_console_confirm($prompt)) {
-      throw new ArcanistUserAbortException();
-    }
+    throw new ArcanistUsageException('Harbormaster builds ongoing or failed.');
   }
 }
