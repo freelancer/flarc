@@ -30,6 +30,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
   private $shouldRunInDocker;
   private $sourceDirectory;
   private $testDirectory;
+  private $testName;
 
   /**
    * Allows the unit test engine execute all tests with `arc unit --everything`.
@@ -135,6 +136,18 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     }
 
     $results = [];
+    $failed_test_codes = [
+      ArcanistUnitTestResult::RESULT_FAIL,
+      ArcanistUnitTestResult::RESULT_BROKEN,
+      ArcanistUnitTestResult::RESULT_UNSOUND,
+    ];
+    $errors = [];
+
+    if ($this->renderer) {
+      echo $this->renderer->getName($this->getConfigurationManager());
+      echo "\n";
+    }
+
     $futures = new FutureIterator($futures);
 
     foreach ($futures->limit(4) as $test => $future) {
@@ -148,11 +161,21 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
 
       if ($this->renderer) {
         foreach ($result as $unit_result) {
-          echo $this->renderer->renderUnitResult($unit_result);
+          echo $this->renderer->renderBasicResult($unit_result);
+
+          if (in_array($unit_result->getResult(), $failed_test_codes)) {
+            $errors[] = $unit_result;
+          }
         }
       }
 
       $results[] = $result;
+    }
+
+    echo "\n\n";
+
+    if ($this->renderer) {
+      $this->renderer->printFailingUnitTests($errors);
     }
 
     return array_mergev($results);
