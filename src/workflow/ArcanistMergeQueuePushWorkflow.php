@@ -199,7 +199,7 @@ EOTEXT
     $build_url = self::JENKINS_URL.self::API_BUILD_URL.'/buildWithParameters';
     $diff_ids = array_map(function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
     $build_data = array(
-      'author' => $submitter,
+      'author' => "@{$submitter}",
       'diff' => implode(',', $diff_ids),
       'channel' => "@{$submitter}",
     );
