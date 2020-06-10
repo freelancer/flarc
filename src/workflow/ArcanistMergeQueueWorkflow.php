@@ -10,6 +10,7 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   private $revisions;
   private $messageFile;
   private $skipTests;
+  private $skipPush;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
   const JENKINS_URL = 'https://ci.tools.flnltd.com';
@@ -22,7 +23,7 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
 
   public function getCommandHelp() {
     return phutil_console_format(<<<EOTEXT
-          Publish an accepted revision to Merge Queue after review.
+          Submit diffs to the Merge Queue.
 
 EOTEXT
       );
@@ -31,6 +32,7 @@ EOTEXT
   public function getCommandSynopses() {
     return phutil_console_format(<<<EOTEXT
       **mergequeue** [__options__] [__ref__]
+      **mergequeue** --skip-tests D1xxxx D2xxxx .....
 EOTEXT
       );
   }
@@ -56,6 +58,10 @@ EOTEXT
       'skip-tests' => array(
         'help' => pht(
           'Skip tests on the merge queue.'),
+        ),
+      'skip-push' => array(
+        'help' => pht(
+          'Skip push on the merge queue.'),
         ),
       '*' => 'revisions',
     );
@@ -93,6 +99,7 @@ EOTEXT
     }
 
     $this->skipTests = $this->getArgument('skip-tests');
+    $this->skipPush = $this->getArgument('skip-push');
     $this->branch = head($branch);
     return $branch;
   }
@@ -214,6 +221,9 @@ EOTEXT
 
     if ($this->skipTests) {
       $build_data['skipTest'] = 'true';
+    }
+    if ($this->skipPush) {
+      $build_data['skipPush'] = 'true';
     }
 
     $build_data_http = http_build_query($build_data);

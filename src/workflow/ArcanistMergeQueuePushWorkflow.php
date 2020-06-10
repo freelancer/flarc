@@ -21,14 +21,15 @@ final class ArcanistMergeQueuePushWorkflow extends ArcanistWorkflow {
 
   public function getCommandHelp() {
     return phutil_console_format(<<<EOTEXT
-          Push a diff into a remote branch.
+          Push diff into a branch with your jenkins username
 EOTEXT
       );
   }
 
   public function getCommandSynopses() {
     return phutil_console_format(<<<EOTEXT
-      **mergequeue-push** [__options__] [__ref__]
+      **mergequeue-push** <Diff Id>
+      **mergequeue-push** D12345
 EOTEXT
       );
   }
