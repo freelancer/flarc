@@ -11,10 +11,13 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   private $messageFile;
   private $skipTests;
   private $skipPush;
+  private $delay;
+  private $delayInput;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
   const JENKINS_URL = 'https://ci.tools.flnltd.com';
   const API_BUILD_URL = '/job/GAF/job/mergequeue-submit';
+  const MAX_DELAY = 72;
 
 
   public function getWorkflowName() {
@@ -63,6 +66,10 @@ EOTEXT
         'help' => pht(
           'Skip push on the merge queue.'),
         ),
+      'delay' => array(
+        'help' => pht(
+          'Delay the submit. Measured in hours.'),
+        ),
       '*' => 'revisions',
     );
   }
@@ -100,6 +107,7 @@ EOTEXT
 
     $this->skipTests = $this->getArgument('skip-tests');
     $this->skipPush = $this->getArgument('skip-push');
+    $this->delay = $this->getArgument('delay');
     $this->branch = head($branch);
     return $branch;
   }
@@ -224,6 +232,11 @@ EOTEXT
     }
     if ($this->skipPush) {
       $build_data['skipPush'] = 'true';
+    }
+    if ($this->delay) {
+      $this->delayInput = phutil_console_prompt('Please enter a delay(hours): ');
+      $delay_secs = (string)((int)(min((float)$this->delayInput, self::MAX_DELAY) * 60 * 60)).'secs';
+      $build_data['delay'] = $delay_secs;
     }
 
     $build_data_http = http_build_query($build_data);
