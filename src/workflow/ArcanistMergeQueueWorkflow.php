@@ -36,6 +36,7 @@ EOTEXT
     return phutil_console_format(<<<EOTEXT
       **mergequeue** [__options__] [__ref__]
       **mergequeue** --skip-tests D1xxxx D2xxxx .....
+      **mergequeue** --delay D1xxxx D2xxxx .....
 EOTEXT
       );
   }
@@ -68,7 +69,7 @@ EOTEXT
         ),
       'delay' => array(
         'help' => pht(
-          'Delay the submit. Measured in hours.'),
+          'Delay the submit. Measured in hours. Also supports floating point numbers.'),
         ),
       '*' => 'revisions',
     );
