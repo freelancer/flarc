@@ -7,6 +7,8 @@
 final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
 
   private $branch;
+  private $jobUrl;
+  private $repoPHID;
   private $revisions;
   private $messageFile;
   private $skipTests;
@@ -15,8 +17,14 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   private $delayInput;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
+
   const JENKINS_URL = 'https://ci.tools.flnltd.com';
-  const API_BUILD_URL = '/job/GAF/job/mergequeue-submit';
+  const API_JOB_URL = '/job/API/job/mergequeue-submit';
+  const GAF_JOB_URL = '/job/GAF/job/mergequeue-submit';
+
+  const API_PHID = 'PHID-REPO-enzn73futkcv4eqfsgnz';
+  const GAF_PHID = 'PHID-REPO-e7qvu3z7a3uhk7akjy7y';
+
   const MAX_DELAY = 72;
 
 
@@ -146,6 +154,19 @@ EOTEXT
             "No such revision '%s'!",
             "D{$revision_id}"));
         }
+
+        if (!$this->repoPHID) {
+          $this->repoPHID = $revisions[0]['repositoryPHID'];
+          $this->jobUrl = ($this->repoPHID == self::API_PHID)
+            ? self::API_JOB_URL
+            : self::GAF_JOB_URL;
+        }
+        if ($revisions[0]['repositoryPHID'] != $this->repoPHID) {
+          throw new ArcanistUsageException(pht(
+            '%s must be in the same repository as the other revisions.',
+            "D{$revision_id}"));
+        }
+
         $this->revisions = array_merge($this->revisions, $revisions);
       }
     } else {
@@ -219,14 +240,17 @@ EOTEXT
       );
     }
 
+    $build_url = self::JENKINS_URL.$this->jobUrl.'/buildWithParameters';
+    $diff_ids = array_map(
+      function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
 
+    $build_data = array('author' => $submitter);
 
-    $build_url = self::JENKINS_URL.self::API_BUILD_URL.'/buildWithParameters';
-    $gaf_diff_ids = array_map(function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
-    $build_data = array(
-      'author' => $submitter,
-      'gafDiffIds' => implode(',', $gaf_diff_ids),
-    );
+    if ($this->jobUrl == self::API_JOB_URL) {
+      $build_data['apiDiffIds'] = implode(',', $diff_ids);
+    } else {
+      $build_data['gafDiffIds'] = implode(',', $diff_ids);
+    }
 
     if ($this->skipTests) {
       $build_data['skipTest'] = 'true';
