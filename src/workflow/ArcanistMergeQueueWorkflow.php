@@ -32,10 +32,46 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
     return 'mergequeue';
   }
 
+  public function supportsToolset(ArcanistToolset $toolset) {
+    return $toolset instanceof ArcanistArcToolset;
+  }
+
+  public function getWorkflowInformation() {
+    $help = pht(<<<EOTEXT
+Call the CI job to put diffs into the merge queue.
+EOTEXT
+);
+
+    return $this->newWorkflowInformation()
+      ->addExample(pht('**mergequeue** [__revisions__]'))
+      ->addExample(pht('**mergequeue** --skip-tests [__revisions__]'))
+      ->addExample(pht('**mergequeue** --skip-push [__revisions__]'))
+      ->addExample(pht('**mergequeue** --delay [__revisions__]'))
+      ->addExample(pht('**mergequeue** --skip-push --skip-tests [__revisions__]'))
+      ->addExample(pht('**mergequeue** --skip-tests --skip-push --delay [__revisions__]'))
+      ->setHelp($help);
+  }
+
+  public function getWorkflowArguments() {
+    return array(
+      $this->newWorkflowArgument('skip-tests')
+        ->setHelp(
+          pht('Skip building a box and testing')),
+      $this->newWorkflowArgument('skip-push')
+        ->setHelp(
+          pht('Skip push/merge to master')),
+      $this->newWorkflowArgument('delay')
+      ->setHelp(
+        pht('Delay the submit. Measured in hours. Also supports floating point numbers.')),
+      $this->newWorkflowArgument('revisions')
+        ->setWildcard(true),
+    );
+  }
+
+
   public function getCommandHelp() {
     return phutil_console_format(<<<EOTEXT
           Submit diffs to the Merge Queue.
-
 EOTEXT
       );
   }
@@ -83,11 +119,34 @@ EOTEXT
     );
   }
 
+  public function runWorkflow() {
+    $this->readArguments();
+    $submitter = $this->getUserField('userName');
+    $use_new_conduit_engine = true;
+
+    $this->findRevisions($use_new_conduit_engine);
+    $this->jenkinsSubmit($submitter);
+
+    echo pht('Done submitting to Merge Queue.'), "\n";
+    return 0;
+  }
+
+  public function getUserField($field) {
+    $conduit_engine = $this->getConduitEngine();
+    $conduit_future = $conduit_engine->newFuture(
+      'user.whoami',
+      array());
+    $user = $conduit_future->resolve();
+
+    if (idx($user, $field)) {
+      return $user[$field];
+    }
+
+    throw new ArcanistUsageException('Cannot identify user field:'.$field);
+  }
+
   public function run() {
     $this->readArguments();
-
-    $this->validate();
-
     $submitter = $this->getUserName();
 
     $this->findRevisions();
@@ -100,7 +159,6 @@ EOTEXT
   private function readArguments() {
     $repository_api = $this->getRepositoryAPI();
 
-    $branch = $this->getArgument('branch');
     if (empty($branch)) {
       $branch = $repository_api->getBranchName();
       if (!strlen($branch)) {
@@ -117,26 +175,11 @@ EOTEXT
     $this->skipTests = $this->getArgument('skip-tests');
     $this->skipPush = $this->getArgument('skip-push');
     $this->delay = $this->getArgument('delay');
-    $this->branch = head($branch);
+
     return $branch;
   }
 
-  public function validate() {
-    $repository_api = $this->getRepositoryAPI();
-
-    list($err) = $repository_api->execManualLocal(
-      'rev-parse --verify %s',
-      $this->branch);
-
-    if ($err) {
-      throw new ArcanistUsageException(
-        pht("Branch '%s' does not exist.", $this->branch));
-    }
-
-    $this->requireCleanWorkingCopy();
-  }
-
-  private function findRevisions() {
+  private function findRevisions($use_new_conduit_engine = false) {
     $this->revisions = array();
     $repository_api = $this->getRepositoryAPI();
 
@@ -144,11 +187,23 @@ EOTEXT
     if ($revision_ids) {
       foreach ($revision_ids as $revision_id) {
         $revision_id = $this->normalizeRevisionID($revision_id);
-        $revisions = $this->getConduit()->callMethodSynchronous(
-          'differential.query',
-          array(
-            'ids' => array($revision_id),
-          ));
+
+        if ($use_new_conduit_engine) {
+          $conduit_engine = $this->getConduitEngine();
+          $conduit_future = $conduit_engine->newFuture(
+            'differential.query',
+            array(
+              'ids' => array($revision_id),
+            ));
+          $revisions = $conduit_future->resolve();
+        } else {
+          $revisions = $this->getConduit()->callMethodSynchronous(
+            'differential.query',
+            array(
+              'ids' => array($revision_id),
+            ));
+        }
+
         if (!$revisions) {
           throw new ArcanistUsageException(pht(
             "No such revision '%s'!",
@@ -190,13 +245,22 @@ EOTEXT
     foreach ($this->revisions as $revision) {
       $rev_id = $revision['id'];
       $rev_title = $revision['title'];
-      $this->checkRevisionState($revision);
+      $this->checkRevisionState($revision, $use_new_conduit_engine);
 
-      $message = $this->getConduit()->callMethodSynchronous(
-        'differential.getcommitmessage',
-        array(
-          'revision_id' => $rev_id,
-        ));
+      if ($use_new_conduit_engine) {
+        $conduit_future = $conduit_engine->newFuture(
+          'differential.getcommitmessage',
+          array(
+            'revision_id' => $rev_id,
+          ));
+        $message = $conduit_future->resolve();
+      } else {
+        $message = $this->getConduit()->callMethodSynchronous(
+          'differential.getcommitmessage',
+          array(
+            'revision_id' => $rev_id,
+          ));
+      }
 
       $this->messageFile = new TempFile();
       Filesystem::writeFile($this->messageFile, $message);
@@ -207,7 +271,7 @@ EOTEXT
 
       $diff_phid = idx($revision, 'activeDiffPHID');
       if ($diff_phid) {
-        $this->checkForBuildables($diff_phid);
+        $this->checkForBuildables($diff_phid, $use_new_conduit_engine);
       }
     }
   }
@@ -275,7 +339,7 @@ EOTEXT
     curl_exec($ch);
   }
 
-  private function checkRevisionState($revision) {
+  private function checkRevisionState($revision, $use_new_conduit_engine) {
     $rev_status = $revision['status'];
     $rev_id = $revision['id'];
     $rev_title = $revision['title'];
@@ -283,12 +347,27 @@ EOTEXT
 
     $full_name = pht('D%d: %s', $rev_id, $rev_title);
 
-    if ($revision['authorPHID'] != $this->getUserPHID()) {
-      $other_author = $this->getConduit()->callMethodSynchronous(
-        'user.query',
-        array(
-          'phids' => array($revision['authorPHID']),
-        ));
+    $user_phid = $use_new_conduit_engine
+      ? $this->getUserField('phid')
+      :$this->getUserPHID();
+
+    if ($revision['authorPHID'] != $user_phid) {
+      if ($use_new_conduit_engine) {
+        $conduit_engine = $this->getConduitEngine();
+        $conduit_future = $conduit_engine->newFuture(
+          'user.query',
+          array(
+            'phids' => array($revision['authorPHID']),
+          ));
+        $other_author = $conduit_future->resolve();
+      } else {
+        $other_author = $this->getConduit()->callMethodSynchronous(
+          'user.query',
+          array(
+            'phids' => array($revision['authorPHID']),
+          ));
+      }
+
       $other_author = ipull($other_author, 'userName', 'phid');
       $other_author = $other_author[$revision['authorPHID']];
       $ok = phutil_console_confirm(pht(
@@ -341,13 +420,23 @@ EOTEXT
     if ($rev_auxiliary) {
       $phids = idx($rev_auxiliary, 'phabricator:depends-on', array());
       if ($phids) {
-        $dep_on_revs = $this->getConduit()->callMethodSynchronous(
-          'differential.query',
-           array(
-             'phids' => $phids,
-             'status' => 'status-open',
-           ));
-
+        if ($use_new_conduit_engine) {
+          $conduit_engine = $this->getConduitEngine();
+          $conduit_future = $conduit_engine->newFuture(
+            'differential.query',
+            array(
+              'phids' => $phids,
+              'status' => 'status-open',
+            ));
+          $dep_on_revs = $conduit_future->resolve();
+        } else {
+          $dep_on_revs = $this->getConduit()->callMethodSynchronous(
+            'differential.query',
+            array(
+              'phids' => $phids,
+              'status' => 'status-open',
+            ));
+        }
         $open_dep_revs = array();
         foreach ($dep_on_revs as $dep_on_rev) {
           $dep_on_rev_id = $dep_on_rev['id'];
@@ -381,14 +470,14 @@ EOTEXT
    * Check if a diff has a running or failed buildable, and prompt the user
    * before landing if it does.
    */
-  private function checkForBuildables($diff_phid) {
+  private function checkForBuildables($diff_phid, $use_new_conduit_engine) {
     // Try to use the more modern check which respects the "Warn on Land"
     // behavioral flag on build plans if we can. This newer check won't work
     // unless the server is running code from March 2019 or newer since the
     // API methods we need won't exist yet. We'll fall back to the older check
     // if this one doesn't work out.
     try {
-      $this->checkForBuildablesWithPlanBehaviors($diff_phid);
+      $this->checkForBuildablesWithPlanBehaviors($diff_phid, $use_new_conduit_engine);
       return;
     } catch (ArcanistUsageException $usage_ex) {
       throw $usage_ex;
@@ -401,12 +490,23 @@ EOTEXT
     // advisory check intended to prevent human error.
 
     try {
-      $buildables = $this->getConduit()->callMethodSynchronous(
-        'harbormaster.querybuildables',
-        array(
-          'buildablePHIDs' => array($diff_phid),
-          'manualBuildables' => false,
-        ));
+      if ($use_new_conduit_engine) {
+        $conduit_engine = $this->getConduitEngine();
+        $conduit_future = $conduit_engine->newFuture(
+          'harbormaster.querybuildables',
+          array(
+            'buildablePHIDs' => array($diff_phid),
+            'manualBuildables' => false,
+          ));
+        $buildables = $conduit_future->resolve();
+      } else {
+        $buildables = $this->getConduit()->callMethodSynchronous(
+          'harbormaster.querybuildables',
+          array(
+            'buildablePHIDs' => array($diff_phid),
+            'manualBuildables' => false,
+          ));
+      }
     } catch (ConduitClientException $ex) {
       return;
     }
@@ -471,7 +571,7 @@ EOTEXT
     throw new ArcanistUsageException('Harbormaster builds ongoing or failed.');
   }
 
-  private function checkForBuildablesWithPlanBehaviors($diff_phid) {
+  private function checkForBuildablesWithPlanBehaviors($diff_phid, $use_new_conduit_engine) {
     // TODO: These queries should page through all results instead of fetching
     // only the first page, but we don't have good primitives to support that
     // in "master" yet.
@@ -480,16 +580,31 @@ EOTEXT
       pht('BUILDS'),
       pht('Checking build status...'));
 
-    $raw_buildables = $this->getConduit()->callMethodSynchronous(
-      'harbormaster.buildable.search',
-      array(
-        'constraints' => array(
-          'objectPHIDs' => array(
-            $diff_phid,
+    if ($use_new_conduit_engine) {
+      $conduit_engine = $this->getConduitEngine();
+      $conduit_future = $conduit_engine->newFuture(
+        'harbormaster.buildable.search',
+        array(
+          'constraints' => array(
+            'objectPHIDs' => array(
+              $diff_phid,
+            ),
+            'manual' => false,
           ),
-          'manual' => false,
-        ),
-      ));
+        ));
+      $raw_buildables = $conduit_future->resolve();
+    } else {
+      $raw_buildables = $this->getConduit()->callMethodSynchronous(
+        'harbormaster.buildable.search',
+        array(
+          'constraints' => array(
+            'objectPHIDs' => array(
+              $diff_phid,
+            ),
+            'manual' => false,
+          ),
+        ));
+    }
 
     if (!$raw_buildables['data']) {
       return;
@@ -498,13 +613,26 @@ EOTEXT
     $buildables = $raw_buildables['data'];
     $buildable_phids = ipull($buildables, 'phid');
 
-    $raw_builds = $this->getConduit()->callMethodSynchronous(
-      'harbormaster.build.search',
+
+    if ($use_new_conduit_engine) {
+      $conduit_engine = $this->getConduitEngine();
+      $conduit_future = $conduit_engine->newFuture(
+        'harbormaster.build.search',
       array(
         'constraints' => array(
           'buildables' => $buildable_phids,
         ),
       ));
+      $raw_builds = $conduit_future->resolve();
+    } else {
+      $raw_builds = $this->getConduit()->callMethodSynchronous(
+        'harbormaster.build.search',
+        array(
+          'constraints' => array(
+            'buildables' => $buildable_phids,
+          ),
+        ));
+    }
 
     if (!$raw_builds['data']) {
       return;
@@ -520,13 +648,25 @@ EOTEXT
     $plan_phids = mpull($builds, 'getBuildPlanPHID');
     $plan_phids = array_values($plan_phids);
 
-    $raw_plans = $this->getConduit()->callMethodSynchronous(
-      'harbormaster.buildplan.search',
-      array(
-        'constraints' => array(
-          'phids' => $plan_phids,
-        ),
-      ));
+    if ($use_new_conduit_engine) {
+      $conduit_engine = $this->getConduitEngine();
+      $conduit_future = $conduit_engine->newFuture(
+        'harbormaster.buildplan.search',
+        array(
+          'constraints' => array(
+            'phids' => $plan_phids,
+          ),
+        ));
+      $raw_plans = $conduit_future->resolve();
+    } else {
+      $raw_plans = $this->getConduit()->callMethodSynchronous(
+        'harbormaster.buildplan.search',
+        array(
+          'constraints' => array(
+            'phids' => $plan_phids,
+          ),
+        ));
+    }
 
     $plans = array();
     foreach ($raw_plans['data'] as $raw_plan) {

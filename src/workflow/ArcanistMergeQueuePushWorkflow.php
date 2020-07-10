@@ -7,6 +7,8 @@
 final class ArcanistMergeQueuePushWorkflow extends ArcanistWorkflow {
 
   private $branch;
+  private $jobUrl;
+  private $repoPHID;
   private $revisions;
   private $messageFile;
   private $skipTests;
@@ -23,6 +25,28 @@ final class ArcanistMergeQueuePushWorkflow extends ArcanistWorkflow {
     return 'mergequeue-push';
   }
 
+  public function supportsToolset(ArcanistToolset $toolset) {
+    return $toolset instanceof ArcanistArcToolset;
+  }
+
+  public function getWorkflowInformation() {
+    $help = pht(<<<EOTEXT
+Push a diff in rGAF into a branch with format <jenkins username>-<diff ID>.
+EOTEXT
+);
+
+    return $this->newWorkflowInformation()
+      ->addExample(pht('**mergequeue-push** [__revisions__]'))
+      ->setHelp($help);
+  }
+
+  public function getWorkflowArguments() {
+    return array(
+      $this->newWorkflowArgument('revisions')
+        ->setWildcard(true),
+    );
+  }
+
   public function getCommandHelp() {
     return phutil_console_format(<<<EOTEXT
           Push diff into a branch with your jenkins username
@@ -32,7 +56,7 @@ EOTEXT
 
   public function getCommandSynopses() {
     return phutil_console_format(<<<EOTEXT
-      **mergequeue-push** <Diff Id>
+      **mergequeue-push** [__revisions__]
       **mergequeue-push** D12345
 EOTEXT
       );
@@ -60,13 +84,36 @@ EOTEXT
     );
   }
 
-  public function run() {
+  public function runWorkflow() {
+    $submitter = $this->getCurrentPhabUserName();
+    $use_new_conduit_engine = true;
     $this->readArguments();
+    $this->findRevisions($use_new_conduit_engine);
+    $this->jenkinsSubmit($submitter);
 
-    $this->validate();
+    $diff_ids = array_map(function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
+    $branch_name = $submitter.'-'.implode(',', $diff_ids);
+    echo pht('Done submitting to mergequeue-push job. Branch: %s', $branch_name), "\n";
+    return 0;
+  }
 
+  public function getCurrentPhabUserName() {
+    $conduit_engine = $this->getConduitEngine();
+    $conduit_future = $conduit_engine->newFuture(
+      'user.whoami',
+      array());
+    $user = $conduit_future->resolve();
+
+    if (idx($user, 'userName')) {
+      return $user['userName'];
+    }
+
+    throw new ArcanistUsageException('Cannot identify current user!');
+  }
+
+  public function run() {
     $submitter = $this->getUserName();
-
+    $this->readArguments();
     $this->findRevisions();
     $this->jenkinsSubmit($submitter);
 
@@ -76,10 +123,10 @@ EOTEXT
     return 0;
   }
 
+
   private function readArguments() {
     $repository_api = $this->getRepositoryAPI();
 
-    $branch = $this->getArgument('branch');
     if (empty($branch)) {
       $branch = $repository_api->getBranchName();
       if (!strlen($branch)) {
@@ -97,22 +144,7 @@ EOTEXT
     return $branch;
   }
 
-  public function validate() {
-    $repository_api = $this->getRepositoryAPI();
-
-    list($err) = $repository_api->execManualLocal(
-      'rev-parse --verify %s',
-      $this->branch);
-
-    if ($err) {
-      throw new ArcanistUsageException(
-        pht("Branch '%s' does not exist.", $this->branch));
-    }
-
-    $this->requireCleanWorkingCopy();
-  }
-
-  private function findRevisions() {
+  private function findRevisions($use_new_conduit_engine = false) {
     $this->revisions = array();
     $repository_api = $this->getRepositoryAPI();
 
@@ -124,35 +156,50 @@ EOTEXT
 
       foreach ($revision_ids as $revision_id) {
         $revision_id = $this->normalizeRevisionID($revision_id);
-        $revisions = $this->getConduit()->callMethodSynchronous(
-          'differential.query',
-          array(
-            'ids' => array($revision_id),
-          ));
-        if (!$revisions) {
+
+        if ($use_new_conduit_engine) {
+          $conduit_engine = $this->getConduitEngine();
+          $conduit_future = $conduit_engine->newFuture(
+            'differential.revision.search',
+            array(
+              'constraints' => array(
+                'ids' => array((int)$revision_id),
+              ),
+            ));
+          $revisions = $conduit_future->resolve();
+        } else {
+          $revisions = $this->getConduit()->callMethodSynchronous(
+            'differential.revision.search',
+            array(
+              'constraints' => array(
+                'ids' => array((int)$revision_id),
+              ),
+            ));
+        }
+
+        if (!idx($revisions, 'data')) {
           throw new ArcanistUsageException(pht(
             "No such revision '%s'!",
             "D{$revision_id}"));
         }
 
         if (!$this->repoPHID) {
-          $this->repoPHID = $revisions[0]['repositoryPHID'];
+          $this->repoPHID = $revisions['data'][0]['fields']['repositoryPHID'];
           $this->jobUrl = ($this->repoPHID == self::API_PHID)
             ? self::API_JOB_URL
             : self::GAF_JOB_URL;
         }
-        if ($revisions[0]['repositoryPHID'] != $this->repoPHID) {
+
+        if ($revisions['data'][0]['fields']['repositoryPHID'] != $this->repoPHID) {
           throw new ArcanistUsageException(pht(
             '%s must be in the same repository as the other revisions.',
             "D{$revision_id}"));
         }
 
-        $this->revisions = array_merge($this->revisions, $revisions);
+        $this->revisions = array_merge($this->revisions, $revisions['data']);
       }
     } else {
-      $this->revisions = $repository_api->loadWorkingCopyDifferentialRevisions(
-        $this->getConduit(),
-        array());
+      throw new ArcanistUsageException('Revisions are required parameters!');
     }
 
     if (!count($this->revisions)) {
@@ -169,13 +216,22 @@ EOTEXT
 
     foreach ($this->revisions as $revision) {
       $rev_id = $revision['id'];
-      $rev_title = $revision['title'];
+      $rev_title = $revision['fields']['title'];
 
-      $message = $this->getConduit()->callMethodSynchronous(
-        'differential.getcommitmessage',
-        array(
-          'revision_id' => $rev_id,
-        ));
+      if ($use_new_conduit_engine) {
+        $conduit_future = $conduit_engine->newFuture(
+          'differential.getcommitmessage',
+          array(
+            'revision_id' => $rev_id,
+          ));
+        $message = $conduit_future->resolve();
+      } else {
+        $message = $this->getConduit()->callMethodSynchronous(
+          'differential.getcommitmessage',
+          array(
+            'revision_id' => $rev_id,
+          ));
+      }
 
       $this->messageFile = new TempFile();
       Filesystem::writeFile($this->messageFile, $message);
