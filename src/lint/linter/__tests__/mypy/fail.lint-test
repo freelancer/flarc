@@ -1,0 +1,12 @@
+class Test(object):
+    def __init__():
+        print(self.invalid)
+        return "abc"
+
+    def __exit__(self, exc, value, tb) -> bool:
+        return False
+~~~~~~~~~~
+error:2:5
+error:6:5
+warning:6:5
+warning:6:5
