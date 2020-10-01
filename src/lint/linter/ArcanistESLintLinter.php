@@ -5,6 +5,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
   private $cacheFile;
   private $config;
   private $env;
+  private $parserOptionsTsconfigRootDir;
   private $resolvePluginsRelativeTo;
   private $noInlineConfig;
 
@@ -76,6 +77,11 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
       $options[] = '--env='.$this->env;
     }
 
+    if ($this->parserOptionsTsconfigRootDir !== null) {
+      $options[] =
+        '--parser-options={tsconfigRootDir:'.$this->parserOptionsTsconfigRootDir.'}';
+    }
+
     if ($this->resolvePluginsRelativeTo !== null) {
       $options[] =
         '--resolve-plugins-relative-to='.$this->resolvePluginsRelativeTo;
@@ -114,6 +120,11 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
         'help' => pht(
           'Prevents comments from changing configuration or rules.'),
       ],
+      'eslint.parserOptions.tsconfigRootDir' => [
+        'type' => 'optional string',
+        'help' => pht(
+          'The root directory for relative tsconfig paths specified in the project option'),
+      ],
       'eslint.resolve-plugins-relative-to' => [
         'type' => 'optional string',
         'help' => pht(
@@ -132,6 +143,10 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
 
       case 'eslint.env':
         $this->env = $value;
+        return;
+
+      case 'eslint.parserOptions.tsconfigRootDir':
+        $this->parserOptionsTsconfigRootDir = $value;
         return;
 
       case 'eslint.resolve-plugins-relative-to':
