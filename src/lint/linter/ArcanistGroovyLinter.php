@@ -63,6 +63,8 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
       $options[] = "--loglevel {$this->lintLogLevel}";
     }
 
+    $options[] = '--no-insight';
+    $options[] = '--noserver';
 
     return $options;
   }
@@ -131,8 +133,11 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     $output = json_decode($stdout, true);
-    $errors = [];
     $messages = [];
+
+    if (!$output) {
+      return $messages;
+    }
 
     foreach ($output['files'] as $file => $lint) {
       foreach ($lint['errors'] as $error) {
