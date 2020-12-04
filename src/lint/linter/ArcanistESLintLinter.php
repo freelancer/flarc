@@ -183,9 +183,12 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
       foreach ($file['messages'] as $message) {
         $result = id(new ArcanistLintMessage())
           ->setPath($file['filePath'])
-          ->setLine($message['line'])
           ->setChar($message['column'])
           ->setDescription($message['message']);
+
+        if (isset($message['line'])) {
+          $result->setLine($message['line']);
+        }
 
         switch ($message['severity']) {
           case 1:
