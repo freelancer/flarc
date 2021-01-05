@@ -292,7 +292,7 @@ EOTEXT
       );
     }
 
-    $jenkins_config = parse_ini_file($fli_config_path);
+    $jenkins_config = parse_ini_file($fli_config_path, true)['jenkins'];
     $username = $jenkins_config['username'];
     $token = $jenkins_config['token'];
 
