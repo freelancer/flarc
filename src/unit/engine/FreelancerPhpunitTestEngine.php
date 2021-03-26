@@ -481,6 +481,10 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     $repo_dependencies = phutil_json_decode($composer_lock);
     $repo_dependencies = $repo_dependencies['packages'];
     $local_dependencies = phutil_json_decode($installed);
+    $local_dependencies = $local_dependencies && array_key_exists('packages', $local_dependencies)
+      ? $local_dependencies['packages']
+      : $local_dependencies;
+
     $local_dependency_versions = [];
     foreach ($local_dependencies as $dependency) {
       $name = $dependency['name'];
