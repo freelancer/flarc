@@ -70,6 +70,7 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
       '--output-format=json',
       // TODO: tweak the number of threads based on actual performance
       '--threads=4',
+      '--show-info=true',
     ];
 
     if ($this->config !== null) {
