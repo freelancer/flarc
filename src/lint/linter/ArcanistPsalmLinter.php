@@ -111,7 +111,7 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function parseLinterOutput($_, $err, $stdout, $stderr): array {
-    if ($err !== 0 && $err !== 1) {
+    if ($err !== 0 && $err !== 1 && $err !== 2) {
       throw new CommandException(
         pht('Linter execution failed with err code %s', $err),
         $this->getLinterName(),
