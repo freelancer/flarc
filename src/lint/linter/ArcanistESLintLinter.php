@@ -163,9 +163,9 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
     }
   }
 
-  private static function hasRangeOverlap(array $ranges, array $rangeToCheck): bool {
+  private static function hasRangeOverlap(array $ranges, array $range_to_check): bool {
     foreach ($ranges as $range) {
-      if (max($range[0], $rangeToCheck[0]) <= min($range[1], $rangeToCheck[1])) {
+      if (max($range[0], $range_to_check[0]) <= min($range[1], $range_to_check[1])) {
         return true;
       }
     }
@@ -226,7 +226,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
 
         if (isset($message['fix'])) {
           list($start_offset, $end_offset) = $message['fix']['range'];
-          if ($fix_ranges && !self::hasRangeOverlap($fix_ranges, [$start_offset, $end_offset])) {
+          if (!self::hasRangeOverlap($fix_ranges, [$start_offset, $end_offset])) {
             $fix_ranges[] = [$start_offset, $end_offset];
             $result->setOriginalText(
               substr(
@@ -237,9 +237,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
           } else {
             $result->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
             $result->setDescription(
-              'This fix conflicts with another fix. Please run `arc lint` again '.
-              'after applying the fixes: '.
-              $message['message']);
+              'This line has a that fix conflicts with another fix. Please run `arc lint` again after applying the fixes: '.$message['message']);
           }
         }
 
