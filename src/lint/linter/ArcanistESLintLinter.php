@@ -163,6 +163,16 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
     }
   }
 
+  private static function hasRangeOverlap(array $ranges, array $range_to_check): bool {
+    foreach ($ranges as $range) {
+      if (max($range[0], $range_to_check[0]) <= min($range[1], $range_to_check[1])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
     $files = [];
     $results = [];
@@ -180,6 +190,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
     }
 
     foreach ($files as $file) {
+      $fix_ranges = [];
       foreach ($file['messages'] as $message) {
         $result = id(new ArcanistLintMessage())
           ->setPath($file['filePath'])
@@ -215,12 +226,19 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
 
         if (isset($message['fix'])) {
           list($start_offset, $end_offset) = $message['fix']['range'];
-          $result->setOriginalText(
-            substr(
-              $file['source'],
-              $start_offset,
-              $end_offset - $start_offset));
-          $result->setReplacementText($message['fix']['text']);
+          if (!self::hasRangeOverlap($fix_ranges, [$start_offset, $end_offset])) {
+            $fix_ranges[] = [$start_offset, $end_offset];
+            $result->setOriginalText(
+              substr(
+                $file['source'],
+                $start_offset,
+                $end_offset - $start_offset));
+            $result->setReplacementText($message['fix']['text']);
+          } else {
+            $result->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
+            $result->setDescription(
+              'This line has a fix that conflicts with another fix. Please run `arc lint` again after applying the fixes: '.$message['message']);
+          }
         }
 
         $results[] = $result;
