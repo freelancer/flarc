@@ -115,11 +115,12 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
     }
 
     $report = (new PhutilJSONParser())->parse($stdout);
-
     $messages = [];
     foreach ($report['files'] as $path => $file) {
       foreach ($file['messages'] as $message) {
-        $severity = $this->getLintMessageSeverity($message['message']);
+        $severity = $message['ignorable']
+          ? $this->getLintMessageSeverity($message['message'])
+          : ArcanistLintSeverity::SEVERITY_ERROR;
         $messages[] = (new ArcanistLintMessage())
           ->setPath($path)
           ->setLine($message['line'])
