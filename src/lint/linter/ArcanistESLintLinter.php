@@ -233,6 +233,19 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
                 $file['source'],
                 $start_offset,
                 $end_offset - $start_offset));
+            /**
+             * The below recalculates and sets the starting character to use
+             * for $result->setChar.
+             *
+             * This is required as $message['column'] is a reference to where
+             * the error begins, but not necessarily where the recommended fix
+             * begins.
+             */
+            $lines = explode("\n", $file['source']);
+            $targetline = $lines[$message['line'] - 1];
+            $startpos = strrpos($file['source'], $targetline) - 1;
+            $targetcol = $start_offset - $startpos;
+            $result->setChar($targetcol);
             $result->setReplacementText($message['fix']['text']);
           } else {
             $result->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
