@@ -88,7 +88,7 @@ final class FlarcJunitTestResultParser extends ArcanistTestResultParser {
     }
 
     // Parse the JUnit test report.
-    $parser = new ArcanistXUnitTestResultParser();
+    $parser = new FlarcXUnitTestResultParser();
     $events = $parser->parseTestResults($output);
 
     // Coverage is calculated for all test cases in the executed path.
