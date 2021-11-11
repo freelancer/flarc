@@ -292,9 +292,9 @@ EOTEXT
       );
     }
 
-    $jenkins_config = parse_ini_file($fli_config_path, true)['jenkins'];
-    $username = $jenkins_config['username'];
-    $token = $jenkins_config['token'];
+    $jenkins_config = parse_ini_file($fli_config_path, true);
+    $username = $jenkins_config['jenkins']['username'];
+    $token = $jenkins_config['jenkins']['token'];
 
     if (!($username && $token)) {
       throw new ArcanistUsageException(
