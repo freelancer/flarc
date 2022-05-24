@@ -308,7 +308,7 @@ EOTEXT
     $diff_ids = array_map(
       function ($revision) { return 'D'.$revision['id']; }, $this->revisions);
 
-    $build_data = array('author' => $submitter);
+    $build_data = array('username' => $submitter);
 
     if ($this->jobUrl == self::API_JOB_URL) {
       $build_data['apiDiffIds'] = implode(',', $diff_ids);

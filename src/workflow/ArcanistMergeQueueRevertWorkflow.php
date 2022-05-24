@@ -213,7 +213,7 @@ EOTEXT
     $build_data = array(
       'commits' => "{$commit_ids}",
       'channel' => "@{$submitter}",
-      'author' => "@{$submitter}",
+      'username' => $submitter,
       'reason' => "\"{$reason}\"",
     );
 
