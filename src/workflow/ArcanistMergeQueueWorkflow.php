@@ -183,11 +183,22 @@ EOTEXT
     $this->revisions = array();
     $repository_api = $this->getRepositoryAPI();
 
-    $revision_ids = $this->getArgument('revisions');
-    if ($revision_ids) {
-      foreach ($revision_ids as $revision_id) {
-        $revision_id = $this->normalizeRevisionID($revision_id);
+    // Revisions might be comma or space separated
+    $revision_ids = [];
+    foreach ($this->getArgument('revisions') as $id) {
+        array_push($revision_ids, ...(explode(',', $id) ?: []));
+    }
 
+    $revision_ids = array_map(
+        function ($id) { return $this->normalizeRevisionID(trim($id)); },
+        $revision_ids);
+
+    $revision_ids = array_filter(
+        $revision_ids,
+        function ($id) { return is_numeric($id); });
+
+    if (!empty($revision_ids)) {
+      foreach ($revision_ids as $revision_id) {
         if ($use_new_conduit_engine) {
           $conduit_engine = $this->getConduitEngine();
           $conduit_future = $conduit_engine->newFuture(
@@ -222,12 +233,12 @@ EOTEXT
             "D{$revision_id}"));
         }
 
-        $this->revisions = array_merge($this->revisions, $revisions);
+        array_push($this->revisions, ...$revisions);
       }
     } else {
       $this->revisions = $repository_api->loadWorkingCopyDifferentialRevisions(
         $this->getConduit(),
-        array());
+        []);
     }
 
     if (!count($this->revisions)) {
@@ -299,7 +310,7 @@ EOTEXT
     if (!($username && $token)) {
       throw new ArcanistUsageException(
         pht('Jenkins credentials not found. Please make sure '.
-          'the username and token are defined in "$s".',
+          'the username and token are defined in "%s".',
           $fli_config_path)
       );
     }
