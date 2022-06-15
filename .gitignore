@@ -6,3 +6,7 @@
 
 # libphutil
 /src/.phutil_module_cache
+
+# Editors
+.idea
+.vscode
