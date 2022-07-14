@@ -63,11 +63,26 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
     switch ($key) {
       case 'php-cs-fixer.config':
         $this->config = $value;
-        return;
+        break;
 
       default:
-        parent::setLinterConfigurationValue($key, $value);
-        return;
+        try {
+            parent::setLinterConfigurationValue($key, $value);
+        } catch (Exception $e) {
+          $message = <<<DOC
+{$e->getMessage()}
+
+FIX: Try 'composer install'
+
+DOC;
+
+          throw new Exception(
+            $message,
+            $e->getCode(),
+            $e
+          );
+        }
+        break;
     }
   }
 
