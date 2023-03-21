@@ -149,13 +149,13 @@ final class ArcanistDockerContainerLinterProxyTestCase
     $linter = $this->getLinterWithMockProxiedLinter();
 
     // Default behavior
-    $this->assertFalse($linter->shouldProxy());
-
-    $linter->setShouldProxy(false);
-    $this->assertFalse($linter->shouldProxy());
+    $this->assertTrue($linter->shouldProxy());
 
     $linter->setShouldProxy(true);
     $this->assertTrue($linter->shouldProxy());
+
+    $linter->setShouldProxy(false);
+    $this->assertFalse($linter->shouldProxy());
   }
 
   public function testShouldProxyFromEnvironment(): void {

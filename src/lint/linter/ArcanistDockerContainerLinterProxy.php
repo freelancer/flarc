@@ -120,15 +120,8 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
    * Docker container.
    *
    * The "proxy external commands through a Docker container" behavior is
-   * currently opt-in (i.e. disabled by default) as this concept should be
-   * considered to be experimental. Users can opt-in to the new behavior by
-   * setting the environment variable `DOCKER_LINTER_PROXY` to `yes`.
-   *
-   * WARNING: In the future, the default behavior will change from opt-in to
-   * opt-out.
-   *
-   * @todo We should consider removing this method (and, more generally, the
-   *   opt-in/opt-out behavior) in the future.
+   * currently opt-out (i.e. enabled by default). Users can opt-out to the
+   * behavior by setting the environment variable `DOCKER_LINTER_PROXY` to `no`.
    */
   public function shouldProxy(): bool {
     if ($this->shouldProxy !== null) {
@@ -152,7 +145,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
             self::ENV_SHOULD_PROXY));
     }
 
-    return false;
+    return true;
   }
 
   public function setProxiedLinter(ArcanistExternalLinter $linter) {
