@@ -387,6 +387,36 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
       $this->getProxiedLinter()->getCommandFlags());
     $futures = [];
 
+    // Check docker image exists
+    $image_future = new ExecFuture(
+      '%C image inspect %s',
+      $this->getExecutableCommand(),
+      $this->getImage()
+    );
+    $image_future->setCWD($this->getProjectRoot());
+
+    try {
+      $image_future->resolvex();
+    } catch (CommandException $e) {
+      // Try to pull image
+      $pull_future = new ExecFuture(
+        '%C pull %s',
+        $this->getExecutableCommand(),
+        $this->getImage()
+      );
+      $pull_future->setCWD($this->getProjectRoot());
+      try {
+        $pull_future->resolvex();
+      } catch (CommandException $e) {
+        throw new ArcanistMissingLinterException(
+          pht(
+            "Docker image '%s' does not exist and could not be pulled. ".
+            "Please check the image name or build the image and try again.",
+            $this->getImage())
+        );
+      }
+    }
+
     foreach ($paths as $path) {
       $disk_path     = $this->getEngine()->getFilePathOnDisk($path);
       $path_argument = $this->getPathArgumentForLinterFuture($disk_path);
