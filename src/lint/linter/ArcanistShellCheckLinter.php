@@ -53,8 +53,11 @@ final class ArcanistShellCheckLinter extends ArcanistExternalLinter {
 
   public function getInstallInstructions(): string {
     return pht(
-      'Install ShellCheck with `%s`.',
-      'cabal install ShellCheck');
+      "\n"
+      ."\tMacOS X: brew install shellcheck\n"
+      ."\tUbuntu:  apt-get install shellcheck\n"
+      ."See installation instructions at %s.",
+      'https://github.com/koalaman/shellcheck#installing');
   }
 
   protected function getMandatoryFlags(): array {
