@@ -120,6 +120,13 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
     try {
       $report = phutil_json_decode($stdout);
     } catch (PhutilJSONParserException $ex) {
+      // PHPStan returns 1 when it finds errors, but also when it finds no
+      // files to analyse. In this case, we return an empty array of messages.
+      // TODO: Fix this when PHPStan report support no files found in v2.
+      if (str_contains($stderr, 'No files found to analyse')) {
+        return [];
+      }
+
       throw new PhutilProxyException(
         pht(
           "Failed to parse `%s` output. Expecting valid JSON.\n\n".
