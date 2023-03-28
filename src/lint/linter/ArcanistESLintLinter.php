@@ -182,8 +182,10 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
     } catch (PhutilJSONParserException $ex) {
       throw new PhutilProxyException(
         pht(
-          "`%s` returned unparseable output:\n\n%s\n%s",
-          'eslint',
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
           $stdout,
           $stderr),
         $ex);

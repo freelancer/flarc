@@ -127,7 +127,7 @@ DOC;
     return $flags;
   }
 
-  protected function parseLinterOutput($_, $err, $stdout, $stderr) {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr) {
     if (isset($this->errCodeMsg[$err])) {
       throw new CommandException(
         pht('%s', $this->errCodeMsg[$err]),
@@ -137,9 +137,21 @@ DOC;
         $stderr);
     }
 
-    $report = (new PhutilJSONParser())->parse($stdout);
-    $messages = [];
+    try {
+      $report = phutil_json_decode($stdout);
+    } catch (PhutilJSONParserException $ex) {
+      throw new PhutilProxyException(
+        pht(
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
+          $stdout,
+          $stderr),
+        $ex);
+    }
 
+    $messages = [];
     foreach ($report['files'] as $file) {
       $hunks = (new FlarcDiffParser())->parseDiff($file['diff']);
 

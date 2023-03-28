@@ -56,7 +56,7 @@ final class ArcanistMypyLinter extends ArcanistExternalLinter {
     return $options;
   }
 
-  protected function parseLinterOutput($path, $status, $stdout, $stderr) {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr) {
     if (!strlen($stdout)) {
       return [];
     }

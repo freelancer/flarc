@@ -128,8 +128,20 @@ final class FlarcPuppetLintLinter extends ArcanistExternalLinter {
     return parent::getCacheVersion();
   }
 
-  protected function parseLinterOutput($path, $status, $stdout, $stderr): array {
-    $results = phutil_json_decode($stdout)[0];
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
+    try {
+      $results = phutil_json_decode($stdout)[0];
+    } catch (PhutilJSONParserException $ex) {
+      throw new PhutilProxyException(
+        pht(
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
+          $stdout,
+          $stderr),
+        $ex);
+    }
 
     return array_map(
       function (array $result) use ($path): ArcanistLintMessage {

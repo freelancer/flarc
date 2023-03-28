@@ -132,13 +132,26 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
-    $output = json_decode($stdout, true);
-    $messages = [];
-
-    if (!$output) {
-      return $messages;
+    try {
+      $output = phutil_json_decode($stdout);
+    } catch (PhutilJSONParserException $ex) {
+      throw new PhutilProxyException(
+        pht(
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
+          $stdout,
+          $stderr),
+        $ex);
     }
 
+
+    if (!$output) {
+      return [];
+    }
+
+    $messages = [];
     foreach ($output['files'] as $file => $lint) {
       foreach ($lint['errors'] as $error) {
         $severity = $this->getLintMessageSeverity($error['severity']);

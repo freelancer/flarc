@@ -104,25 +104,41 @@ final class ArcanistPHPStanLinter extends ArcanistBatchExternalLinter {
     }
   }
 
-  protected function parseLinterOutput($_, $err, $stdout, $stderr): array {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     if ($err !== 0 && $err !== 1) {
       throw new CommandException(
-        pht('Linter execution failed with err code %s', $err),
-        $this->getLinterName(),
+        pht(
+          '%s execution failed with err code %s',
+          $this->getLinterName(),
+          $err),
+        $this->getExecutableCommand(),
         $err,
         $stdout,
         $stderr);
     }
 
-    $report = (new PhutilJSONParser())->parse($stdout);
+    try {
+      $report = phutil_json_decode($stdout);
+    } catch (PhutilJSONParserException $ex) {
+      throw new PhutilProxyException(
+        pht(
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
+          $stdout,
+          $stderr),
+        $ex);
+    }
+
     $messages = [];
-    foreach ($report['files'] as $path => $file) {
+    foreach ($report['files'] as $file_path => $file) {
       foreach ($file['messages'] as $message) {
         $severity = $message['ignorable']
           ? $this->getLintMessageSeverity($message['message'])
           : ArcanistLintSeverity::SEVERITY_ERROR;
         $messages[] = (new ArcanistLintMessage())
-          ->setPath($path)
+          ->setPath($file_path)
           ->setLine($message['line'])
           ->setChar(0) // TODO: Fix this when PHPStan report support column
           ->setCode('PHPStan')

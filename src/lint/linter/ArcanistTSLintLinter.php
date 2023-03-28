@@ -30,7 +30,7 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
     return 'tslint';
   }
 
-  public function getVersion(): string {
+  public function getVersion() {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
     $matches = [];
@@ -120,8 +120,10 @@ final class ArcanistTSLintLinter extends ArcanistBatchExternalLinter {
     } catch (PhutilJSONParserException $ex) {
       throw new PhutilProxyException(
         pht(
-          "`%s` returned unparseable output:\n\n%s\n%s",
-          'tslint',
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
           $stdout,
           $stderr),
         $ex);

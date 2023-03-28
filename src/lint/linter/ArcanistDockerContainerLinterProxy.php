@@ -366,6 +366,21 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr) {
+    // Error code 125 from Docker means `docker run` failed. Usually because
+    // the image did not exist.
+    if (!$stdout && $err === 125 && $stderr) {
+      throw new CommandException(
+        pht(
+          '%s for %s execution failed with err code %s',
+          $this->getLinterName(),
+          $this->getProxiedLinter()->getLinterName(),
+          $err),
+        $this->getExecutableCommand(),
+        $err,
+        $stdout,
+        $stderr);
+    }
+
     return $this->getProxiedLinter()->parseLinterOutput($path, $err, $stdout, $stderr);
   }
 

@@ -55,7 +55,7 @@ final class ArcanistBlackLinter extends ArcanistExternalLinter {
     ];
   }
 
-  protected function parseLinterOutput($path, $status, $stdout, $stderr): array {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     if (!strlen($stdout)) {
       return [];
     }

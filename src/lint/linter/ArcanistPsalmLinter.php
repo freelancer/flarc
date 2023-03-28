@@ -110,11 +110,14 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
     ];
   }
 
-  protected function parseLinterOutput($_, $err, $stdout, $stderr): array {
+  protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     if ($err !== 0 && $err !== 1 && $err !== 2) {
       throw new CommandException(
-        pht('Linter execution failed with err code %s', $err),
-        $this->getLinterName(),
+        pht(
+          '%s execution failed with err code %s',
+          $this->getLinterName(),
+          $err),
+        $this->getExecutableCommand(),
         $err,
         $stdout,
         $stderr);
@@ -125,7 +128,19 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
       return [];
     }
 
-    $report = (new PhutilJSONParser())->parse($stdout);
+    try {
+      $report = phutil_json_decode($stdout);
+    } catch (PhutilJSONParserException $ex) {
+      throw new PhutilProxyException(
+        pht(
+          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+          $this->getLinterConfigurationName(),
+          $ex->getMessage(),
+          $stdout,
+          $stderr),
+        $ex);
+    }
 
     $messages = [];
     foreach ($report as $message) {
