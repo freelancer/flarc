@@ -116,10 +116,6 @@ DOC;
       '-vvv',
     ];
 
-    if (version_compare(self::getVersion(), '3.0.0') < 0) {
-      $flags[] = '--diff-format=udiff';
-    }
-
     if ($this->config !== null) {
       $flags[] = '--config='.$this->config;
     }
