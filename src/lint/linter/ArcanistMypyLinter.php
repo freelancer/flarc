@@ -51,7 +51,6 @@ final class ArcanistMypyLinter extends ArcanistExternalLinter {
 
   protected function getMandatoryFlags() {
     $options = array();
-    $options[] = '--show-error-codes';
     $options[] = '--show-column-numbers';
     return $options;
   }
