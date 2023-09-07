@@ -49,10 +49,7 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     //   - `null` if the user did not pass any coverage flags. Coverage should
     //     generally be enabled if available.
     //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
-    // $enable_coverage = $this->getEnableCoverage();
-
-    // T239054: PHPUnit 8 doesn't support code coverage for PHP 8
-    $enable_coverage = false;
+    $enable_coverage = $this->getEnableCoverage();
 
     if ($enable_coverage !== false) {
       if (!extension_loaded('xdebug')) {
