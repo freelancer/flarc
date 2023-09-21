@@ -49,26 +49,40 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     //   - `null` if the user did not pass any coverage flags. Coverage should
     //     generally be enabled if available.
     //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
-    $enable_coverage = $this->getEnableCoverage();
+    $enable_coverage = $this->getEnableCoverage() ?? true;
 
-    if ($enable_coverage !== false) {
-      if (!extension_loaded('xdebug')) {
-        // Throw an exception if the user explicitly enabled coverage, but
-        // coverage is unavailable.
-        if ($enable_coverage === true) {
-          throw new ArcanistUsageException(
-            pht(
-              'You specified `%s` but %s is not available, '.
-              'so coverage can not be enabled for `%s`.',
-              '--coverage',
-              'XDebug',
-              __CLASS__));
-        }
+    if ($enable_coverage !== false && !extension_loaded('xdebug')) {
+      // Instructions to install Xdebug
+      // https://xdebug.org/wizard
+      throw new ArcanistUsageException(
+        <<<'EOTEXT'
+Xdebug is not installed.
 
-        $enable_coverage = false;
-      } else {
-        $enable_coverage = true;
-      }
+Please install Xdebug to enable code coverage.
+
+NOTE:
+These instructions are specific to Ubuntu 20.04 and PHP 8.0. Use
+the instructions from https://xdebug.org/wizard for your specific environment.
+
+1. Download Xdebug
+   wget https://xdebug.org/files/xdebug-3.2.2.tgz
+2. Install pre-requisites
+   sudo apt-get install php8.0-dev autoconf automake
+3. Unpack the downloaded file
+   tar -xvzf xdebug-3.2.2.tgz
+4. Install Xdebug
+   cd xdebug-3.2.2
+   phpize
+   ./configure --with-php-config=$(which php-config8.0)
+   make
+   sudo cp modules/xdebug.so /usr/lib/php/20200930
+5. Configure Xdebug
+   echo -e "zend_extension=xdebug.so\nxdebug.mode=coverage,debug" | sudo tee /etc/php/8.0/cli/conf.d/99-xdebug.ini
+
+See https://xdebug.org/wizard for instructions on how to install Xdebug.
+
+EOTEXT
+      );
     }
 
     if (getenv('RUN_PHPUNIT_IN_DOCKER')) {
