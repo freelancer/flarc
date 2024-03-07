@@ -85,6 +85,33 @@ EOTEXT
       );
     }
 
+    // If coverage is enabled then check the mode
+    if ($enable_coverage !== false) {
+      $required_modes = ['coverage', 'debug'];
+      $modes = explode(',', ini_get('xdebug.mode'));
+      if (array_diff($required_modes, $modes)) {
+        $current_modes_str = empty($modes) ? 'No modes are set' : 'xdebug.mode='.implode(',', $modes);
+        $required_modes_str = implode(',', $required_modes);
+        throw new ArcanistUsageException(
+"Xdebug is not configured correctly.
+
+Expected Xdebug to be configured with the following modes:
+   xdebug.mode={$required_modes_str}
+
+Your current configuration is:
+   {$current_modes_str}
+
+Instructions to configure Xdebug:
+1. Find your Xdebug configuration file
+   php -i | grep xdebug.ini
+2. Add or modify the following lines in your Xdebug configuration file
+   xdebug.mode=coverage,debug
+
+See https://xdebug.org/docs/all_settings#mode for more information."
+        );
+      }
+    }
+
     if (getenv('RUN_PHPUNIT_IN_DOCKER')) {
       $this->shouldRunInDocker = true;
     }
