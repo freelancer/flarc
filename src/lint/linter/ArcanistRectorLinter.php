@@ -178,7 +178,7 @@ EOD;
         ->setCode('Rector')
         ->setName('Rector')
         ->setDescription($description)
-        ->setSeverity(ArcanistLintSeverity::SEVERITY_WARNING)
+        ->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE)
         ->setBypassChangedLineFiltering(true);
     }
 
