@@ -162,7 +162,7 @@ DOC;
             pht(
               '(%s) Please consider the following changes',
               implode(', ', $file['appliedFixers'])))
-          ->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE)
+          ->setSeverity(ArcanistLintSeverity::SEVERITY_AUTOFIX)
           ->setBypassChangedLineFiltering(true)
           ->setOriginalText($hunk->getOriginal())
           ->setReplacementText($hunk->getReplacement());
