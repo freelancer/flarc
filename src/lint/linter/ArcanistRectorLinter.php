@@ -149,24 +149,37 @@ DOC;
 
     $messages = [];
     foreach ($report['file_diffs'] ?? [] as $file) {
-      $hunks = (new FlarcDiffParser())->parseDiff($file['diff']);
-
-      foreach ($hunks as $hunk) {
-        $messages[] = (new ArcanistLintMessage())
-          ->setPath($file['file'])
-          ->setLine($hunk->getLine())
-          ->setChar(1) // first char in the line
-          ->setCode('Rector')
-          ->setName('Rector')
-          ->setDescription(
-            pht(
-              '(%s) Please consider the following changes',
-              implode(', ', $file['applied_rectors'])))
-          ->setSeverity(ArcanistLintSeverity::SEVERITY_ADVICE)
-          ->setBypassChangedLineFiltering(true)
-          ->setOriginalText($hunk->getOriginal())
-          ->setReplacementText($hunk->getReplacement());
+      $fixers = '';
+      foreach ($file['applied_rectors'] as $fixer) {
+        $fixers .= "\n - `{$fixer}`";
       }
+
+      $description = <<<EOD
+Please apply the following rector fixes: {$fixers}
+
+```lang=diff
+{$file['diff']}
+```
+
+Apply Rector fixes automatically:
+```lang=sh
+# Single file
+composer fix:rector -- {$file['file']}
+
+# All files
+composer fix:rector:all
+```
+
+WARNING: Not all "fixed" code is guaranteed to be correct. Please review the changes and test them.
+EOD;
+
+      $messages[] = (new ArcanistLintMessage())
+        ->setPath($file['file'])
+        ->setCode('Rector')
+        ->setName('Rector')
+        ->setDescription($description)
+        ->setSeverity(ArcanistLintSeverity::SEVERITY_WARNING)
+        ->setBypassChangedLineFiltering(true);
     }
 
     return $messages;
