@@ -111,6 +111,11 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
   }
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
+    // Psalm error codes:
+    // 0: Linting completed, no issues found
+    // 1: Problem running Psalm (e.g. config is bad, file not found, etc.)
+    // 2: Linted completed, issues found
+    // Other: Possible internal issue with Psalm
     if ($err !== 0 && $err !== 1 && $err !== 2) {
       throw new CommandException(
         pht(
@@ -121,6 +126,32 @@ final class ArcanistPsalmLinter extends ArcanistBatchExternalLinter {
         $err,
         $stdout,
         $stderr);
+    }
+
+    if (
+      $err === 1 &&
+      preg_match('/^Uncaught Psalm\\\Exception\\\ConfigException: Container xml file\(s\) not found!/', $stderr) &&
+      str_contains($stderr, 'plugin-symfony')
+    ) {
+      throw new CommandException(
+        pht(
+          'Need to run `bin/console cache:warmup` before running %s',
+          $this->getLinterName()),
+        $this->getExecutableCommand(),
+        $err,
+        $stdout,
+        $stderr
+      );
+    }
+
+    if ($err === 1) {
+      throw new CommandException(
+        "{$this->getLinterName()} failed due to a configuration or bootstrapping issue",
+        $this->getExecutableCommand(),
+        $err,
+        $stdout,
+        $stderr
+      );
     }
 
     if ($err === 0 && trim($stdout) === '') {
