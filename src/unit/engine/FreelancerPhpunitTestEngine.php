@@ -24,22 +24,10 @@
  * only after [[https://secure.phabricator.com/T5568 | T5568: Support
  * `.arcunit`, similar to `.arclint`]].
  */
-final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
+final class FreelancerPhpunitTestEngine
+  extends FreelancerAbstractPhpunitTestEngine {
 
-  private $affectedTests = [];
   private $shouldRunInDocker;
-  private $sourceDirectory;
-  private $testDirectory;
-  private $testName;
-
-  /**
-   * Allows the unit test engine execute all tests with `arc unit --everything`.
-   *
-   * @return bool
-   */
-  protected function supportsRunAllTests() {
-    return true;
-  }
 
   public function run(): array {
     // @{method:getEnableCoverage} returns the following possible values:
@@ -51,66 +39,8 @@ final class FreelancerPhpunitTestEngine extends ArcanistUnitTestEngine {
     //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
     $enable_coverage = $this->getEnableCoverage() ?? true;
 
-    if ($enable_coverage !== false && !extension_loaded('xdebug')) {
-      // Instructions to install Xdebug
-      // https://xdebug.org/wizard
-      throw new ArcanistUsageException(
-        <<<'EOTEXT'
-Xdebug is not installed.
-
-Please install Xdebug to enable code coverage.
-
-NOTE:
-These instructions are specific to Ubuntu 20.04 and PHP 8.0. Use
-the instructions from https://xdebug.org/wizard for your specific environment.
-
-1. Download Xdebug
-   wget https://xdebug.org/files/xdebug-3.2.2.tgz
-2. Install pre-requisites
-   sudo apt-get install php8.0-dev autoconf automake
-3. Unpack the downloaded file
-   tar -xvzf xdebug-3.2.2.tgz
-4. Install Xdebug
-   cd xdebug-3.2.2
-   phpize
-   ./configure --with-php-config=$(which php-config8.0)
-   make
-   sudo cp modules/xdebug.so /usr/lib/php/20200930
-5. Configure Xdebug
-   echo -e "zend_extension=xdebug.so\nxdebug.mode=coverage,debug" | sudo tee /etc/php/8.0/cli/conf.d/99-xdebug.ini
-
-See https://xdebug.org/wizard for instructions on how to install Xdebug.
-
-EOTEXT
-      );
-    }
-
-    // If coverage is enabled then check the mode
-    if ($enable_coverage !== false) {
-      $required_modes = ['coverage', 'debug'];
-      $modes = explode(',', ini_get('xdebug.mode'));
-      if (array_diff($required_modes, $modes)) {
-        $current_modes_str = empty($modes) ? 'No modes are set' : 'xdebug.mode='.implode(',', $modes);
-        $required_modes_str = implode(',', $required_modes);
-        throw new ArcanistUsageException(
-"Xdebug is not configured correctly.
-
-Expected Xdebug to be configured with the following modes:
-   xdebug.mode={$required_modes_str}
-
-Your current configuration is:
-   {$current_modes_str}
-
-Instructions to configure Xdebug:
-1. Find your Xdebug configuration file
-   php -i | grep xdebug.ini
-2. Add or modify the following lines in your Xdebug configuration file
-   xdebug.mode=coverage,debug
-
-See https://xdebug.org/docs/all_settings#mode for more information."
-        );
-      }
-    }
+    self::checkXdebugInstalled($enable_coverage);
+    self::checkXdebugConfigured($enable_coverage);
 
     if (getenv('RUN_PHPUNIT_IN_DOCKER')) {
       $this->shouldRunInDocker = true;
@@ -192,7 +122,7 @@ See https://xdebug.org/docs/all_settings#mode for more information."
     $futures = new FutureIterator($futures);
 
     foreach ($futures->limit(4) as $test => $future) {
-      list($err, $stdout, $stderr) = $future->resolve();
+      list(, , $stderr) = $future->resolve();
 
       $result = $this->parseTestResults(
         $test,
@@ -223,168 +153,23 @@ See https://xdebug.org/docs/all_settings#mode for more information."
   }
 
   /**
-   * Retrieve all test files affected by the specified source files.
+   * Retrieve the paths to the tests affected by the changes.
    *
-   * Returns the paths to all test files which are affected by the source files
-   * specified with @{method:setPaths}.
-   *
-   * @return list<string>
+   * @throws FilesystemException If the source or test directories do not exist.
+   * @return list<string>  The paths to the affected tests.
    */
-  public function getAffectedTests() {
-    $tests = [];
-
-    foreach ($this->getPaths() as $path) {
-      $tests[$path] = $this->getTestsForPath($path);
-    }
-
-    return $tests;
+  protected function getSourceTestFiles(string $path): array {
+    return [
+    FlarcFilesystem::transposePath(
+      dirname($path).'/'.ucfirst(
+        preg_replace(
+          '/^(.*)\.php$/',
+          '$1Test.php',
+          basename($path))),
+      $this->sourceDirectory,
+      $this->testDirectory),
+    ];
   }
-
-  /**
-   * Retrieve all tests affected by a specified path.
-   *
-   * This is an internal method which is only intended to be called from
-   * @{method:getAffectedTests}.
-   *
-   * @param  string        The input path.
-   * @return list<string>  A list of paths containing the tests affected by the
-   *                       input path.
-   */
-  private function getTestsForPath($path) {
-    $tests = [];
-
-    if (!$this->sourceDirectory) {
-      throw new PhutilInvalidStateException('setSourceDirectory');
-    }
-    if (!$this->testDirectory) {
-      throw new PhutilInvalidStateException('setTestDirectory');
-    }
-
-    if (is_dir($path)) {
-      if (FlarcFilesystem::isDescendant($path, $this->testDirectory)) {
-        return $this->getTestsInDirectory($path);
-      }
-
-      if (FlarcFilesystem::isDescendant($path, $this->sourceDirectory)) {
-        return $this->getTestsInDirectory(
-          FlarcFilesystem::transposePath(
-            $path,
-            $this->sourceDirectory,
-            $this->testDirectory));
-      }
-    }
-
-    if (!preg_match('/\.php$/', $path)) {
-      return [];
-    }
-
-    if (FlarcFilesystem::isDescendant($path, $this->testDirectory)) {
-      if (preg_match('/Test\.php$/', $path)) {
-        $tests[] = $path;
-      }
-    }
-
-    if (FlarcFilesystem::isDescendant($path, $this->sourceDirectory)) {
-      $tests[] = FlarcFilesystem::transposePath(
-        dirname($path).'/'.ucfirst(
-          preg_replace(
-            '/^(.*)\.php$/',
-            '$1Test.php',
-            basename($path))),
-        $this->sourceDirectory,
-        $this->testDirectory);
-    }
-
-    return $tests;
-  }
-
-  /**
-   * Get all test files contained within a given directory.
-   *
-   * Returns the paths to all test files contained within the specified
-   * directory. A "test file" is any file which matches the regular expression
-   * `/Test\.php$/`.
-   *
-   * This is an internal method which is only intended to be called from
-   * @{method:getTestsForPath}.
-   *
-   * @param  string
-   * @return list<string>
-   */
-  private function getTestsInDirectory($path) {
-    $tests = [];
-    $path = rtrim($path, '/');
-
-    if (!Filesystem::pathExists($path)) {
-      return [];
-    }
-
-    $files = id(new FileFinder($path))
-      ->withType('f')
-      ->withSuffix('php')
-      ->find();
-
-    foreach ($files as $file) {
-      if (!preg_match('/Test\.php$/', $file)) {
-        continue;
-      }
-
-      $tests[] = $path.'/'.$file;
-    }
-
-    return $tests;
-  }
-
-  /**
-   * Set the source directory.
-   *
-   * Set the source directory. The source directory is the root directory which
-   * contains source files. It is expected that the directory structure of the
-   * test directory mirrors the directory structure of the source directory.
-   *
-   * @param  string
-   * @return this
-   */
-  public function setSourceDirectory($source_directory) {
-    $this->sourceDirectory = rtrim($source_directory, DIRECTORY_SEPARATOR).'/';
-    return $this;
-  }
-
-  /**
-   * Set the test directory.
-   *
-   * Set the test directory. The source directory is the root directory which
-   * contains test files. It is expected that the directory structure of the
-   * test directory mirrors the directory structure of the source directory.
-   *
-   * @param  string
-   * @return this
-   */
-  public function setTestDirectory($test_directory) {
-    $this->testDirectory = rtrim($test_directory, DIRECTORY_SEPARATOR).'/';
-    return $this;
-  }
-
-  /**
-   * Parse test results from PHPUnit JUnit report.
-   *
-   * @param  string                        Path to test file.
-   * @param  string                        Path to PHPUnit JUnit report.
-   * @param  string                        Path to PHPUnit Clover report.
-   * @param  string                        Data written to `stderr`.
-   * @return list<ArcanistUnitTestResult>
-   */
-  private function parseTestResults($path, $junit_ouput, $clover, $stderr): array {
-    $results = Filesystem::readFile($junit_ouput);
-    return id(new FlarcJunitTestResultParser())
-      ->setEnableCoverage($clover !== null)
-      ->setProjectRoot($this->getProjectRoot())
-      ->setCoverageFile($clover)
-      ->setAffectedTests($this->affectedTests)
-      ->setStderr($stderr)
-      ->parseTestResults($path, $results);
-  }
-
 
 /* -(  Utility  )------------------------------------------------------------ */
 
@@ -407,22 +192,7 @@ See https://xdebug.org/docs/all_settings#mode for more information."
       return 'docker';
     }
 
-    $bin = $this
-      ->getConfigurationManager()
-      ->getConfigFromAnySource($key, $default);
-
-    $binary_path = Filesystem::resolvePath($bin, $this->getProjectRoot());
-
-    if (!Filesystem::binaryExists($binary_path)) {
-      throw new ArcanistUsageException(
-        pht(
-          '%s does not seem to be installed at `%s`. Have you run `%s`?',
-          'PHPUnit',
-          $bin,
-          'composer install'));
-    }
-
-    return $binary_path;
+    return parent::getBinaryPath($key, $default);
   }
 
   /**
@@ -435,22 +205,11 @@ See https://xdebug.org/docs/all_settings#mode for more information."
    * @param  string|null  The default value.
    * @return string       The absolute path to the configuration file.
    */
-  protected function getConfigPath($key, $default = null) {
-    $path = $this->getConfigurationManager()->getConfigFromAnySource($key);
 
-    if (!Filesystem::pathExists($path)) {
-      throw new Exception(
-        pht(
-          "Path '%s' was not found for '%s'.",
-          $path,
-          $key));
-    }
-
-    return $path;
-  }
 
   protected function getBinaryArgs(string $config, bool $enable_coverage,
     string $junit_output, ?string $clover_output = null): array {
+    $args = [];
     if ($this->shouldRunInDocker) {
       $docker_image = $this->getConfigurationManager()
         ->getConfigFromAnySource('unit.phpunit.docker-image');
@@ -471,78 +230,23 @@ See https://xdebug.org/docs/all_settings#mode for more information."
 
       $args[] = $docker_image;
       $args[] = $phpunit_path;
-    } else {
-      $args = [];
     }
 
-    if ($config) {
-      $args[] = '--configuration='.$config;
-    }
-    $args[] = '-d display_errors=stderr';
-    $args[] = '--log-junit='.$junit_output;
-
-    if ($enable_coverage !== false) {
-      $args[] = '--coverage-clover='.$clover_output;
-    }
-
-    return $args;
+    return array_merge(
+      $args,
+      parent::getBinaryArgs(
+        $config,
+        $enable_coverage,
+        $junit_output,
+        $clover_output));
   }
 
-  protected function generateOutputFiles(bool $enable_coverage): array {
+  protected function generateOutputFiles(
+    bool $enable_coverage,
+    ?string $file_name = null): array {
     return [
       'clover' => $enable_coverage ? new TempFile() : null,
       'junit' => new TempFile(),
     ];
-  }
-
-  /**
-   * Retrieve the project root directory.
-   *
-   * This is a convenience method to access the project root directory from the
-   * working copy of the unit test engine.
-   *
-   * @return string  The project root directory.
-   */
-  public function getProjectRoot() {
-    return $this->getWorkingCopy()->getProjectRoot();
-  }
-
-  /**
-   * Get stale Composer dependencies.
-   *
-   * Compare dependency versions in `composer.lock` and
-   * `installed.json`, and return dependencies needed
-   * to be updated or installed.
-   *
-   * @param  string         Content of composer.lock
-   * @param  string         Content of installed.json
-   * @return list<string>   Stale dependencies
-   */
-  public static function getStaleDependencies($composer_lock, $installed) {
-    $repo_dependencies = phutil_json_decode($composer_lock);
-    $repo_dependencies = $repo_dependencies['packages'];
-    $local_dependencies = phutil_json_decode($installed);
-    $local_dependencies = $local_dependencies && array_key_exists('packages', $local_dependencies)
-      ? $local_dependencies['packages']
-      : $local_dependencies;
-
-    $local_dependency_versions = [];
-    foreach ($local_dependencies as $dependency) {
-      $name = $dependency['name'];
-      $local_dependency_versions[$name] = $dependency['version'];
-    }
-
-    $stale_dependencies = [];
-    foreach ($repo_dependencies as $dependency) {
-      $name = $dependency['name'];
-
-      if (!isset($local_dependency_versions[$name])
-        || $dependency['version'] !== $local_dependency_versions[$name]) {
-
-        $stale_dependencies[] = $name;
-      }
-    }
-
-    return $stale_dependencies;
   }
 }

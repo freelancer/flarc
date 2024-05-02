@@ -58,10 +58,9 @@ final class FreelancerPhpunitTestEngineTestCase extends PhutilTestCase {
     foreach ($test_cases as $test_case) {
       list($paths, $expected) = $test_case;
 
-      $engine
-        ->setSourceDirectory('src/')
-        ->setTestDirectory('test/')
-        ->setPaths($paths);
+      $engine->setSourceDirectory('src/');
+      $engine->setTestDirectory('test/');
+      $engine->setPaths($paths);
 
       $this->assertEqual($expected, $engine->getAffectedTests());
     }
