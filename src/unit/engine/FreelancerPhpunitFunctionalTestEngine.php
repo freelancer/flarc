@@ -315,7 +315,9 @@ final class FreelancerPhpunitFunctionalTestEngine
    * @return list<string> An array of test file paths.
    */
   protected function getSourceTestFiles(string $path): array {
-    $tests = [];
+    if (Filesystem::pathExists($path) === false) {
+      return [];
+    }
 
     $affected_file_name = basename($path, '.php');
     $content = Filesystem::readFile($path);
@@ -331,6 +333,7 @@ final class FreelancerPhpunitFunctionalTestEngine
 
     $fnq_class_came = "{$namespace}\\{$affected_file_name}";
     $function_tests = $this->testCoverageMap[$fnq_class_came] ?? [];
+    $tests = [];
     foreach ($function_tests as $functional_test) {
       $tests[] = $functional_test;
     }
