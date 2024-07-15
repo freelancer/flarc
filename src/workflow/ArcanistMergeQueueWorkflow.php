@@ -15,6 +15,7 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   private $skipPush;
   private $delay;
   private $delayInput;
+  private $d;
 
   const ONTO_BRANCH = 'master'; // Only merge to master
 
@@ -26,7 +27,6 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
   const GAF_PHID = 'PHID-REPO-e7qvu3z7a3uhk7akjy7y';
 
   const MAX_DELAY = 72;
-
 
   public function getWorkflowName() {
     return 'mergequeue';
@@ -61,8 +61,12 @@ EOTEXT
         ->setHelp(
           pht('Skip push/merge to master')),
       $this->newWorkflowArgument('delay')
-      ->setHelp(
-        pht('Delay the submit. Measured in hours. Also supports floating point numbers.')),
+        ->setHelp(
+          pht('Prompt to delay the submit. Measured in hours. Also supports floating point numbers.')),
+      $this->newWorkflowArgument('d')
+        ->setParameter('number')
+        ->setHelp(
+          pht('Delay the submit. Measured in hours. Also supports floating point numbers.')),
       $this->newWorkflowArgument('revisions')
         ->setWildcard(true),
     );
@@ -175,6 +179,7 @@ EOTEXT
     $this->skipTests = $this->getArgument('skip-tests');
     $this->skipPush = $this->getArgument('skip-push');
     $this->delay = $this->getArgument('delay');
+    $this->d = $this->getArgument('d');
 
     return $branch;
   }
@@ -336,6 +341,10 @@ EOTEXT
     if ($this->delay) {
       $this->delayInput = phutil_console_prompt('Please enter a delay(hours): ');
       $delay_secs = (string)((int)(min((float)$this->delayInput, self::MAX_DELAY) * 60 * 60)).'secs';
+      $build_data['delay'] = $delay_secs;
+    }
+    if ($this->d) {
+      $delay_secs = (string)((int)(min((float)$this->d, self::MAX_DELAY) * 60 * 60)).'secs';
       $build_data['delay'] = $delay_secs;
     }
 
