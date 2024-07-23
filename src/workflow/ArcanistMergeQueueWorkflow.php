@@ -261,7 +261,7 @@ EOTEXT
     foreach ($this->revisions as $revision) {
       $rev_id = $revision['id'];
       $rev_title = $revision['title'];
-      $this->checkRevisionState($revision, $use_new_conduit_engine);
+      $this->checkRevisionState($revision, $this->revisions, $use_new_conduit_engine);
 
       if ($use_new_conduit_engine) {
         $conduit_future = $conduit_engine->newFuture(
@@ -359,7 +359,10 @@ EOTEXT
     curl_exec($ch);
   }
 
-  private function checkRevisionState($revision, $use_new_conduit_engine) {
+  private function checkRevisionState(
+    $revision,
+    array $revisions,
+    $use_new_conduit_engine) {
     $rev_status = $revision['status'];
     $rev_id = $revision['id'];
     $rev_title = $revision['title'];
@@ -457,8 +460,18 @@ EOTEXT
               'status' => 'status-open',
             ));
         }
+
+        $diff_ids = array_map(function ($r) {
+          return $r['id'];
+        }, $revisions);
+
         $open_dep_revs = array();
         foreach ($dep_on_revs as $dep_on_rev) {
+          // Skip it as this dependency is included with the merge-queue request
+          if (in_array($dep_on_rev['id'], $diff_ids, true)) {
+            continue;
+          }
+
           $dep_on_rev_id = $dep_on_rev['id'];
           $dep_on_rev_title = $dep_on_rev['title'];
           $dep_on_rev_status = $dep_on_rev['status'];
