@@ -42,6 +42,14 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
     return 'php-cs-fixer';
   }
 
+  public function shouldUseInterpreter(): bool {
+    return true;
+  }
+
+  public function getDefaultInterpreter(): ?string {
+    return null;
+  }
+
   public function getInstallInstructions(): string {
     return pht(
       'See %s.',
