@@ -58,6 +58,10 @@ final class ArcanistPHPCSFixerLinter extends ArcanistBatchExternalLinter {
 
   public function getLinterConfigurationOptions(): array {
     $options = [
+      'interpreter' => [
+        'type' => 'optional string',
+        'help' => pht('The PHP interpreter to use'),
+      ],
       'php-cs-fixer.config' => [
         'type' => 'optional string',
         'help' => pht('The path to a %s configuration file', 'php-cs-fixer'),
