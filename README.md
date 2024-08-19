@@ -12,8 +12,20 @@ To use `flarc`, you must clone the repository into a location that Arcanist know
 ## Usage
 To use `flarc` in your project, add `flarc/src` to the `load` path in the project's `.arcconfig`:
 
-```
+```json
 {
   "load": ["flarc/src"]
 }
 ```
+
+### Usage in `fl-gaf`
+To pin the version of `flarc` used in `fl-gaf`, update the `FLARC_VERSION` in `rGaf/support/flarc/src/common/FlarcVersionChecker.php`.
+
+## Development
+### Adding/Updating Linters
+For more information on adding or updating linters, see [lint/README.md](src/lint/README.md).
+
+### Versioning
+To create a new version of `flarc`:
+- Update `composer.json` to the new version.
+- Run `arc liberate` and `composer update --lock`.

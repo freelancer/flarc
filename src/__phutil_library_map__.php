@@ -9,6 +9,7 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
+    'ArcanistAndroidLinter' => 'lint/linter/ArcanistAndroidLinter.php',
     'ArcanistBatchExternalLinter' => 'lint/linter/ArcanistBatchExternalLinter.php',
     'ArcanistBlackLinter' => 'lint/linter/ArcanistBlackLinter.php',
     'ArcanistBlackLinterTestCase' => 'lint/linter/__tests__/ArcanistBlackLinterTestCase.php',
@@ -76,6 +77,7 @@ phutil_register_library_map(array(
   ),
   'function' => array(),
   'xmap' => array(
+    'ArcanistAndroidLinter' => 'ArcanistLinter',
     'ArcanistBatchExternalLinter' => 'ArcanistExternalLinter',
     'ArcanistBlackLinter' => 'ArcanistExternalLinter',
     'ArcanistBlackLinterTestCase' => 'ArcanistExternalLinterTestCase',
