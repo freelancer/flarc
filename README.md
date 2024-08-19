@@ -10,6 +10,7 @@ To use `flarc`, you must clone the repository into a location that Arcanist know
   3. Inside `arcanist/externals/includes/`.
 
 ## Usage
+### general usage
 To use `flarc` in your project, add `flarc/src` to the `load` path in the project's `.arcconfig`:
 
 ```json
@@ -20,6 +21,11 @@ To use `flarc` in your project, add `flarc/src` to the `load` path in the projec
 
 ### Usage in `fl-gaf`
 To pin the version of `flarc` used in `fl-gaf`, update the `FLARC_VERSION` in `rGaf/support/flarc/src/common/FlarcVersionChecker.php`.
+
+### Usage in CI
+`flarc` is built and used as a docker image in CI.
+It was built daily in this [CI job](https://ci.tools.flnltd.com/job/Infrastructure/job/docker-arcanist/).
+It's probably a good idea to trigger this job manually once you've made changes to `flarc`.
 
 ## Development
 ### Adding/Updating Linters
