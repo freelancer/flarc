@@ -5,7 +5,8 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
   private $lintOutput;
   /** @var string */
   private $lintLogLevel;
-
+  /** @var string */
+  private $lintFailon;
 
   public function getInfoName(): string {
     return 'npm-groovy-lint';
@@ -63,6 +64,10 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
       $options[] = "--loglevel {$this->lintLogLevel}";
     }
 
+    if ($this->lintFailon) {
+      $options[] = "--failon {$this->lintFailon}";
+    }
+
     $options[] = '--no-insight';
     $options[] = '--noserver';
 
@@ -82,13 +87,13 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
     // Example command which fails:
     //  `node_modules/.bin/npm-groovy-lint \
     //    '--loglevel warning' '--output json' \
-    //    '--files "**/*.groovy,**/*.Jenkinsfile,**/Jenkinsfile.*"' \
+    //    '"**/*.groovy,**/*.Jenkinsfile,**/Jenkinsfile.*"' \
     //     /home/pauljoshuarobles/gaf/support/build/merge-queue/Worker.Jenkinsfile`
     //
     // The command doesn't recognize the options and I get the error:
     // `Parse options error: Value for 'loglevel' of type 'String' required.`
     $flags = implode(' ', $this->getCommandFlags());
-    $bin = csprintf('%C %C --files', $executable, $flags);
+    $bin = csprintf('%C %C', $executable, $flags);
 
     $futures = array();
     foreach ($paths as $path) {
@@ -112,6 +117,10 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
         'type' => 'optional string',
         'help' => pht('Log level. Temporarily set to error because we have a lot of issues.'),
       ),
+      'groovy-lint.failon' => array(
+        'type' => 'optional string',
+        'help' => pht('Defines the error level where CLI will fail (return code = 1). error,warning,info or none. Each failure level includes the more critical ones.'),
+      ),
     );
 
     return $options + parent::getLinterConfigurationOptions();
@@ -124,6 +133,9 @@ final class ArcanistGroovyLinter extends ArcanistExternalLinter {
         return;
       case 'groovy-lint.loglevel':
         $this->lintLogLevel = $value;
+        return;
+      case 'groovy-lint.failon':
+        $this->lintFailon = $value;
         return;
       default:
         parent::setLinterConfigurationValue($key, $value);
