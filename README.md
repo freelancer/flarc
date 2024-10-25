@@ -24,8 +24,10 @@ To pin the version of `flarc` used in `fl-gaf`, update the `FLARC_VERSION` in `r
 
 ### Usage in CI
 `flarc` is built and used as a docker image in CI.
-It was built daily in this [CI job](https://ci.tools.flnltd.com/job/Infrastructure/job/docker-arcanist/).
-It's probably a good idea to trigger this job manually once you've made changes to `flarc`.
+
+To build `flarc` docker image run this [CI job](https://ci.tools.flnltd.com/job/Infrastructure/job/docker-arcanist/) manually. Otherwise, it will be built daily.
+
+`php build base` docker image depends on `flarc` docker image. Trigger this [CI job](https://ci.tools.flnltd.com/job/GAF/job/gaf-php-build-base/) manually after 1st job finishes. Otherwise, it will be built weekly.
 
 ## Development
 ### Adding/Updating Linters
