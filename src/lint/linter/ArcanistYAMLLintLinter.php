@@ -99,7 +99,7 @@ final class ArcanistYAMLLintLinter extends ArcanistExternalLinter {
     $messages = [];
 
     $regex = '/^(?P<file>.*?):(?P<line>\d+):(?P<column>\d+):\s+'.
-      '\[(?P<severity>.*)\]\s+(?P<message>.*?)(\((?P<code>\S*)\))?$/m';
+      '\[(?P<severity>.*?)\]\s+(?P<message>.*?)(\((?P<code>\S*?)\))?$/m';
     preg_match_all($regex, $stdout, $errors, PREG_SET_ORDER);
 
     foreach ($errors as $error) {
