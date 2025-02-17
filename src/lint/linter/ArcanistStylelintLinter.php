@@ -120,17 +120,22 @@ final class ArcanistStylelintLinter extends ArcanistExternalLinter {
 
   protected function parseLinterOutput($path, $err, $stdout, $stderr): array {
     try {
-      $files = phutil_json_decode($stdout);
+      $files = phutil_json_decode($stderr);
     } catch (PhutilJSONParserException $ex) {
-      throw new PhutilProxyException(
-        pht(
-          "Failed to parse `%s` output. Expecting valid JSON.\n\n".
-          "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
-          $this->getLinterConfigurationName(),
-          $ex->getMessage(),
-          $stdout,
-          $stderr),
-        $ex);
+      try {
+        $files = phutil_json_decode($stdout);
+      } catch (PhutilJSONParserException $ex) {
+        throw new PhutilProxyException(
+          pht(
+            "Failed to parse `%s` output. Expecting valid JSON.\n\n".
+            "Exception:\n%s\n\nSTDOUT\n%s\n\nSTDERR\n%s",
+            $this->getLinterConfigurationName(),
+            $ex->getMessage(),
+            $stdout,
+            $stderr),
+          $ex);
+      }
+
     }
 
     return array_map(
