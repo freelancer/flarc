@@ -19,9 +19,6 @@ To use `flarc` in your project, add `flarc/src` to the `load` path in the projec
 }
 ```
 
-### Usage in `fl-gaf`
-To pin the version of `flarc` used in `fl-gaf`, update the `FLARC_VERSION` in `rGaf/support/flarc/src/common/FlarcVersionChecker.php`.
-
 ### Usage in CI
 `flarc` is built and used as a docker image in CI.
 
@@ -37,3 +34,4 @@ For more information on adding or updating linters, see [lint/README.md](src/lin
 To create a new version of `flarc`:
 - Update `composer.json` to the new version.
 - Run `arc liberate` and `composer update --lock`.
+- Update the `FLARC_VERSION` in `rGaf/support/flarc/src/common/FlarcVersionChecker.php`.
