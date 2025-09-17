@@ -1,6 +1,6 @@
 {
   "name": "freelancer/flarc",
-  "version": "1.2.4.2",
+  "version": "1.2.4.3",
   "config": {
     "classmap-authoritative": true,
     "prepend-autoloader": false,
