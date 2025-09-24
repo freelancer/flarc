@@ -35,10 +35,13 @@ final class ArcanistMypyLinter extends ArcanistExternalLinter {
   public function getVersion() {
     list($stdout) = execx('%C --version', $this->getExecutableCommand());
 
-    $matches = [];
-    $regex = '/^mypy (?<version>\d+\.\d+(?:b\d+)?)$/';
+    // Get first line only
+    $first_line = strtok($stdout, "\n");
 
-    if (preg_match($regex, $stdout, $matches)) {
+    $matches = [];
+    $regex = '/^mypy (?<version>\d+\.\d+(?:\.\d+)?(?:b\d+)?)(?:\s|$)/';
+
+    if (preg_match($regex, $first_line, $matches)) {
       return $matches['version'];
     } else {
       return false;

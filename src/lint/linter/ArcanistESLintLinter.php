@@ -78,8 +78,9 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
     }
 
     if ($this->parserOptionsTsconfigRootDir !== null) {
+      $absolute_path = getcwd().'/'.$this->parserOptionsTsconfigRootDir;
       $options[] =
-        '--parser-options={tsconfigRootDir:'.$this->parserOptionsTsconfigRootDir.'}';
+        '--parser-options={tsconfigRootDir:'.$absolute_path.'}';
     }
 
     if ($this->resolvePluginsRelativeTo !== null) {
@@ -196,7 +197,7 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
       foreach ($file['messages'] as $message) {
         $result = id(new ArcanistLintMessage())
           ->setPath($file['filePath'])
-          ->setChar($message['column'])
+          ->setChar($message['column'] ?? 1)
           ->setDescription($message['message']);
 
         if (isset($message['line'])) {

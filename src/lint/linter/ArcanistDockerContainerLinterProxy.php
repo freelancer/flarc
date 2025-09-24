@@ -151,7 +151,7 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   public function setProxiedLinter(ArcanistExternalLinter $linter) {
     $engine = $this->getEngine();
 
-    if ($this->engine === null) {
+    if ($engine === null) {
       throw new PhutilInvalidStateException('setEngine');
     }
 
@@ -182,6 +182,9 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function getLinterPriority(): float {
+    if ($this->proxiedLinter === null) {
+      return 1.0;
+    }
     return $this->getProxiedLinter()->getLinterPriority();
   }
 
@@ -207,10 +210,16 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function canRun(): bool {
+    if ($this->proxiedLinter === null) {
+      return false;
+    }
     return $this->getProxiedLinter()->canRun();
   }
 
   public function getLinterName(): string {
+    if ($this->proxiedLinter === null) {
+      return 'docker-proxy';
+    }
     return $this->getProxiedLinter()->getLinterName();
   }
 
@@ -221,14 +230,23 @@ final class ArcanistDockerContainerLinterProxy extends ArcanistExternalLinter {
   }
 
   public function getLintSeverityMap(): array {
+    if ($this->proxiedLinter === null) {
+      return [];
+    }
     return $this->getProxiedLinter()->getLintSeverityMap();
   }
 
   public function getLintNameMap(): array {
+    if ($this->proxiedLinter === null) {
+      return [];
+    }
     return $this->getProxiedLinter()->getLintNameMap();
   }
 
   public function getCacheGranularity(): int {
+    if ($this->proxiedLinter === null) {
+      return 1; // GRANULARITY_FILE
+    }
     return $this->getProxiedLinter()->getCacheGranularity();
   }
 
