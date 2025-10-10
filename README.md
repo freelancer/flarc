@@ -35,3 +35,9 @@ To create a new version of `flarc`:
 - Update `composer.json` to the new version.
 - Run `arc liberate` and `composer update --lock`.
 - Update the `FLARC_VERSION` in `rGaf/support/flarc/src/common/FlarcVersionChecker.php`.
+
+## Deployment
+### Jenkins
+There are two Jenkins jobs that are used to deploy `flarc` to our GAF CI jobs (the build order is important)::
+- [Building Arcanist Docker Image](https://ci.tools.flnltd.com/job/Infrastructure/job/docker-arcanist/)
+- [Building PHP Base Docker Image](https://ci.tools.flnltd.com/job/GAF/job/gaf-php-build-base/)
