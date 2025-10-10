@@ -67,12 +67,6 @@ final class FreelancerPhpunitTestEngine
       $this->getConfigPath('unit.phpunit.source-directory'));
     $this->setTestDirectory(
       $this->getConfigPath('unit.phpunit.test-directory'));
-    $this->setTestType(
-      $this->getConfigValue('unit.phpunit.test-type'));
-    $this->setReportDirectory(
-      $this->getConfigValue('unit.phpunit.reports'));
-
-
 
     if ($this->getRunAllTests()) {
       $this->setPaths([$this->testDirectory]);
@@ -94,11 +88,8 @@ final class FreelancerPhpunitTestEngine
         if (!Filesystem::pathExists($test_path)) {
           continue;
         }
-        $test_name = basename($test_path, '.php');
-        $output_files = $this->generateOutputFiles(
-          $enable_coverage,
-          $test_name);
 
+        $output_files = $this->generateOutputFiles($enable_coverage);
         $args = $this->getBinaryArgs(
           $config,
           $enable_coverage,
@@ -181,6 +172,8 @@ final class FreelancerPhpunitTestEngine
   }
 
 /* -(  Utility  )------------------------------------------------------------ */
+
+
   /**
    * Retrieve a path to an executable from the `.arcconfig` file.
    *
@@ -246,5 +239,14 @@ final class FreelancerPhpunitTestEngine
         $enable_coverage,
         $junit_output,
         $clover_output));
+  }
+
+  protected function generateOutputFiles(
+    bool $enable_coverage,
+    ?string $file_name = null): array {
+    return [
+      'clover' => $enable_coverage ? new TempFile() : null,
+      'junit' => new TempFile(),
+    ];
   }
 }

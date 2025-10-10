@@ -38,6 +38,9 @@ final class FreelancerPhpunitFunctionalTestEngine
   /** @var string $testCoverageMap */
   private $testCoverageMap = [];
 
+  /** @var string $testType */
+  private $testType;
+
   protected function supportsRunAllTests() {
     // Disable running all tests for this engine.
     return false;
@@ -79,8 +82,6 @@ final class FreelancerPhpunitFunctionalTestEngine
       $this->getConfigPath('unit.phpunit.test-directory'));
     $this->setTestType(
       $this->getConfigValue('unit.phpunit.test-type'));
-    $this->setReportDirectory(
-      $this->getConfigValue('unit.phpunit.reports'));
 
     if ($this->getRunAllTests()) {
       $this->setPaths([$this->testDirectory]);
@@ -141,6 +142,7 @@ final class FreelancerPhpunitFunctionalTestEngine
           if (!Filesystem::pathExists($test_path)) {
             continue;
           }
+
           $test_name = basename($test_path, '.php');
           $output_files = $this->generateOutputFiles(
             $enable_coverage,
@@ -337,5 +339,48 @@ final class FreelancerPhpunitFunctionalTestEngine
     }
 
     return $tests;
+  }
+
+  public function setTestType(string $type): void {
+    $this->testType = $type;
+  }
+
+
+/* -(  Utility  )------------------------------------------------------------ */
+
+
+  private function getConfigValue(
+    string $key, ?string
+    $default = null): string {
+    $configuration_manager = $this->getConfigurationManager();
+    return $configuration_manager->getConfigFromAnySource($key, $default);
+  }
+
+  protected function generateOutputFiles(
+    bool $enable_coverage,
+    ?string $file_name = null): array {
+    $root_path = "{$this->getProjectRoot()}/reports/{$this->testType}";
+
+    $clover_file = null;
+    if ($enable_coverage) {
+      $clover_dir = Filesystem::createDirectory(
+        "{$root_path}/clover",
+        0755,
+        true);
+      $clover_file = "{$clover_dir}/{$file_name}.xml";
+      Filesystem::writeFile($clover_file, '');
+    }
+
+    $junit_dir = Filesystem::createDirectory(
+      "{$root_path}/junit",
+      0755,
+      true);
+    $junut_file = "{$junit_dir}/{$file_name}.xml";
+    Filesystem::writeFile($junut_file, '');
+
+    return [
+      'clover' => $clover_file,
+      'junit' => $junut_file,
+    ];
   }
 }
