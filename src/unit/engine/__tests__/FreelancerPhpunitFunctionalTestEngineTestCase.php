@@ -1,8 +1,8 @@
 <?php
 
 
-final class FreelancerGafPhpunitFunctionalTestEngineTestCase
-extends PhutilTestCase {
+final class FreelancerPhpunitFunctionalTestEngineTestCase
+  extends PhutilTestCase {
 
   private function createTestEngine() {
     $dir = 'testfiles';
@@ -22,7 +22,7 @@ extends PhutilTestCase {
       'unit.phpunit.source-directory',
       'src/');
 
-    $engine = new FreelancerGafPhpunitFunctionalTestEngine();
+    $engine = new FreelancerPhpunitFunctionalTestEngine();
     return $engine
       ->setConfigurationManager($configuration_manager)
       ->setWorkingCopy($working_copy);
