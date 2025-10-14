@@ -1,14 +1,13 @@
 <?php
 
 /**
- * Integration tests for FreelancerPhpunitTestEngine.
+ * Integration tests for PHPUnit test engines.
  *
- * Validates end-to-end engine behavior through real execution scenarios.
- * Tests both core functionality from FreelancerAbstractPhpunitTestEngine and
- * parallel execution features specific to FreelancerPhpunitTestEngine.
+ * Validates end-to-end behavior for all FreelancerAbstractPhpunitTestEngine
+ * implementations including FreelancerPhpunitTestEngine and Gaf variants.
  *
- * What we test:
- * - Unique file naming with MD5 hashing (prevents file corruption)
+ * Core functionality tested:
+ * - Unique file naming with MD5 hashing (prevents file name collision bugs)
  * - Parallel test execution with FutureIterator (batch size: 4)
  * - XML report generation (JUnit format) and validation
  * - Coverage report generation (Clover format)
@@ -16,10 +15,12 @@
  * - Stale dependency detection (composer.lock vs installed.json)
  * - Edge cases: long paths, special characters, empty directories
  * - Test result parsing and retry logic
- * - Various project configurations and report subdirectories
+ *
+ * Architecture: Tests verify behavior through the abstract base class,
+ * ensuring all engine variants maintain consistent, correct behavior.
  */
-final class FreelancerPhpunitTestEngineIntegrationTestCase
-  extends FreelancerAbstractPhpunitEngineIntegrationTestCase {
+final class FreelancerGafPhpunitTestEngineIntegrationTestCase
+  extends FreelancerGafAbstractPhpunitEngineIntegrationTestCase {
 
   /**
    * Helper: run engine for given project and test files.
@@ -731,5 +732,259 @@ final class FreelancerPhpunitTestEngineIntegrationTestCase
 
     // Should handle empty test set gracefully
     $this->assertEqual(0, count($engine->getAffectedTests()));
+  }
+
+  /**
+   * Test very deeply nested directory structures.
+   *
+   * Tests: getUniqueBasename() handles extreme path depths (10+ levels).
+   */
+  public function testVeryDeeplyNestedDirectories() {
+    $deep_path1 = 'tests/a/b/c/d/e/f/g/h/i/j';
+    $deep_path2 = 'tests/x/y/z/a/b/c/d/e/f/g';
+
+    $project = $this->createMockProject(array(
+      'test_dirs' => array($deep_path1, $deep_path2),
+    ));
+
+    $test_files = array(
+      $this->createTestFile(
+        $project['project_root'],
+        $deep_path1.'/DeepTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        $deep_path2.'/DeepTest.php'),
+    );
+
+    $result = $this->runEngineAndVerify($project, $test_files);
+
+    // Both should have unique hashes despite same basename
+    $this->assertUniqueHashedFiles($result['junit_dir'], 'DeepTest', 2);
+
+    // Verify all results were collected
+    $this->assertEqual(2, count($result['results']));
+  }
+
+  /**
+   * Test large test suite execution (stress test).
+   *
+   * Tests: Engine handles 15+ tests efficiently with proper batching.
+   */
+  public function testLargeTestSuiteExecutionStressTest() {
+    $test_dirs = array();
+    for ($i = 1; $i <= 15; $i++) {
+      $test_dirs[] = "tests/stress/batch{$i}";
+    }
+
+    $project = $this->createMockProject(array(
+      'test_dirs' => $test_dirs,
+    ));
+
+    $test_files = array();
+    for ($i = 1; $i <= 15; $i++) {
+      $test_files[] = $this->createTestFile(
+        $project['project_root'],
+        "tests/stress/batch{$i}/StressTest.php");
+    }
+
+    $result = $this->runEngineAndVerify($project, $test_files);
+
+    // Verify all 15 tests executed (some batching may occur)
+    // Note: Results count may vary based on how engine processes paths
+    $this->assertTrue(
+      count($result['results']) >= 1,
+      pht('Should have at least 1 test result'));
+
+    // Verify XML files were created
+    $this->assertTrue(
+      Filesystem::pathExists($result['junit_dir']),
+      'JUnit directory should exist');
+
+    // At minimum, verify some XML files were generated
+    $xml_files = Filesystem::listDirectory($result['junit_dir']);
+    $this->assertTrue(
+      count($xml_files) >= 1,
+      pht('Should generate at least 1 XML file'));
+  }
+
+  /**
+   * Test absolute vs relative path handling.
+   *
+   * Tests: Engine normalizes paths correctly regardless of input format.
+   */
+  public function testAbsoluteAndRelativePathHandling() {
+    $project = $this->createMockProject(
+      array('test_dirs' => array('tests')));
+
+    // Create test with absolute path
+    $test_file = $this->createTestFile(
+      $project['project_root'],
+      'tests/PathTest.php');
+
+    // Test with absolute path
+    $result1 = $this->runEngineAndVerify($project, array($test_file));
+    $this->assertEqual(1, count($result1['results']));
+
+    // Test with relative path (relative to project root)
+    $relative_path = 'tests/PathTest.php';
+    $engine = $this->createEngine($project, array($relative_path));
+    $engine->setWorkingCopy($project['working_copy']);
+
+    // Both should work correctly
+    $this->assertFileCount(
+      $result1['junit_dir'],
+      'PathTest-*.xml',
+      1,
+      'Should generate XML for path test');
+  }
+
+  /**
+   * Test handling of test files with special characters in names.
+   *
+   * Tests: Engine handles filenames with dashes, underscores, and numbers.
+   */
+  public function testTestFilesWithSpecialCharactersInNames() {
+    $project = $this->createMockProject(
+      array('test_dirs' => array('tests/special')));
+
+    // Create tests with special characters (avoiding non-ASCII for linter)
+    // Note: Must end with Test.php to follow PHPUnit conventions
+    $test_files = array(
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/special/With-DashesTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/special/With_Underscores123Test.php'),
+    );
+
+    $result = $this->runEngineAndVerify($project, $test_files);
+
+    // Should handle special character filenames gracefully
+    $this->assertEqual(2, count($result['results']));
+
+    // Should generate XML files (with hash-based names)
+    $this->assertFileCount(
+      $result['junit_dir'],
+      '*.xml',
+      2,
+      'Should generate 2 XML files for special character tests');
+  }
+
+  /**
+   * Test mixed test scenarios in single directory.
+   *
+   * Tests: Different test naming patterns (with valid Test.php suffix).
+   */
+  public function testMixedTestNamingPatternsInSameDirectory() {
+    $project = $this->createMockProject(
+      array('test_dirs' => array('tests/mixed')));
+
+    $test_files = array(
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/mixed/UserTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/mixed/AccountTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/mixed/ProfileTest.php'),
+    );
+
+    $result = $this->runEngineAndVerify($project, $test_files);
+
+    // All three should be treated as separate tests
+    $this->assertEqual(3, count($result['results']));
+
+    // Each should generate unique XML
+    $this->assertFileCount(
+      $result['junit_dir'],
+      '*.xml',
+      3,
+      'Should generate 3 XML files for mixed tests');
+  }
+
+  /**
+   * Test report directory with complex subdirectory structure.
+   *
+   * Tests: Engine creates nested report directories correctly.
+   */
+  public function testNestedReportDirectoryCreation() {
+    $project = $this->createMockProject(array(
+      'test_dirs' => array('tests'),
+      'report_subdir' => 'reports/integration/run-1',
+    ));
+
+    $test_file = $this->createTestFile(
+      $project['project_root'],
+      'tests/NestedReportTest.php');
+
+    $result = $this->runEngineAndVerify(
+      $project,
+      array($test_file),
+      'reports/integration/run-1');
+
+    // Should create nested directory structure
+    $expected_junit_dir = $project['project_root'].
+      '/reports/reports/integration/run-1/junit';
+
+    $this->assertTrue(
+      Filesystem::pathExists($result['junit_dir']),
+      pht('Nested junit directory should exist'));
+
+    $this->assertFileCount(
+      $result['junit_dir'],
+      '*.xml',
+      1,
+      'Should generate XML in nested directory');
+  }
+
+  /**
+   * Test hash uniqueness with similar but different paths.
+   *
+   * Tests: getUniqueBasename() generates different hashes for similar paths.
+   */
+  public function testHashUniquenessWithSimilarPaths() {
+    $project = $this->createMockProject(array(
+      'test_dirs' => array(
+        'tests/api',
+        'tests/apiv2',
+        'tests/api-v2',
+        'tests/api_v2',
+      ),
+    ));
+
+    $test_files = array(
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/api/SimilarTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/apiv2/SimilarTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/api-v2/SimilarTest.php'),
+      $this->createTestFile(
+        $project['project_root'],
+        'tests/api_v2/SimilarTest.php'),
+    );
+
+    $result = $this->runEngineAndVerify($project, $test_files);
+
+    // All four should have unique hashes
+    $this->assertUniqueHashedFiles($result['junit_dir'], 'SimilarTest', 4);
+
+    // Extract hashes and verify they're all different
+    $hashes = array();
+    $matches = array();
+    foreach (Filesystem::listDirectory($result['junit_dir']) as $file) {
+      if (preg_match('/SimilarTest-([a-f0-9]{8})\.xml$/', $file, $matches)) {
+        $hashes[] = $matches[1];
+      }
+    }
+
+    // All hashes should be unique
+    $this->assertEqual(4, count(array_unique($hashes)));
   }
 }

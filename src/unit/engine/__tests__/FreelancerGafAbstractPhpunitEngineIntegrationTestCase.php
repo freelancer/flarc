@@ -3,10 +3,20 @@
 /**
  * Base class for PHPUnit engine integration tests.
  *
- * Provides reusable helpers for creating mock projects, test files,
- * and running engines with assertions.
+ * Provides reusable infrastructure for testing all PHPUnit engine
+ * implementations (FreelancerPhpunitTestEngine, Gaf variants, etc.).
+ *
+ * Features:
+ * - Mock project creation with configurable directory structure
+ * - Mock PHPUnit binary that generates valid JUnit and Clover XML
+ * - Composer files setup (composer.lock, vendor/composer/installed.json)
+ * - Custom assertions for file counts, patterns, and hash validation
+ * - Automatic cleanup of temporary test projects
+ *
+ * Design principle: Test behavior, not implementation.
+ * All helpers are implementation-agnostic and work across engine variants.
  */
-abstract class FreelancerAbstractPhpunitEngineIntegrationTestCase
+abstract class FreelancerGafAbstractPhpunitEngineIntegrationTestCase
   extends PhutilTestCase {
 
   /** @var array $tempProjects */
@@ -159,12 +169,19 @@ abstract class FreelancerAbstractPhpunitEngineIntegrationTestCase
 <?php
 $junit_file = null;
 $clover_file = null;
+$test_file = null;
+
+// Parse arguments - handle both orders:
+// phpunit [args] test.php  OR  phpunit test.php [args]
 foreach ($argv as $i => $arg) {
   if (strncmp($arg, "--log-junit=", 12) === 0) {
     $junit_file = substr($arg, 12);
   }
   if (strncmp($arg, "--coverage-clover=", 18) === 0) {
     $clover_file = substr($arg, 18);
+  }
+  if (substr($arg, -4) === ".php" && !str_contains($arg, "=")) {
+    $test_file = $arg;
   }
 }
 
@@ -179,8 +196,7 @@ if ($junit_file) {
   file_put_contents($junit_file, $xml);
 }
 
-if ($clover_file) {
-  $test_file = end($argv);
+if ($clover_file && $test_file) {
   $clover = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <coverage generated=\"1234567890\">
   <project timestamp=\"1234567890\">
@@ -255,7 +271,7 @@ exit(0);
     array $project,
     array $test_paths): ArcanistUnitTestEngine {
 
-    $engine = new FreelancerPhpunitTestEngine();
+    $engine = new FreelancerGafPhpunitTestEngine();
     $engine->setConfigurationManager($project['configuration_manager']);
     $engine->setWorkingCopy($project['working_copy']);
     $engine->setPaths($test_paths);
