@@ -22,6 +22,12 @@ abstract class FreelancerAbstractPhpunitTestEngine
   /** @var string $testDirectory */
   protected $testDirectory;
 
+  /** @var string $testType */
+  protected $testType;
+
+  /** @var string $reportDirectory */
+  protected $reportDirectory;
+
   /**
    * Check if the xdebug extension is installed.
    *
@@ -348,6 +354,16 @@ EOTEXT
       DIRECTORY_SEPARATOR).'/';
   }
 
+  public function setTestType(string $type): void {
+    $this->testType = $type;
+  }
+
+  public function setReportDirectory(string $report_directory): void {
+    $this->reportDirectory = rtrim(
+      $report_directory,
+      DIRECTORY_SEPARATOR);
+  }
+
   protected function getBinaryArgs(
     string $config,
     bool $enable_coverage,
@@ -435,17 +451,43 @@ EOTEXT
   /**
    * Generate output files for the test results.
    *
-   * This function generates the output files for the test results. The output
-   * files are generated based on the test results and the coverage settings.
+   * This function generates a single all_tests.xml file for all test results
+   * in the JUnit directory, and a single all_tests.xml for coverage if enabled.
    *
    * @param bool $enable_coverage If true, generates coverage files.
-   * @param string|null $file_name The name of the output file.
+   * @param string $file_name The base name for the output files.
    *
-   * @return array<string> Returns the list of output files generated.
+   * @return array<string, string> The list of output files generated.
    */
-  abstract protected function generateOutputFiles(
-    bool $enable_coverage,
-    ?string $file_name = null): array;
+  protected function generateOutputFiles(bool $enable_coverage, string $file_name): array {
+    $root_path = $this->getProjectRoot().'/reports/'.$this->reportDirectory;
+
+    $clover_file = null;
+    if ($enable_coverage) {
+      $clover_dir = Filesystem::createDirectory(
+        "{$root_path}/clover",
+        0755,
+        true);
+      $clover_file = "{$clover_dir}/{$file_name}.xml";
+      if (!Filesystem::pathExists($clover_file)) {
+        Filesystem::writeFile($clover_file, '');
+      }
+    }
+
+    $junit_dir = Filesystem::createDirectory(
+      "{$root_path}/junit",
+      0755,
+      true);
+    $junit_file = "{$junit_dir}/{$file_name}.xml";
+    if (!Filesystem::pathExists($junit_file)) {
+      Filesystem::writeFile($junit_file, '');
+    }
+
+    return [
+      'clover' => $clover_file,
+      'junit' => $junit_file,
+    ];
+  }
 
   /**
    * Retrieve the project root directory.
@@ -499,5 +541,26 @@ EOTEXT
     }
 
     return $stale_dependencies;
+  }
+
+  /* -(  Utility  )------------------------------------------------------------ */
+  protected function getConfigValue(
+    string $key,
+    ?string $default = null): ?string {
+    $configuration_manager = $this->getConfigurationManager();
+    return $configuration_manager->getConfigFromAnySource($key, $default) ?? null;
+  }
+
+  /**
+   * Generate a unique basename for a given file path.
+   *
+   * @param string $file_path The full path to the file.
+   *
+   * @return string Unique basename derived from the file path.
+   */
+  protected function getUniqueBasename(string $file_path): string {
+    $file_name = basename($file_path, '.php');
+    $path_md5 = substr(md5($file_path), 0, 8);
+    return "{$file_name}-{$path_md5}";
   }
 }

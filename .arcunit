@@ -2,7 +2,8 @@
   "engines": {
     "phutil": {
       "type": "phutil",
-      "include": "(\\.php$)"
+      "include": "(\\.php$)",
+      "exclude": "(/__tests__/)"
     }
   }
 }
