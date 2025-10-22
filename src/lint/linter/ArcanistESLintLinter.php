@@ -189,7 +189,8 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
           $ex->getMessage(),
           $stdout,
           $stderr),
-        $ex);
+        $ex
+      );
     }
 
     foreach ($files as $file) {
@@ -237,18 +238,35 @@ final class ArcanistESLintLinter extends ArcanistBatchExternalLinter {
                 $start_offset,
                 $end_offset - $start_offset));
             /**
-             * The below recalculates and sets the starting character to use
-             * for $result->setChar.
+             * When a fix is provided, recalculate the line and column to point
+             * to where the fix should be applied,
+             * not where the error was reported.
              *
              * This is required as $message['column'] is a reference to where
              * the error begins, but not necessarily where the recommended fix
              * begins.
              */
-            $lines = explode("\n", $file['source']);
-            $targetline = $lines[$message['line'] - 1];
-            $startpos = strrpos($file['source'], $targetline) - 1;
-            $targetcol = $start_offset - $startpos;
-            $result->setChar($targetcol);
+            // Gets all text from start of file up to where the fix begins.
+            $text_before_fix = substr($file['source'], 0, $start_offset);
+
+            // Counts newlines (\n) in that text to determine which
+            // line number the fix is on.
+            // FYI line numbers start at 1, hence +1
+            $fix_line_number = substr_count($text_before_fix, "\n") + 1;
+
+            // Finds the position of the last newline before the fix
+            // because this tells us where the current line starts.
+            $last_newline_position = strrpos($text_before_fix, "\n");
+
+            // Calculates the column by SUBTRACTING the line start
+            // FROM the fix position.
+            $fix_column_number = $last_newline_position === false
+              ? $start_offset + 1
+              : $start_offset - $last_newline_position;
+
+            // Update the result to point to where the fix actually is
+            $result->setLine($fix_line_number);
+            $result->setChar($fix_column_number);
             $result->setReplacementText($message['fix']['text']);
           } else {
             $result->setSeverity(ArcanistLintSeverity::SEVERITY_ERROR);
