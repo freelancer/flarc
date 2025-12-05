@@ -115,6 +115,7 @@ extends FreelancerAbstractPhpunitTestEngine {
     $binary = $this->getBinaryPath('unit.phpunit.binary', 'phpunit');
     $config = $this->getConfigPath('unit.phpunit.config');
 
+    $deprecations_counter = 0;
     try {
       echo phutil_console_format(
         '<bg:blue>** %s **</bg> %s',
@@ -176,7 +177,9 @@ extends FreelancerAbstractPhpunitTestEngine {
 
       $futures = new FutureIterator($futures);
       foreach ($futures->limit(1) as $test => $future) {
-        list(, , $stderr) = $future->resolve();
+        list(, $stdout, $stderr) = $future->resolve();
+
+        $deprecations_counter += $this->countDeprecationNotices($stdout);
 
         $result = $this->parseTestResults(
           $test,
@@ -205,6 +208,11 @@ extends FreelancerAbstractPhpunitTestEngine {
 
       return array_mergev($results);
     } finally {
+      // Error on deprecations and describe how to address them
+      if ($deprecations_counter > 0) {
+        $this->printDeprecationsHelp($deprecations_counter);
+      }
+
       echo phutil_console_format(
         '<bg:blue>** %s **</bg> %s',
         pht('INFO'),
@@ -223,6 +231,11 @@ extends FreelancerAbstractPhpunitTestEngine {
 
       $elapsed_time = microtime(true) - $time_now;
       echo pht(" Completed in %.2fs\n", $elapsed_time);
+
+      // Exit with non-zero status code to indicate deprecations
+      if ($deprecations_counter > 0) {
+        exit(1);
+      }
     }
   }
 

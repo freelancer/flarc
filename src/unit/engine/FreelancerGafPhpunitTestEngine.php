@@ -116,6 +116,7 @@ extends FreelancerAbstractPhpunitTestEngine {
     }
 
     $results = [];
+    $deprecations_counter = 0;
     $failed_test_codes = [
       ArcanistUnitTestResult::RESULT_FAIL,
       ArcanistUnitTestResult::RESULT_BROKEN,
@@ -131,7 +132,9 @@ extends FreelancerAbstractPhpunitTestEngine {
     $futures = new FutureIterator($futures);
 
     foreach ($futures->limit(4) as $test => $future) {
-      list(, , $stderr) = $future->resolve();
+      list(, $stdout, $stderr) = $future->resolve();
+
+      $deprecations_counter += $this->countDeprecationNotices($stdout);
 
       $result = $this->parseTestResults(
         $test,
@@ -156,6 +159,12 @@ extends FreelancerAbstractPhpunitTestEngine {
 
     if ($this->renderer) {
       $this->renderer->printFailingUnitTests($errors);
+    }
+
+    // Error on deprecations and describe how to address them
+    if ($deprecations_counter > 0) {
+      $this->printDeprecationsHelp($deprecations_counter);
+      exit(1);
     }
 
     return array_mergev($results);

@@ -563,4 +563,43 @@ EOTEXT
     $path_md5 = substr(md5($file_path), 0, 8);
     return "{$file_name}-{$path_md5}";
   }
+
+  /**
+   * Extract count of deprecations from Symfony's PHPUnit Bridge.
+   *
+   * Example: "Other deprecation notices (5)" => 5
+   */
+  protected function countDeprecationNotices(string $stdout): int {
+    $matches = [];
+    preg_match_all(
+      '/deprecation notices \((\d+)\)/',
+      $stdout,
+      $matches);
+
+    return (int)(array_sum($matches[1]) ?? 0);
+  }
+
+  protected function printDeprecationsHelp(int $count): void {
+    $command = $this->getBinaryPath('phpunit.binary', 'vendor/bin/phpunit');
+    echo phutil_console_format(
+      '<bg:red>** %s **</bg> %s',
+      pht('FAIL'),
+      <<<TXT
+{$count} deprecation notices found.
+
+These were detected by Symfony's PHPUnit bridge, and there are several ways to address them:
+
+  A. Review the code to understand the deprecation and make necessary changes.
+  B. Suppress the deprecation notices using annotations or configuration.
+    i.  .../deprecations-ignore - list of deprecation notices to ignore
+    ii. .../deprecations-baseline.json - baseline file to store ignored deprecations
+
+Run `arc unit --trace` to see the command used and replay it manually to fix deprecations.
+
+See https://symfony.com/doc/current/components/phpunit_bridge.html#usage for more information.
+
+
+TXT
+    );
+  }
 }
