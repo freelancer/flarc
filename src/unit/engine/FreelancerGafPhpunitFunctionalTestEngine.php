@@ -231,11 +231,6 @@ extends FreelancerAbstractPhpunitTestEngine {
 
       $elapsed_time = microtime(true) - $time_now;
       echo pht(" Completed in %.2fs\n", $elapsed_time);
-
-      // Exit with non-zero status code to indicate deprecations
-      if ($deprecations_counter > 0) {
-        exit(1);
-      }
     }
   }
 

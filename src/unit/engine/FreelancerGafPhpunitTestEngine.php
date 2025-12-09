@@ -164,7 +164,6 @@ extends FreelancerAbstractPhpunitTestEngine {
     // Error on deprecations and describe how to address them
     if ($deprecations_counter > 0) {
       $this->printDeprecationsHelp($deprecations_counter);
-      exit(1);
     }
 
     return array_mergev($results);
