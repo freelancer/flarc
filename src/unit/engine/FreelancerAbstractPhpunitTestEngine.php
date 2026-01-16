@@ -580,10 +580,9 @@ EOTEXT
   }
 
   protected function printDeprecationsHelp(int $count): void {
-    $command = $this->getBinaryPath('phpunit.binary', 'vendor/bin/phpunit');
     echo phutil_console_format(
-      '<bg:red>** %s **</bg> %s',
-      pht('FAIL'),
+      '<bg:yellow>** %s **</bg> %s',
+      pht('WARNING'),
       <<<TXT
 {$count} deprecation notices found.
 
