@@ -117,6 +117,8 @@ extends FreelancerAbstractPhpunitTestEngine {
 
     $results = [];
     $deprecations_counter = 0;
+    /** @var array<string, int> $deprecations_count_map */
+    $deprecations_count_map = [];
     $failed_test_codes = [
       ArcanistUnitTestResult::RESULT_FAIL,
       ArcanistUnitTestResult::RESULT_BROKEN,
@@ -126,7 +128,7 @@ extends FreelancerAbstractPhpunitTestEngine {
 
     if ($this->renderer) {
       echo $this->renderer->getName($this->getConfigurationManager());
-      echo "\n";
+      echo PHP_EOL;
     }
 
     $futures = new FutureIterator($futures);
@@ -134,7 +136,15 @@ extends FreelancerAbstractPhpunitTestEngine {
     foreach ($futures->limit(4) as $test => $future) {
       list(, $stdout, $stderr) = $future->resolve();
 
-      $deprecations_counter += $this->countDeprecationNotices($stdout);
+      $deprecations = $this->countDeprecationNotices($stdout);
+      if ($deprecations > 0) {
+        $deprecations_counter += $deprecations;
+        if (!array_key_exists($test, $deprecations_count_map)) {
+          $deprecations_count_map[$test] = $deprecations;
+        } else {
+          $deprecations_count_map[$test] += $deprecations;
+        }
+      }
 
       $result = $this->parseTestResults(
         $test,
@@ -163,7 +173,9 @@ extends FreelancerAbstractPhpunitTestEngine {
 
     // Error on deprecations and describe how to address them
     if ($deprecations_counter > 0) {
-      $this->printDeprecationsHelp($deprecations_counter);
+      $this->printDeprecationsHelp(
+        $deprecations_counter,
+        $deprecations_count_map);
     }
 
     return array_mergev($results);

@@ -579,12 +579,18 @@ EOTEXT
     return (int)(array_sum($matches[1]) ?? 0);
   }
 
-  protected function printDeprecationsHelp(int $count): void {
+  /**
+   * @param array<string, int> $deprecation_count_map File name => count of deprecations
+   */
+  protected function printDeprecationsHelp(
+    int $total_count,
+    array $deprecation_count_map): void {
+    $first_key = key($deprecation_count_map) ?? 'test/unit/src2/SomeFileTest.php';
     echo phutil_console_format(
       '<bg:yellow>** %s **</bg> %s',
       pht('WARNING'),
       <<<TXT
-{$count} deprecation notices found.
+{$total_count} deprecation notices found.
 
 These were detected by Symfony's PHPUnit bridge, and there are several ways to address them:
 
@@ -593,12 +599,30 @@ These were detected by Symfony's PHPUnit bridge, and there are several ways to a
     i.  .../deprecations-ignore - list of deprecation notices to ignore
     ii. .../deprecations-baseline.json - baseline file to store ignored deprecations
 
-Run `arc unit --trace` to see the command used and replay it manually to fix deprecations.
+  Run `arc unit --trace` to see the command used and replay it manually to fix deprecations. For example;
+  $ bin/run-tests ${first_key}
 
-See https://symfony.com/doc/current/components/phpunit_bridge.html#usage for more information.
-
+Affected tests:
 
 TXT
     );
+
+    arsort($deprecation_count_map);
+    $iteration = 0;
+    $limit = 10;
+    foreach ($deprecation_count_map as $file => $count) {
+      if ($iteration >= $limit) {
+        break;
+      }
+      echo "  {$file}: {$count}\n";
+      $iteration++;
+    }
+
+    if (count($deprecation_count_map) > $limit) {
+      $remaining = count($deprecation_count_map) - $limit;
+      echo "  ... and {$remaining} more files.\n";
+    }
+
+    echo PHP_EOL.'See https://symfony.com/doc/current/components/phpunit_bridge.html#usage for more information.'.PHP_EOL;
   }
 }

@@ -116,6 +116,7 @@ extends FreelancerAbstractPhpunitTestEngine {
     $config = $this->getConfigPath('unit.phpunit.config');
 
     $deprecations_counter = 0;
+    $deprecations_count_map = [];
     try {
       echo phutil_console_format(
         '<bg:blue>** %s **</bg> %s',
@@ -179,7 +180,15 @@ extends FreelancerAbstractPhpunitTestEngine {
       foreach ($futures->limit(1) as $test => $future) {
         list(, $stdout, $stderr) = $future->resolve();
 
-        $deprecations_counter += $this->countDeprecationNotices($stdout);
+        $deprecations = $this->countDeprecationNotices($stdout);
+        if ($deprecations > 0) {
+          $deprecations_counter += $deprecations;
+          if (!array_key_exists($test, $deprecations_count_map)) {
+            $deprecations_count_map[$test] = $deprecations;
+          } else {
+            $deprecations_count_map[$test] += $deprecations;
+          }
+        }
 
         $result = $this->parseTestResults(
           $test,
@@ -210,7 +219,9 @@ extends FreelancerAbstractPhpunitTestEngine {
     } finally {
       // Error on deprecations and describe how to address them
       if ($deprecations_counter > 0) {
-        $this->printDeprecationsHelp($deprecations_counter);
+        $this->printDeprecationsHelp(
+          $deprecations_counter,
+          $deprecations_count_map);
       }
 
       echo phutil_console_format(
