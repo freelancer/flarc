@@ -57,7 +57,7 @@ final class FreelancerPhpunitConsoleRenderer extends ArcanistUnitRenderer {
 
     $test_name = $result->getName();
     $test_namespace = $result->getNamespace();
-    if (strlen($test_namespace)) {
+    if ($test_namespace !== null && strlen($test_namespace)) {
       $test_name = $test_namespace.'::'.$test_name;
     }
 
