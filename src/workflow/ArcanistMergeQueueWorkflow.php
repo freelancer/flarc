@@ -21,7 +21,7 @@ final class ArcanistMergeQueueWorkflow extends ArcanistWorkflow {
 
   const JENKINS_URL = 'https://ci.tools.flnltd.com';
   const API_JOB_URL = '/job/API/job/mergequeue-submit';
-  const GAF_JOB_URL = '/job/GAF/job/mergequeue-submit';
+  const GAF_JOB_URL = '/job/GAF/job/mergequeue-master';
 
   const API_PHID = 'PHID-REPO-enzn73futkcv4eqfsgnz';
   const GAF_PHID = 'PHID-REPO-e7qvu3z7a3uhk7akjy7y';
