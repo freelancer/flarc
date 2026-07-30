@@ -226,6 +226,23 @@ EOTEXT
     curl_setopt($ch, CURLOPT_POSTFIELDS, $build_data);
     curl_setopt($ch, CURLOPT_USERPWD, $username.':'.$token);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    print_r(curl_exec($ch));
+    $response_body = curl_exec($ch);
+    $curl_errno = curl_errno($ch);
+    $curl_error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($curl_errno) {
+      throw new ArcanistUsageException(
+        pht('Failed to submit to Jenkins: %s', $curl_error));
+    }
+
+    if ($http_code < 200 || $http_code >= 300) {
+      throw new ArcanistUsageException(
+        pht(
+          "Jenkins rejected the Merge Queue Revert submission (HTTP %d):\n\n%s",
+          $http_code,
+          $response_body));
+    }
   }
 }
