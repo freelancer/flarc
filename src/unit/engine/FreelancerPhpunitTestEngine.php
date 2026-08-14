@@ -39,9 +39,6 @@ final class FreelancerPhpunitTestEngine
     //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
     $enable_coverage = $this->getEnableCoverage() ?? true;
 
-    self::checkXdebugInstalled($enable_coverage);
-    self::checkXdebugConfigured($enable_coverage);
-
     if (getenv('RUN_PHPUNIT_IN_DOCKER')) {
       $this->shouldRunInDocker = true;
     }

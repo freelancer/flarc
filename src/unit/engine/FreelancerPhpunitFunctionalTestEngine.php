@@ -53,9 +53,6 @@ final class FreelancerPhpunitFunctionalTestEngine
     //   - `true` if the user passed `--coverage`, explicitly enabling coverage.
     $enable_coverage = $this->getEnableCoverage() ?? true;
 
-    self::checkXdebugInstalled($enable_coverage);
-    self::checkXdebugConfigured($enable_coverage);
-
     // Check whether Composer dependencies are up-to-date.
     $project_root = $this->getProjectRoot();
     $stale_dependencies = $this->getStaleDependencies(
