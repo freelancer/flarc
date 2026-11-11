@@ -2,3 +2,6 @@ output "something" {
   value = "something"
 }
 ~~~~~~~~~~
+~~~~~~~~~~
+~~~~~~~~~~
+{"path": "ok.tf"}

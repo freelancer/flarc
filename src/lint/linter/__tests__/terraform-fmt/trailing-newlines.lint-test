@@ -5,3 +5,5 @@ output "something" {
 
 ~~~~~~~~~~
 ~~~~~~~~~~
+~~~~~~~~~~
+{"path": "trailing-newlines.tf"}

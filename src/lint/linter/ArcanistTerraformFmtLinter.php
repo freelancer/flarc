@@ -102,14 +102,9 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
     // `terraform fmt` returns a non-zero exit status in the case of a syntax
     // error.
     if ($err) {
-      // TODO: The output from `terraform fmt` is colorized. Ideally we would be
-      // able to pass `-color=false` to `terraform fmt` to produce raw output,
-      // but for now we just strip out the ANSI color codes from the output.
-      // See https://github.com/hashicorp/terraform/issues/6926.
-      $stderr = preg_replace(
-        '/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/',
-        '',
-        $stderr);
+      // The output from `terraform fmt` is colorized, and old versions have
+      // no `-no-color` flag, so strip the ANSI color codes.
+      $stderr = preg_replace('/\x1B\[[0-9;]*[mK]/', '', $stderr);
 
       $matches = null;
       $regex = pregsprintf(
@@ -120,7 +115,13 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
         '(At (?P<line>\d+):(?P<column>\d+): )?',
         '(?P<message>.*)$');
 
-      if (!preg_match($regex, $stderr, $matches)) {
+      // Terraform 0.12 and later print `Error: <message>`, then
+      // `on <path> line <line>`, inside a box.
+      $hcl_regex =
+        '/Error: (?P<message>[^\n]+)\n.*?\bon .*? line (?P<line>\d+)/s';
+
+      if (!preg_match($regex, $stderr, $matches)
+        && !preg_match($hcl_regex, $stderr, $matches)) {
         throw new Exception(
           pht(
             'Failed to parse `%s` output: "%s".',
@@ -129,8 +130,8 @@ final class ArcanistTerraformFmtLinter extends ArcanistExternalLinter {
       }
 
       $code   = self::LINT_SYNTAX_ERROR;
-      $line   = nonempty((int)$matches['line'], null);
-      $column = nonempty((int)$matches['column'], null);
+      $line   = nonempty((int)idx($matches, 'line'), null);
+      $column = nonempty((int)idx($matches, 'column'), null);
 
       $message = (new ArcanistLintMessage())
         ->setPath($path)

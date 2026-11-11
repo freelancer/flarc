@@ -1,3 +1,6 @@
 output "something" {
 ~~~~~~~~~~
-error:0:0:TERRAFORMFMT1:Syntax Error
+error:1::TERRAFORMFMT1:Syntax Error
+~~~~~~~~~~
+~~~~~~~~~~
+{"path": "syntax.tf"}
